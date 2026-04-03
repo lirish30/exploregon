@@ -102,32 +102,40 @@ const fetchBySlug = async <T>(
   slug: string,
   { depth = DEFAULT_DEPTH, status, ...behavior }: SlugQuery = {}
 ): Promise<T | null> => {
-  const path = withQueryString(`/api/${collection}`, {
-    depth,
-    limit: 1,
-    'where[slug][equals]': slug,
-    'where[status][equals]': status
-  })
+  try {
+    const path = withQueryString(`/api/${collection}`, {
+      depth,
+      limit: 1,
+      'where[slug][equals]': slug,
+      'where[status][equals]': status
+    })
 
-  const result = await payloadFetch<PayloadFindResponse<T>>(path, behavior)
-  return result.docs[0] ?? null
+    const result = await payloadFetch<PayloadFindResponse<T>>(path, behavior)
+    return result.docs[0] ?? null
+  } catch {
+    return null
+  }
 }
 
 const fetchCollection = async <T>(
   collection: string,
   { depth = DEFAULT_DEPTH, status, limit = 24, page = 1, sort, where = {}, ...behavior }: CollectionQuery = {}
 ): Promise<T[]> => {
-  const path = withQueryString(`/api/${collection}`, {
-    depth,
-    limit,
-    page,
-    sort,
-    'where[status][equals]': status,
-    ...where
-  })
+  try {
+    const path = withQueryString(`/api/${collection}`, {
+      depth,
+      limit,
+      page,
+      sort,
+      'where[status][equals]': status,
+      ...where
+    })
 
-  const result = await payloadFetch<PayloadFindResponse<T>>(path, behavior)
-  return result.docs
+    const result = await payloadFetch<PayloadFindResponse<T>>(path, behavior)
+    return result.docs
+  } catch {
+    return []
+  }
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -517,6 +525,16 @@ export const getRegionBySlug = async (
 
   const doc = await fetchBySlug<RegionDoc>(COLLECTIONS.regions, slug, options)
   return doc ? normalizeRegion(doc) : null
+}
+
+export const getRegions = async (options: CollectionQuery = {}): Promise<NormalizedRegion[]> => {
+  const docs = await fetchCollection<RegionDoc>(COLLECTIONS.regions, {
+    sort: 'name',
+    limit: 24,
+    ...options
+  })
+
+  return docs.map((doc) => normalizeRegion(doc))
 }
 
 export const getGuideBySlug = async (

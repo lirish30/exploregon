@@ -11,7 +11,7 @@ import {
   getListingBySlug,
   getSiteSettings
 } from '../lib/api'
-import { createMetadata } from '../lib/seo'
+import { buildWebsiteJsonLd, createMetadata } from '../lib/seo'
 import type { NormalizedCategory, NormalizedCity, NormalizedEvent, NormalizedGuide, NormalizedHomepage, NormalizedItinerary, NormalizedListing, SiteSettingsGlobal } from '../lib/types'
 
 export const revalidate = 300
@@ -168,6 +168,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const model = await loadHomepageViewModel()
+  const websiteJsonLd = buildWebsiteJsonLd(model.settings)
   const heroMediaUrl = toPayloadMediaUrl(
     model.featuredCities[0]?.heroImage?.url ??
       model.editorsChoiceListings[0]?.heroImage?.url ??
@@ -179,6 +180,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
       <section className="home-hero">
         <div className="container">
           <div className="home-hero-layout">
@@ -331,10 +333,10 @@ export default async function HomePage() {
                 <Link href="/map" className="button-primary">
                   Open Live Map
                 </Link>
-                <Link href="/nature/weather" className="button-secondary">
+                <Link href="/weather-tides#weather" className="button-secondary">
                   Weather Snapshot
                 </Link>
-                <Link href="/nature/tides" className="button-secondary">
+                <Link href="/weather-tides#tides" className="button-secondary">
                   Tide Snapshot
                 </Link>
               </div>
