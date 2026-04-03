@@ -2,12 +2,26 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import dynamic from 'next/dynamic'
+
 import { Breadcrumbs } from '../../../components/primitives/breadcrumbs'
 import { Container } from '../../../components/primitives/container'
 import { FaqAccordion } from '../../../components/primitives/faq-accordion'
-import { MapPlaceholder } from '../../../components/primitives/map-placeholder'
 import { Section } from '../../../components/primitives/section'
 import { SectionHeading } from '../../../components/primitives/section-heading'
+import type { MapPin } from '../../../components/map/coast-map'
+
+const CoastMap = dynamic(
+  () => import('../../../components/map/coast-map').then((m) => m.CoastMap),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="mappage-loading" aria-label="Map loading">
+        Loading map…
+      </div>
+    )
+  }
+)
 import {
   getCities,
   getCityBySlug,
@@ -267,13 +281,47 @@ export default async function CityPage({ params }: CityPageProps) {
       <Section>
         <SectionHeading
           kicker="Map"
-          title={`${city.name} orientation map`}
-          lede={`City center coordinates: ${city.latitude.toFixed(4)}, ${city.longitude.toFixed(4)}.`}
+          title={`${city.name} on the coast`}
+          lede={`${featuredListings.length > 0 ? `${featuredListings.length} listing${featuredListings.length !== 1 ? 's' : ''} plotted.` : 'City center shown.'} Click any pin to open the detail page.`}
         />
-        <MapPlaceholder
-          title={`${city.name} map preview`}
-          note="Leaflet + OpenStreetMap integration step: plot city center plus related listing pins."
+        <CoastMap
+          pins={[
+            {
+              label: city.name,
+              slug: city.slug,
+              latitude: city.latitude,
+              longitude: city.longitude,
+              type: 'city',
+              region: city.region?.label ?? undefined
+            } satisfies MapPin,
+            ...featuredListings
+              .filter((l) => l.latitude && l.longitude)
+              .map(
+                (l): MapPin => ({
+                  label: l.name,
+                  slug: l.slug,
+                  latitude: l.latitude,
+                  longitude: l.longitude,
+                  type: 'listing',
+                  region: l.region?.label ?? undefined
+                })
+              )
+          ]}
+          center={[city.latitude, city.longitude]}
+          zoom={13}
+          height={420}
         />
+        <p className="mappage-attribution">
+          Map &copy;{' '}
+          <a
+            href="https://www.openstreetmap.org/copyright"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            OpenStreetMap
+          </a>{' '}
+          contributors.
+        </p>
       </Section>
 
       <Section surface="muted">

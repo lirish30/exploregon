@@ -44,7 +44,8 @@ const fallbackNavigation: NavigationGlobal = {
     { label: 'Cities', url: '/cities' },
     { label: 'Categories', url: '/categories' },
     { label: 'Guides', url: '/guides' },
-    { label: 'Map', url: '/map' }
+    { label: 'Map', url: '/map' },
+    { label: 'Plan', url: '/plan/compare' }
   ],
   footerNavGroups: []
 }
@@ -62,8 +63,10 @@ const fallbackFooter: FooterGlobal = {
     {
       groupLabel: 'Plan',
       links: [
-        { label: 'Weather & Tides', url: '/weather-tides' },
-        { label: 'Map', url: '/map' },
+        { label: 'Weather', url: '/nature/weather' },
+        { label: 'Tides', url: '/nature/tides' },
+        { label: 'Coast Map', url: '/map' },
+        { label: 'Compare Cities', url: '/plan/compare' },
         { label: 'Itineraries', url: '/itineraries' }
       ]
     }
