@@ -619,3 +619,81 @@ export const getItineraries = async (options: CollectionQuery = {}): Promise<Nor
 
   return docs.map((doc) => normalizeItinerary(doc))
 }
+
+// ─── Additional query helpers ─────────────────────────────────────────────────
+
+/**
+ * All regions, sorted alphabetically. Rarely changes so revalidate is long.
+ */
+export const getRegions = async (options: CollectionQuery = {}): Promise<NormalizedRegion[]> => {
+  const docs = await fetchCollection<RegionDoc>(COLLECTIONS.regions, {
+    sort: 'name',
+    limit: 50,
+    revalidate: 3600,
+    ...options
+  })
+
+  return docs.map((doc) => normalizeRegion(doc))
+}
+
+/**
+ * Published cities in a specific region.
+ */
+export const getCitiesByRegion = async (
+  regionId: ID,
+  options: CollectionQuery = {}
+): Promise<NormalizedCity[]> => {
+  const docs = await fetchCollection<CityDoc>(COLLECTIONS.cities, {
+    status: 'published',
+    sort: 'name',
+    limit: 50,
+    where: {
+      'where[region][equals]': regionId
+    },
+    ...options
+  })
+
+  return docs.map((doc) => normalizeCity(doc))
+}
+
+/**
+ * Published listings belonging to a specific category.
+ * Uses Payload's `[in]` operator for the hasMany categories field.
+ */
+export const getListingsByCategory = async (
+  categoryId: ID,
+  options: CollectionQuery = {}
+): Promise<NormalizedListing[]> => {
+  const docs = await fetchCollection<ListingDoc>(COLLECTIONS.listings, {
+    status: 'published',
+    sort: 'name',
+    limit: 48,
+    where: {
+      'where[categories][in][0]': categoryId
+    },
+    ...options
+  })
+
+  return docs.map((doc) => normalizeListing(doc))
+}
+
+/**
+ * Published events with a start date on or after today, sorted ascending.
+ * Use for "upcoming events" modules and the events index.
+ */
+export const getUpcomingEvents = async (options: CollectionQuery = {}): Promise<NormalizedEvent[]> => {
+  const todayIso = new Date().toISOString()
+
+  const docs = await fetchCollection<EventDoc>(COLLECTIONS.events, {
+    status: 'published',
+    sort: 'startDate',
+    limit: 120,
+    where: {
+      'where[startDate][greater_than_equal]': todayIso
+    },
+    ...options
+  })
+
+  return docs.map((doc) => normalizeEvent(doc))
+}
+

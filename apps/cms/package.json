@@ -8,7 +8,8 @@
     "lint": "eslint src --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "typegen": "payload generate:types --config src/payload.config.ts",
-    "seed": "tsx src/seed/index.ts"
+    "seed": "tsx src/seed/index.ts",
+    "import": "tsx src/import/runner.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.30.0",

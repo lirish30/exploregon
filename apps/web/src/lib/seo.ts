@@ -1,7 +1,15 @@
 import type { Metadata } from 'next'
 
-import { ROUTE_SEGMENTS } from './schema'
-import type { SiteSettingsGlobal } from './types'
+import { ROUTE_SEGMENTS, toPayloadMediaUrl } from './schema'
+import type {
+  NormalizedCity,
+  NormalizedCategory,
+  NormalizedEvent,
+  NormalizedGuide,
+  NormalizedItinerary,
+  NormalizedListing,
+  SiteSettingsGlobal
+} from './types'
 
 export type SeoInput = {
   title?: string | null
@@ -125,3 +133,139 @@ export const buildEntityBreadcrumbs = (
     }
   ])
 }
+
+// ─── Per-content-type metadata generators ────────────────────────────────────
+//
+// These helpers encapsulate the path construction, image URL resolution, and
+// not-found fallback for each major content type. Pages import whichever helper
+// they need and pass in the resolved doc + site settings.
+//
+// Pattern:
+//   const metadata = await generateListingMetadata(listing, params.slug, settings)
+
+/** Shared not-found fallback. */
+const notFoundMetadata = (
+  label: string,
+  path: string,
+  settings: SiteSettingsGlobal
+): Metadata =>
+  createMetadata(
+    {
+      title: `${label} Not Found`,
+      description: `The requested ${label.toLowerCase()} page could not be found on ExplOregon Coast.`,
+      path,
+      noIndex: true
+    },
+    settings
+  )
+
+export const generateListingMetadata = (
+  listing: NormalizedListing | null,
+  slug: string,
+  settings: SiteSettingsGlobal
+): Metadata => {
+  if (!listing) return notFoundMetadata('Listing', `/listings/${slug}`, settings)
+
+  return createMetadata(
+    {
+      title: listing.seo.title,
+      description: listing.seo.description,
+      path: `/listings/${listing.slug}`,
+      imageUrl: toPayloadMediaUrl(listing.heroImage?.url)
+    },
+    settings
+  )
+}
+
+export const generateCityMetadata = (
+  city: NormalizedCity | null,
+  slug: string,
+  settings: SiteSettingsGlobal
+): Metadata => {
+  if (!city) return notFoundMetadata('City', `/cities/${slug}`, settings)
+
+  return createMetadata(
+    {
+      title: city.seo.title,
+      description: city.seo.description,
+      path: `/cities/${city.slug}`,
+      imageUrl: toPayloadMediaUrl(city.heroImage?.url)
+    },
+    settings
+  )
+}
+
+export const generateCategoryMetadata = (
+  category: NormalizedCategory | null,
+  slug: string,
+  settings: SiteSettingsGlobal
+): Metadata => {
+  if (!category) return notFoundMetadata('Category', `/categories/${slug}`, settings)
+
+  return createMetadata(
+    {
+      title: category.seo.title,
+      description: category.seo.description,
+      path: `/categories/${category.slug}`
+      // categories don't have hero images in the current schema
+    },
+    settings
+  )
+}
+
+export const generateGuideMetadata = (
+  guide: NormalizedGuide | null,
+  slug: string,
+  settings: SiteSettingsGlobal
+): Metadata => {
+  if (!guide) return notFoundMetadata('Guide', `/guides/${slug}`, settings)
+
+  return createMetadata(
+    {
+      title: guide.seo.title,
+      description: guide.seo.description,
+      path: `/guides/${guide.slug}`,
+      imageUrl: toPayloadMediaUrl(guide.heroImage?.url)
+    },
+    settings
+  )
+}
+
+export const generateEventMetadata = (
+  event: NormalizedEvent | null,
+  slug: string,
+  settings: SiteSettingsGlobal
+): Metadata => {
+  if (!event) return notFoundMetadata('Event', `/events/${slug}`, settings)
+
+  return createMetadata(
+    {
+      title: event.seo.title,
+      description: event.seo.description,
+      path: `/events/${event.slug}`,
+      imageUrl: toPayloadMediaUrl(event.heroImage?.url)
+    },
+    settings
+  )
+}
+
+export const generateItineraryMetadata = (
+  itinerary: NormalizedItinerary | null,
+  slug: string,
+  settings: SiteSettingsGlobal
+): Metadata => {
+  if (!itinerary) return notFoundMetadata('Itinerary', `/itineraries/${slug}`, settings)
+
+  return createMetadata(
+    {
+      title: itinerary.seo.title,
+      description: itinerary.seo.description,
+      path: `/itineraries/${itinerary.slug}`,
+      imageUrl: toPayloadMediaUrl(itinerary.heroImage?.url)
+    },
+    settings
+  )
+}
+
+// Re-export toPayloadMediaUrl so pages only need to import from seo.ts or schema.ts
+export { toPayloadMediaUrl }

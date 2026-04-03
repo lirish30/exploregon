@@ -63,9 +63,9 @@ export const Listings: CollectionConfig = {
       label: 'Categories',
       type: 'relationship',
       relationTo: 'listingCategories',
-      hasMany: true,
-      required: true,
-      minRows: 1
+      hasMany: true
+      // Not required at schema level — publish hook enforces at least one before going live.
+      // Import pipeline may stage records without a resolved category.
     },
     {
       name: 'summary',
@@ -86,8 +86,9 @@ export const Listings: CollectionConfig = {
       name: 'heroImage',
       label: 'Hero Image',
       type: 'upload',
-      relationTo: 'media',
-      required: true
+      relationTo: 'media'
+      // Not required at schema level — publish hook enforces presence before going live.
+      // Import pipeline may stage records without images pending editorial review.
     },
     {
       name: 'gallery',
@@ -202,6 +203,90 @@ export const Listings: CollectionConfig = {
       type: 'textarea',
       required: true,
       maxLength: 160
+    },
+    {
+      name: 'importMeta',
+      label: 'Import Metadata',
+      type: 'group',
+      admin: {
+        condition: (data) => data?.sourceType === 'imported',
+        description: 'Populated automatically by the import pipeline. Do not edit manually unless correcting provenance.'
+      },
+      fields: [
+        {
+          name: 'importSource',
+          label: 'Import Source',
+          type: 'text',
+          admin: {
+            description: 'Identifier for the source dataset or batch (e.g. "yelp-export-2024-06", "manual-csv-batch-001").'
+          }
+        },
+        {
+          name: 'importBatch',
+          label: 'Import Batch ID',
+          type: 'text',
+          admin: {
+            description: 'Unique batch ID assigned at run time. Groups all records from the same import run.'
+          }
+        },
+        {
+          name: 'importedAt',
+          label: 'Imported At',
+          type: 'date',
+          admin: {
+            date: { pickerAppearance: 'dayAndTime' }
+          }
+        },
+        {
+          name: 'rawName',
+          label: 'Original Name',
+          type: 'text',
+          admin: {
+            description: 'Name as it appeared in the source data before normalization.'
+          }
+        },
+        {
+          name: 'rawAddress',
+          label: 'Original Address',
+          type: 'text',
+          admin: {
+            description: 'Address as it appeared in the source data before normalization.'
+          }
+        },
+        {
+          name: 'flags',
+          label: 'Review Flags',
+          type: 'array',
+          admin: {
+            description: 'Missing or suspicious fields flagged during import. Clear each flag after the field is corrected.'
+          },
+          fields: [
+            {
+              name: 'flag',
+              label: 'Flag',
+              type: 'text',
+              required: true
+            }
+          ]
+        },
+        {
+          name: 'duplicateSuspected',
+          label: 'Duplicate Suspected',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            description: 'Set by the import pipeline when a probable duplicate was found in the database.'
+          }
+        },
+        {
+          name: 'duplicateOfSlug',
+          label: 'Possible Duplicate Of (Slug)',
+          type: 'text',
+          admin: {
+            description: 'Slug of the existing listing this record may duplicate. Verify before approving.'
+          }
+        }
+      ]
     }
   ]
 }
