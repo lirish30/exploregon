@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import dotenv from 'dotenv'
 import { getPayload } from 'payload'
 
-import payloadConfig from '../payload.config'
+import payloadConfig from '../payload.config.ts'
 
 type SluggedDoc = {
   id: number | string

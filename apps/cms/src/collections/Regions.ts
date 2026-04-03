@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { createSlugField } from '../utilities/slug'
+import { createSlugField } from '../utilities/slug.ts'
 
 export const Regions: CollectionConfig = {
   slug: 'regions',

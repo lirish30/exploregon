@@ -14,9 +14,9 @@ import type { SiteSettingsGlobal } from '../../../lib/types'
 export const revalidate = 300
 
 type EventPageProps = {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 const fallbackSettings: SiteSettingsGlobal = {
@@ -82,14 +82,15 @@ const getSettings = async (): Promise<SiteSettingsGlobal> => {
 }
 
 export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
-  const [settings, event] = await Promise.all([getSettings(), getEventBySlug(params.slug)])
+  const { slug } = await params
+  const [settings, event] = await Promise.all([getSettings(), getEventBySlug(slug)])
 
   if (!event) {
     return createMetadata(
       {
         title: 'Event Not Found',
         description: 'The requested event could not be found.',
-        path: `/events/${params.slug}`,
+        path: `/events/${slug}`,
         noIndex: true
       },
       settings
@@ -108,7 +109,8 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
 }
 
 export default async function EventPage({ params }: EventPageProps) {
-  const event = await getEventBySlug(params.slug)
+  const { slug } = await params
+  const event = await getEventBySlug(slug)
 
   if (!event) {
     notFound()

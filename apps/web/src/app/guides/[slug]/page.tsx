@@ -13,9 +13,9 @@ import type { NormalizedGuide, NormalizedItinerary, SiteSettingsGlobal } from '.
 export const revalidate = 300
 
 type GuidePageProps = {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 const fallbackSettings: SiteSettingsGlobal = {
@@ -73,14 +73,15 @@ const relatedItineraries = (itineraries: NormalizedItinerary[], guide: Normalize
 }
 
 export async function generateMetadata({ params }: GuidePageProps): Promise<Metadata> {
-  const [settings, guide] = await Promise.all([getSettings(), getGuideBySlug(params.slug)])
+  const { slug } = await params
+  const [settings, guide] = await Promise.all([getSettings(), getGuideBySlug(slug)])
 
   if (!guide) {
     return createMetadata(
       {
         title: 'Guide Not Found',
         description: 'The requested guide could not be found.',
-        path: `/guides/${params.slug}`,
+        path: `/guides/${slug}`,
         noIndex: true
       },
       settings
@@ -99,7 +100,8 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
 }
 
 export default async function GuidePage({ params }: GuidePageProps) {
-  const guide = await getGuideBySlug(params.slug)
+  const { slug } = await params
+  const guide = await getGuideBySlug(slug)
 
   if (!guide) {
     notFound()

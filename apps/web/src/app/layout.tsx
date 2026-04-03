@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Manrope, Newsreader } from 'next/font/google'
+import Script from 'next/script'
 import type { ReactNode } from 'react'
 
 import { SiteFooter } from '../components/shell/site-footer'
@@ -7,6 +8,9 @@ import { SiteHeader } from '../components/shell/site-header'
 import { getFooter, getNavigation, getSiteSettings } from '../lib/api'
 import type { FooterGlobal, NavigationGlobal, SiteSettingsGlobal } from '../lib/types'
 import './styles.css'
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '')
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID?.trim()
 
 const newsreader = Newsreader({
   subsets: ['latin'],
@@ -21,8 +25,12 @@ const manrope = Manrope({
 })
 
 export const metadata: Metadata = {
+  metadataBase: siteUrl ? new URL(siteUrl) : undefined,
   title: 'ExplOregon Coast',
-  description: 'A structured Oregon Coast directory and trip planning guide.'
+  description: 'A structured Oregon Coast directory and trip planning guide.',
+  alternates: {
+    canonical: '/'
+  }
 }
 
 const fallbackSiteSettings: SiteSettingsGlobal = {
@@ -99,6 +107,20 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en">
       <body className={`${newsreader.variable} ${manrope.variable}`}>
+        {gaMeasurementId ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaMeasurementId}', { anonymize_ip: true });`}
+            </Script>
+          </>
+        ) : null}
         <a href="#content" className="skip-link">
           Skip to content
         </a>

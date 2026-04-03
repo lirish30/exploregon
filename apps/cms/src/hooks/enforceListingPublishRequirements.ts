@@ -1,4 +1,4 @@
-import { createPublishGuard } from './workflowGuards'
+import { createPublishGuard } from './workflowGuards.ts'
 
 export const enforceListingPublishRequirements = createPublishGuard({
   contentLabel: 'listing',

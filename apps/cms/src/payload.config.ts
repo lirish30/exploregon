@@ -1,8 +1,8 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { buildConfig } from 'payload'
 
-import { collections } from './collections'
-import { globals } from './globals'
+import { collections } from './collections/index.ts'
+import { globals } from './globals/index.ts'
 
 export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || 'REPLACE_WITH_LONG_RANDOM_SECRET',

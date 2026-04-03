@@ -15,9 +15,9 @@ import type { NormalizedCity, NormalizedListing, SiteSettingsGlobal } from '../.
 export const revalidate = 300
 
 type ListingPageProps = {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 const fallbackSettings: SiteSettingsGlobal = {
@@ -127,10 +127,11 @@ const toJsonLd = (listing: NormalizedListing) => {
 }
 
 export async function generateMetadata({ params }: ListingPageProps): Promise<Metadata> {
+  const { slug } = await params
   const [settings, listing, listingRecord] = await Promise.all([
     getSettings(),
-    getListingBySlug(params.slug),
-    getListingRecordBySlug(params.slug)
+    getListingBySlug(slug),
+    getListingRecordBySlug(slug)
   ])
 
   if (listing) {
@@ -158,18 +159,19 @@ export async function generateMetadata({ params }: ListingPageProps): Promise<Me
   }
 
   return createMetadata(
-    {
-      title: 'Listing Not Found',
-      description: 'The requested listing could not be found.',
-      path: `/listings/${params.slug}`,
-      noIndex: true
-    },
-    settings
+      {
+        title: 'Listing Not Found',
+        description: 'The requested listing could not be found.',
+        path: `/listings/${slug}`,
+        noIndex: true
+      },
+      settings
   )
 }
 
 export default async function ListingPage({ params }: ListingPageProps) {
-  const [listing, listingRecord] = await Promise.all([getListingBySlug(params.slug), getListingRecordBySlug(params.slug)])
+  const { slug } = await params
+  const [listing, listingRecord] = await Promise.all([getListingBySlug(slug), getListingRecordBySlug(slug)])
 
   if (!listingRecord) {
     notFound()

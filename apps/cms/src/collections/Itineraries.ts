@@ -1,8 +1,8 @@
 import type { CollectionConfig } from 'payload'
 
-import { createEditorialPublishRequirements } from '../hooks/enforceEditorialPublishRequirements'
-import { createSlugField } from '../utilities/slug'
-import { editorialStatusField } from '../utilities/status'
+import { createEditorialPublishRequirements } from '../hooks/enforceEditorialPublishRequirements.ts'
+import { createSlugField } from '../utilities/slug.ts'
+import { editorialStatusField } from '../utilities/status.ts'
 
 export const Itineraries: CollectionConfig = {
   slug: 'itineraries',

@@ -24,12 +24,12 @@ export type BreadcrumbItem = {
   href: string
 }
 
-const getSiteUrl = (): string => {
+export const getSiteUrl = (): string => {
   const value = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   return value.replace(/\/$/, '')
 }
 
-const toAbsoluteUrl = (path: string): string => {
+export const toAbsoluteUrl = (path: string): string => {
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path
   }
@@ -269,3 +269,31 @@ export const generateItineraryMetadata = (
 
 // Re-export toPayloadMediaUrl so pages only need to import from seo.ts or schema.ts
 export { toPayloadMediaUrl }
+
+export const buildBreadcrumbJsonLd = (items: BreadcrumbItem[]) => {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.label,
+      item: toAbsoluteUrl(item.href)
+    }))
+  }
+}
+
+export const buildWebsiteJsonLd = (settings: SiteSettingsGlobal) => {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: settings.siteName,
+    description: settings.defaultSeo.description,
+    url: toAbsoluteUrl('/'),
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${toAbsoluteUrl('/listings')}?q={search_term_string}`,
+      'query-input': 'required name=search_term_string'
+    }
+  }
+}

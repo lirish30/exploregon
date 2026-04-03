@@ -1,4 +1,4 @@
-import { createPublishGuard } from './workflowGuards'
+import { createPublishGuard } from './workflowGuards.ts'
 
 const commonEditorialPublishFields = [
   { key: 'title', label: 'title' },

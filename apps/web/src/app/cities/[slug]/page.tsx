@@ -29,9 +29,9 @@ import type {
 export const revalidate = 300
 
 type CityPageProps = {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 const fallbackSettings: SiteSettingsGlobal = {
@@ -132,14 +132,15 @@ const getSettings = async (): Promise<SiteSettingsGlobal> => {
 }
 
 export async function generateMetadata({ params }: CityPageProps): Promise<Metadata> {
-  const [settings, city] = await Promise.all([getSettings(), getCityBySlug(params.slug)])
+  const { slug } = await params
+  const [settings, city] = await Promise.all([getSettings(), getCityBySlug(slug)])
 
   if (!city) {
     return createMetadata(
       {
         title: 'City Not Found',
         description: 'The requested Oregon Coast city page could not be found.',
-        path: `/cities/${params.slug}`,
+        path: `/cities/${slug}`,
         noIndex: true
       },
       settings
@@ -158,7 +159,8 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
 }
 
 export default async function CityPage({ params }: CityPageProps) {
-  const city = await getCityBySlug(params.slug)
+  const { slug } = await params
+  const city = await getCityBySlug(slug)
 
   if (!city) {
     notFound()

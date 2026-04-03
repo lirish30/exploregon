@@ -14,12 +14,12 @@ import type { NormalizedCategory, NormalizedCity, NormalizedGuide, NormalizedLis
 export const revalidate = 300
 
 type CategoryPageProps = {
-  params: {
+  params: Promise<{
     slug: string
-  }
-  searchParams?: {
-    city?: string
-  }
+  }>
+  searchParams?: Promise<{
+    city?: string | string[]
+  }>
 }
 
 type RelatedCity = {
@@ -135,14 +135,15 @@ const buildFaq = (category: NormalizedCategory, listingCount: number, relatedCit
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-  const [settings, category] = await Promise.all([getSettings(), getCategoryBySlug(params.slug)])
+  const { slug } = await params
+  const [settings, category] = await Promise.all([getSettings(), getCategoryBySlug(slug)])
 
   if (!category) {
     return createMetadata(
       {
         title: 'Category Not Found',
         description: 'The requested category page could not be found.',
-        path: `/categories/${params.slug}`,
+        path: `/categories/${slug}`,
         noIndex: true
       },
       settings
@@ -160,7 +161,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 }
 
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
-  const category = await getCategoryBySlug(params.slug)
+  const { slug } = await params
+  const category = await getCategoryBySlug(slug)
 
   if (!category) {
     notFound()
@@ -178,7 +180,9 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const relatedGuides = getRelatedGuides(guides, category.slug)
   const breadcrumbs = buildEntityBreadcrumbs('categories', category.name, category.slug)
   const editorialCopy = categoryEditorialCopy[category.slug]
-  const activeCityFilter = relatedCities.some((city) => city.slug === searchParams?.city) ? searchParams?.city ?? null : null
+  const resolvedSearchParams = searchParams ? await searchParams : undefined
+  const requestedCity = typeof resolvedSearchParams?.city === 'string' ? resolvedSearchParams.city : null
+  const activeCityFilter = relatedCities.some((city) => city.slug === requestedCity) ? requestedCity : null
   const visibleListings = activeCityFilter
     ? categoryListings.filter((listing) => listing.city?.slug === activeCityFilter)
     : categoryListings
