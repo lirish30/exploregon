@@ -1,0 +1,59 @@
+[
+  {
+    "_comment": "COMPLETE record — will enter status: imported",
+    "name": "Cannon Beach Surf & Paddleboard Rentals",
+    "citySlug": "cannon-beach",
+    "regionSlug": "north-coast",
+    "categorySlugs": ["kayaking", "family-activities"],
+    "address": "123 Hemlock St, Cannon Beach, OR 97110",
+    "latitude": 45.8918,
+    "longitude": -123.9615,
+    "summary": "Rent boards, kayaks, and gear for a full day on the Oregon Coast surf and calm waters near Ecola Creek.",
+    "description": "Located steps from the beach, this outfitter offers half-day and full-day rentals for paddleboards, kayaks, and wetsuits. Instructors are on call for beginners. Ideal for families and first-time visitors wanting to get on the water without owning equipment.",
+    "websiteUrl": "https://example.com/cannon-beach-surf",
+    "phone": "5038000001",
+    "priceRange": "$$",
+    "seasonality": "Open Memorial Day through Labor Day. Limited weekend availability in spring and fall.",
+    "attributes": ["family-friendly", "beginner-welcome", "rental-equipment"],
+    "amenities": ["wetsuit-rental", "instruction-available", "parking-nearby"],
+    "seoTitle": "Paddleboard & Kayak Rentals in Cannon Beach, OR",
+    "seoDescription": "Rent paddleboards, kayaks, and wetsuits in Cannon Beach. Beginner-friendly instruction available steps from the beach."
+  },
+  {
+    "_comment": "INCOMPLETE record — missing coordinates and description, will enter status: needsReview",
+    "name": "Seaside Crab Shack",
+    "citySlug": "seaside",
+    "regionSlug": "north-coast",
+    "categorySlugs": ["restaurants"],
+    "address": "456 Broadway Ave, Seaside, OR 97138",
+    "summary": "Fresh Dungeness crab, fish and chips, and local seafood served at an iconic Seaside boardwalk shack.",
+    "phone": "5038000002",
+    "websiteUrl": "https://example.com/seaside-crab-shack"
+  },
+  {
+    "_comment": "INCOMPLETE record — missing city slug, will enter status: needsReview",
+    "name": "Newport Lighthouse Inn",
+    "address": "789 Coast Hwy, Newport, OR 97365",
+    "categorySlugs": ["hotels"],
+    "summary": "Boutique oceanfront inn adjacent to the Yaquina Head Outstanding Natural Area with panoramic Pacific views.",
+    "description": "The Newport Lighthouse Inn offers 24 individually decorated rooms, all with ocean-facing windows. Guests can walk to Yaquina Head Lighthouse in under five minutes. Continental breakfast included. Pet-friendly rooms available on request.",
+    "latitude": 44.6779,
+    "longitude": -124.0685,
+    "phone": "5418000001",
+    "websiteUrl": "https://example.com/newport-lighthouse-inn",
+    "seoTitle": "Newport Lighthouse Inn — Oceanfront Hotel Near Yaquina Head",
+    "seoDescription": "Boutique oceanfront inn in Newport, OR. Steps from Yaquina Head Lighthouse. Continental breakfast included."
+  },
+  {
+    "_comment": "DUPLICATE TEST — if slug 'cannon-beach-surf-paddleboard-rentals' already exists in DB, this will be skipped",
+    "name": "Cannon Beach Surf & Paddleboard Rentals",
+    "citySlug": "cannon-beach",
+    "regionSlug": "north-coast",
+    "categorySlugs": ["kayaking"],
+    "address": "123 Hemlock St, Cannon Beach, OR 97110",
+    "latitude": 45.8918,
+    "longitude": -123.9615,
+    "summary": "Slightly different version of the same place — should be detected as duplicate.",
+    "description": "This is a test record intended to trigger duplicate detection during import runs."
+  }
+]
