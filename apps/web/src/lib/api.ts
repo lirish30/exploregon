@@ -1,0 +1,621 @@
+import { COLLECTIONS, GLOBALS, normalizeRouteSlug } from './schema'
+import type {
+  CityDoc,
+  FooterGlobal,
+  GuideDoc,
+  HomepageGlobal,
+  ID,
+  ItineraryDoc,
+  ListingCategoryDoc,
+  ListingDoc,
+  NavigationGlobal,
+  NormalizedCategory,
+  NormalizedCity,
+  NormalizedEvent,
+  NormalizedGuide,
+  NormalizedHomepage,
+  NormalizedItinerary,
+  NormalizedListing,
+  NormalizedMedia,
+  NormalizedReference,
+  NormalizedRegion,
+  PayloadFindResponse,
+  PayloadMedia,
+  PayloadRelationship,
+  RegionDoc,
+  SiteSettingsGlobal,
+  EventDoc
+} from './types'
+
+type FetchBehavior = {
+  depth?: number
+  revalidate?: number | false
+  tags?: string[]
+}
+
+type SlugQuery = FetchBehavior & {
+  status?: string
+}
+
+type CollectionQuery = FetchBehavior & {
+  status?: string
+  limit?: number
+  page?: number
+  sort?: string
+  where?: Record<string, string | number | undefined>
+}
+
+const DEFAULT_DEPTH = 2
+const DEFAULT_REVALIDATE = 300
+
+const ensurePayloadBaseUrl = (): string => {
+  const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL
+
+  if (!baseUrl) {
+    throw new Error('Missing PAYLOAD_PUBLIC_SERVER_URL. Add it to your environment.')
+  }
+
+  return baseUrl.replace(/\/$/, '')
+}
+
+const withQueryString = (path: string, params: Record<string, string | number | undefined>): string => {
+  const query = new URLSearchParams()
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === undefined) {
+      return
+    }
+
+    query.set(key, String(value))
+  })
+
+  const queryString = query.toString()
+  return queryString ? `${path}?${queryString}` : path
+}
+
+const payloadFetch = async <T>(path: string, behavior: FetchBehavior = {}): Promise<T> => {
+  const baseUrl = ensurePayloadBaseUrl()
+  const { revalidate = DEFAULT_REVALIDATE, tags } = behavior
+
+  const response = await fetch(`${baseUrl}${path}`, {
+    next: {
+      revalidate,
+      tags
+    }
+  })
+
+  if (!response.ok) {
+    throw new Error(`Payload request failed (${response.status}) for ${path}`)
+  }
+
+  return response.json() as Promise<T>
+}
+
+const fetchGlobal = <T>(slug: string, behavior: FetchBehavior = {}): Promise<T> => {
+  const depth = behavior.depth ?? DEFAULT_DEPTH
+  const path = withQueryString(`/api/globals/${slug}`, { depth })
+  return payloadFetch<T>(path, behavior)
+}
+
+const fetchBySlug = async <T>(
+  collection: string,
+  slug: string,
+  { depth = DEFAULT_DEPTH, status, ...behavior }: SlugQuery = {}
+): Promise<T | null> => {
+  const path = withQueryString(`/api/${collection}`, {
+    depth,
+    limit: 1,
+    'where[slug][equals]': slug,
+    'where[status][equals]': status
+  })
+
+  const result = await payloadFetch<PayloadFindResponse<T>>(path, behavior)
+  return result.docs[0] ?? null
+}
+
+const fetchCollection = async <T>(
+  collection: string,
+  { depth = DEFAULT_DEPTH, status, limit = 24, page = 1, sort, where = {}, ...behavior }: CollectionQuery = {}
+): Promise<T[]> => {
+  const path = withQueryString(`/api/${collection}`, {
+    depth,
+    limit,
+    page,
+    sort,
+    'where[status][equals]': status,
+    ...where
+  })
+
+  const result = await payloadFetch<PayloadFindResponse<T>>(path, behavior)
+  return result.docs
+}
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null
+
+const asDoc = <T extends Record<string, unknown>>(value: PayloadRelationship<T>): T | null => {
+  return isRecord(value) ? (value as T) : null
+}
+
+const normalizeMedia = (value: PayloadRelationship<PayloadMedia> | undefined): NormalizedMedia | null => {
+  const media = value ? asDoc(value) : null
+
+  if (!media) {
+    return null
+  }
+
+  return {
+    id: media.id,
+    alt: typeof media.alt === 'string' ? media.alt : null,
+    url: typeof media.url === 'string' ? media.url : null,
+    width: typeof media.width === 'number' ? media.width : null,
+    height: typeof media.height === 'number' ? media.height : null
+  }
+}
+
+const normalizeReference = (
+  value: PayloadRelationship<Record<string, unknown>>,
+  labelKeys: string[]
+): NormalizedReference | null => {
+  const doc = asDoc(value)
+
+  if (!doc || typeof doc.id === 'undefined' || typeof doc.slug !== 'string') {
+    return null
+  }
+
+  const label = labelKeys.reduce<string | null>((acc, key) => {
+    if (acc) {
+      return acc
+    }
+
+    const candidate = doc[key]
+    if (typeof candidate === 'string' && candidate.length > 0) {
+      return candidate
+    }
+
+    return null
+  }, null)
+
+  if (!label) {
+    return null
+  }
+
+  return {
+    id: doc.id as ID,
+    slug: doc.slug,
+    label
+  }
+}
+
+const normalizeReferences = (
+  values: Array<PayloadRelationship<Record<string, unknown>>> | undefined,
+  labelKeys: string[]
+): NormalizedReference[] => {
+  return (values ?? [])
+    .map((value) => normalizeReference(value, labelKeys))
+    .filter((value): value is NormalizedReference => value !== null)
+}
+
+const normalizeRegion = (doc: RegionDoc): NormalizedRegion => ({
+  id: doc.id,
+  name: doc.name,
+  slug: doc.slug,
+  summary: doc.summary,
+  intro: doc.intro,
+  heroImage: normalizeMedia(doc.heroImage),
+  seo: {
+    title: doc.seoTitle,
+    description: doc.seoDescription
+  }
+})
+
+const normalizeCity = (doc: CityDoc): NormalizedCity => ({
+  id: doc.id,
+  name: doc.name,
+  slug: doc.slug,
+  region: normalizeReference(doc.region, ['name', 'title']),
+  summary: doc.summary,
+  intro: doc.intro,
+  whyVisit: doc.whyVisit,
+  whenToGo: doc.whenToGo,
+  featuredHighlights: (doc.featuredHighlights ?? []).map((item) => item.highlight),
+  latitude: doc.latitude,
+  longitude: doc.longitude,
+  faq: (doc.faq ?? []).map((item) => ({
+    question: item.question,
+    answer: item.answer
+  })),
+  heroImage: normalizeMedia(doc.heroImage),
+  seo: {
+    title: doc.seoTitle,
+    description: doc.seoDescription
+  }
+})
+
+const normalizeCategory = (doc: ListingCategoryDoc): NormalizedCategory => ({
+  id: doc.id,
+  name: doc.name,
+  slug: doc.slug,
+  description: doc.description,
+  icon: doc.icon,
+  seo: {
+    title: doc.seoTitle,
+    description: doc.seoDescription
+  }
+})
+
+const normalizeListing = (doc: ListingDoc): NormalizedListing => ({
+  id: doc.id,
+  name: doc.name,
+  slug: doc.slug,
+  status: doc.status,
+  sourceType: doc.sourceType,
+  city: normalizeReference(doc.city, ['name', 'title']),
+  region: normalizeReference(doc.region, ['name', 'title']),
+  categories: normalizeReferences(doc.categories as Array<PayloadRelationship<Record<string, unknown>>>, [
+    'name',
+    'title'
+  ]),
+  summary: doc.summary,
+  description: doc.description,
+  address: doc.address,
+  latitude: doc.latitude,
+  longitude: doc.longitude,
+  websiteUrl: doc.websiteUrl ?? null,
+  phone: doc.phone ?? null,
+  attributes: (doc.attributes ?? []).map((item) => item.attribute),
+  amenities: (doc.amenities ?? []).map((item) => item.amenity),
+  priceRange: doc.priceRange ?? null,
+  seasonality: doc.seasonality ?? null,
+  editorNotes: doc.editorNotes ?? null,
+  heroImage: normalizeMedia(doc.heroImage),
+  gallery: (doc.gallery ?? [])
+    .map((image) => normalizeMedia(image))
+    .filter((image): image is NormalizedMedia => image !== null),
+  seo: {
+    title: doc.seoTitle,
+    description: doc.seoDescription
+  }
+})
+
+const normalizeGuide = (doc: GuideDoc): NormalizedGuide => ({
+  id: doc.id,
+  title: doc.title,
+  slug: doc.slug,
+  excerpt: doc.excerpt,
+  body: doc.body,
+  travelSeason: doc.travelSeason,
+  heroImage: normalizeMedia(doc.heroImage),
+  relatedCities: normalizeReferences(doc.relatedCities as Array<PayloadRelationship<Record<string, unknown>>> | undefined, [
+    'name',
+    'title'
+  ]),
+  relatedCategories: normalizeReferences(
+    doc.relatedCategories as Array<PayloadRelationship<Record<string, unknown>>> | undefined,
+    ['name', 'title']
+  ),
+  seo: {
+    title: doc.seoTitle,
+    description: doc.seoDescription
+  }
+})
+
+const normalizeEvent = (doc: EventDoc): NormalizedEvent => ({
+  id: doc.id,
+  title: doc.title,
+  slug: doc.slug,
+  city: normalizeReference(doc.city, ['name', 'title']),
+  region: normalizeReference(doc.region, ['name', 'title']),
+  startDate: doc.startDate,
+  endDate: doc.endDate ?? null,
+  venue: doc.venue,
+  summary: doc.summary,
+  description: doc.description,
+  heroImage: normalizeMedia(doc.heroImage),
+  eventUrl: doc.eventUrl ?? null,
+  seo: {
+    title: doc.seoTitle,
+    description: doc.seoDescription
+  }
+})
+
+const normalizeItinerary = (doc: ItineraryDoc): NormalizedItinerary => ({
+  id: doc.id,
+  title: doc.title,
+  slug: doc.slug,
+  summary: doc.summary,
+  tripLength: doc.tripLength,
+  body: doc.body,
+  heroImage: normalizeMedia(doc.heroImage),
+  stops: normalizeReferences(doc.stops as Array<PayloadRelationship<Record<string, unknown>>>, [
+    'name',
+    'title'
+  ]),
+  relatedCities: normalizeReferences(doc.relatedCities as Array<PayloadRelationship<Record<string, unknown>>> | undefined, [
+    'name',
+    'title'
+  ]),
+  seo: {
+    title: doc.seoTitle,
+    description: doc.seoDescription
+  }
+})
+
+const normalizeHomepage = (global: HomepageGlobal): NormalizedHomepage => ({
+  heroHeadline: global.heroHeadline,
+  heroSubheadline: global.heroSubheadline,
+  heroCta: global.heroCta
+    ? {
+        label: global.heroCta.label,
+        url: global.heroCta.url
+      }
+    : null,
+  featuredCities: normalizeReferences(
+    global.featuredCities as Array<PayloadRelationship<Record<string, unknown>>> | undefined,
+    ['name', 'title']
+  ),
+  featuredCategories: normalizeReferences(
+    global.featuredCategories as Array<PayloadRelationship<Record<string, unknown>>> | undefined,
+    ['name', 'title']
+  ),
+  editorialIntroBlock: global.editorialIntroBlock
+    ? {
+        headline: global.editorialIntroBlock.headline,
+        body: global.editorialIntroBlock.body
+      }
+    : null,
+  utilityTeaserBlock: global.utilityTeaserBlock
+    ? {
+        headline: global.utilityTeaserBlock.headline,
+        body: global.utilityTeaserBlock.body
+      }
+    : null,
+  planningCtaBlock: global.planningCtaBlock
+    ? {
+        headline: global.planningCtaBlock.headline,
+        body: global.planningCtaBlock.body,
+        buttonLabel: global.planningCtaBlock.buttonLabel,
+        buttonUrl: global.planningCtaBlock.buttonUrl
+      }
+    : null
+})
+
+export const getHomepageData = async (behavior: FetchBehavior = {}): Promise<NormalizedHomepage> => {
+  const data = await fetchGlobal<HomepageGlobal>(GLOBALS.homepage, behavior)
+  return normalizeHomepage(data)
+}
+
+export const getSiteSettings = (behavior: FetchBehavior = {}): Promise<SiteSettingsGlobal> => {
+  return fetchGlobal<SiteSettingsGlobal>(GLOBALS.siteSettings, behavior)
+}
+
+export const getNavigation = (behavior: FetchBehavior = {}): Promise<NavigationGlobal> => {
+  return fetchGlobal<NavigationGlobal>(GLOBALS.navigation, behavior)
+}
+
+export const getFooter = (behavior: FetchBehavior = {}): Promise<FooterGlobal> => {
+  return fetchGlobal<FooterGlobal>(GLOBALS.footer, behavior)
+}
+
+export const getCityBySlug = async (
+  routeSlug: string | string[] | undefined,
+  options: FetchBehavior = {}
+): Promise<NormalizedCity | null> => {
+  const slug = normalizeRouteSlug(routeSlug)
+  if (!slug) {
+    return null
+  }
+
+  const doc = await fetchBySlug<CityDoc>(COLLECTIONS.cities, slug, {
+    ...options,
+    status: 'published'
+  })
+
+  return doc ? normalizeCity(doc) : null
+}
+
+export const getCities = async (options: CollectionQuery = {}): Promise<NormalizedCity[]> => {
+  const docs = await fetchCollection<CityDoc>(COLLECTIONS.cities, {
+    status: 'published',
+    sort: 'name',
+    limit: 250,
+    ...options
+  })
+
+  return docs.map((doc) => normalizeCity(doc))
+}
+
+export const getCategoryBySlug = async (
+  routeSlug: string | string[] | undefined,
+  options: FetchBehavior = {}
+): Promise<NormalizedCategory | null> => {
+  const slug = normalizeRouteSlug(routeSlug)
+  if (!slug) {
+    return null
+  }
+
+  const doc = await fetchBySlug<ListingCategoryDoc>(COLLECTIONS.listingCategories, slug, options)
+  return doc ? normalizeCategory(doc) : null
+}
+
+export const getCategories = async (options: CollectionQuery = {}): Promise<NormalizedCategory[]> => {
+  const docs = await fetchCollection<ListingCategoryDoc>(COLLECTIONS.listingCategories, {
+    sort: 'name',
+    limit: 250,
+    ...options
+  })
+
+  return docs.map((doc) => normalizeCategory(doc))
+}
+
+export const getListingBySlug = async (
+  routeSlug: string | string[] | undefined,
+  options: FetchBehavior = {}
+): Promise<NormalizedListing | null> => {
+  const slug = normalizeRouteSlug(routeSlug)
+  if (!slug) {
+    return null
+  }
+
+  const doc = await fetchBySlug<ListingDoc>(COLLECTIONS.listings, slug, {
+    ...options,
+    status: 'published'
+  })
+
+  return doc ? normalizeListing(doc) : null
+}
+
+export const getListingRecordBySlug = async (
+  routeSlug: string | string[] | undefined,
+  options: FetchBehavior = {}
+): Promise<NormalizedListing | null> => {
+  const slug = normalizeRouteSlug(routeSlug)
+  if (!slug) {
+    return null
+  }
+
+  const doc = await fetchBySlug<ListingDoc>(COLLECTIONS.listings, slug, options)
+  return doc ? normalizeListing(doc) : null
+}
+
+export const getListings = async (options: CollectionQuery = {}): Promise<NormalizedListing[]> => {
+  const docs = await fetchCollection<ListingDoc>(COLLECTIONS.listings, {
+    status: 'published',
+    sort: 'name',
+    limit: 250,
+    ...options
+  })
+
+  return docs.map((doc) => normalizeListing(doc))
+}
+
+export const getListingsByCity = async (
+  cityId: ID,
+  options: CollectionQuery = {}
+): Promise<NormalizedListing[]> => {
+  const docs = await fetchCollection<ListingDoc>(COLLECTIONS.listings, {
+    status: 'published',
+    sort: 'name',
+    limit: 48,
+    where: {
+      'where[city][equals]': cityId
+    },
+    ...options
+  })
+
+  return docs.map((doc) => normalizeListing(doc))
+}
+
+export const getRegionBySlug = async (
+  routeSlug: string | string[] | undefined,
+  options: FetchBehavior = {}
+): Promise<NormalizedRegion | null> => {
+  const slug = normalizeRouteSlug(routeSlug)
+  if (!slug) {
+    return null
+  }
+
+  const doc = await fetchBySlug<RegionDoc>(COLLECTIONS.regions, slug, options)
+  return doc ? normalizeRegion(doc) : null
+}
+
+export const getGuideBySlug = async (
+  routeSlug: string | string[] | undefined,
+  options: FetchBehavior = {}
+): Promise<NormalizedGuide | null> => {
+  const slug = normalizeRouteSlug(routeSlug)
+  if (!slug) {
+    return null
+  }
+
+  const doc = await fetchBySlug<GuideDoc>(COLLECTIONS.guides, slug, {
+    ...options,
+    status: 'published'
+  })
+
+  return doc ? normalizeGuide(doc) : null
+}
+
+export const getGuides = async (options: CollectionQuery = {}): Promise<NormalizedGuide[]> => {
+  const docs = await fetchCollection<GuideDoc>(COLLECTIONS.guides, {
+    status: 'published',
+    sort: '-createdAt',
+    limit: 120,
+    ...options
+  })
+
+  return docs.map((doc) => normalizeGuide(doc))
+}
+
+export const getEventBySlug = async (
+  routeSlug: string | string[] | undefined,
+  options: FetchBehavior = {}
+): Promise<NormalizedEvent | null> => {
+  const slug = normalizeRouteSlug(routeSlug)
+  if (!slug) {
+    return null
+  }
+
+  const doc = await fetchBySlug<EventDoc>(COLLECTIONS.events, slug, {
+    ...options,
+    status: 'published'
+  })
+
+  return doc ? normalizeEvent(doc) : null
+}
+
+export const getEventsByCity = async (
+  cityId: ID,
+  options: CollectionQuery = {}
+): Promise<NormalizedEvent[]> => {
+  const docs = await fetchCollection<EventDoc>(COLLECTIONS.events, {
+    status: 'published',
+    sort: 'startDate',
+    limit: 24,
+    where: {
+      'where[city][equals]': cityId
+    },
+    ...options
+  })
+
+  return docs.map((doc) => normalizeEvent(doc))
+}
+
+export const getEvents = async (options: CollectionQuery = {}): Promise<NormalizedEvent[]> => {
+  const docs = await fetchCollection<EventDoc>(COLLECTIONS.events, {
+    status: 'published',
+    sort: 'startDate',
+    limit: 120,
+    ...options
+  })
+
+  return docs.map((doc) => normalizeEvent(doc))
+}
+
+export const getItineraryBySlug = async (
+  routeSlug: string | string[] | undefined,
+  options: FetchBehavior = {}
+): Promise<NormalizedItinerary | null> => {
+  const slug = normalizeRouteSlug(routeSlug)
+  if (!slug) {
+    return null
+  }
+
+  const doc = await fetchBySlug<ItineraryDoc>(COLLECTIONS.itineraries, slug, {
+    ...options,
+    status: 'published'
+  })
+
+  return doc ? normalizeItinerary(doc) : null
+}
+
+export const getItineraries = async (options: CollectionQuery = {}): Promise<NormalizedItinerary[]> => {
+  const docs = await fetchCollection<ItineraryDoc>(COLLECTIONS.itineraries, {
+    status: 'published',
+    sort: '-createdAt',
+    limit: 120,
+    ...options
+  })
+
+  return docs.map((doc) => normalizeItinerary(doc))
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@exploregon/cms",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "payload dev --config src/payload.config.ts",
+    "build": "payload build --config src/payload.config.ts",
+    "lint": "eslint src --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "typegen": "payload generate:types --config src/payload.config.ts",
+    "seed": "tsx src/seed/index.ts"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "^3.30.0",
+    "dotenv": "^16.4.7",
+    "payload": "^3.30.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.3"
+  }
+}

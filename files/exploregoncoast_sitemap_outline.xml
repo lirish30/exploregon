@@ -1,0 +1,1132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================
+  ExplOregon Coast — Content Outline & Sitemap
+  ============================================================
+  
+  Structure: 6 content hubs + homepage + utility pages
+  Total planned pages at launch: ~80+
+  URL base: https://exploregoncoast.com
+  
+  Priority key:
+    1.0 = Homepage
+    0.9 = Hub landing pages
+    0.8 = Pillar guides and top city pages
+    0.7 = Secondary guides and remaining city pages
+    0.6 = Individual listings and long-tail pages
+    0.5 = Utility, about, legal pages
+  
+  Changefreq key:
+    weekly  = pages updated with seasonal/event content
+    monthly = evergreen guides refreshed monthly
+    yearly  = static info pages
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:content="http://exploregoncoast.com/schemas/content-outline">
+
+  <!-- ============================================================
+       HOMEPAGE
+       ============================================================ -->
+  <url>
+    <loc>https://exploregoncoast.com/</loc>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+    <content:outline>
+      <content:title>ExplOregon Coast — Your Complete Oregon Coast Directory</content:title>
+      <content:target-keyword>oregon coast</content:target-keyword>
+      <content:word-count>800–1200</content:word-count>
+      <content:description>
+        Front door to the site. Interactive map hero, search bar, quick-filter 
+        buttons (Stay / Do / Plan / Cities), featured city cards, seasonal 
+        spotlight block, whale migration status widget, weather snapshot, 
+        latest events feed, editor picks, email capture CTA.
+      </content:description>
+      <content:sections>
+        <content:section>Hero with interactive coast map + search</content:section>
+        <content:section>Featured regions: North Coast, Central Coast, South Coast</content:section>
+        <content:section>Top city cards (Cannon Beach, Newport, Astoria, etc.)</content:section>
+        <content:section>Seasonal spotlight — what's happening on the coast right now</content:section>
+        <content:section>Quick links to all 6 hubs</content:section>
+        <content:section>Whale watch status + tide snapshot</content:section>
+        <content:section>Latest events feed</content:section>
+        <content:section>Email signup — free "Hidden Beaches Map" lead magnet</content:section>
+      </content:sections>
+    </content:outline>
+  </url>
+
+
+  <!-- ============================================================
+       HUB 1: PLACES TO STAY  /stay/
+       ============================================================ -->
+  <url>
+    <loc>https://exploregoncoast.com/stay/</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+    <content:outline>
+      <content:title>Places to Stay on the Oregon Coast — Hotels, Camping, Rentals &amp; More</content:title>
+      <content:target-keyword>oregon coast places to stay</content:target-keyword>
+      <content:word-count>1200–1800</content:word-count>
+      <content:template>Hub landing page</content:template>
+      <content:description>
+        Hub page linking to all accommodation subcategories. Comparison grid 
+        of options by type (hotel vs. rental vs. campground), featured 
+        listings, seasonal pricing callout, FAQ.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Stay: Hotels -->
+  <url>
+    <loc>https://exploregoncoast.com/stay/hotels/</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Best Oregon Coast Hotels — Budget to Luxury Picks for 2026</content:title>
+      <content:target-keyword>oregon coast hotels</content:target-keyword>
+      <content:word-count>2500–3000</content:word-count>
+      <content:template>Category guide</content:template>
+      <content:description>
+        Hotels organized by budget tier and region. Comparison table with 
+        price range, oceanfront status, amenities, and affiliate booking 
+        links. Quick-answer box at top. FAQ targeting "People Also Ask."
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Stay: Campgrounds -->
+  <url>
+    <loc>https://exploregoncoast.com/stay/campgrounds/</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Camping — Complete Campground Guide (2026)</content:title>
+      <content:target-keyword>oregon coast camping</content:target-keyword>
+      <content:word-count>2500–3000</content:word-count>
+      <content:template>Category guide</content:template>
+      <content:description>
+        Pillar guide: best campgrounds by region (north/central/south), tent 
+        vs RV vs yurt, reservation tips, state parks vs private, cost breakdown, 
+        packing checklist. Filterable comparison table of all campgrounds. 
+        Affiliate links to Reserve America, Hipcamp.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Stay: RV Parks -->
+  <url>
+    <loc>https://exploregoncoast.com/stay/rv-parks/</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Best Oregon Coast RV Parks — Full Hookups, Oceanfront Sites &amp; More</content:title>
+      <content:target-keyword>oregon coast rv parks</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Category guide</content:template>
+      <content:description>
+        Top 15–20 RV parks ranked. Full hookups vs partial, pet-friendly, 
+        waterfront vs forest. Comparison table with amenities, pricing, 
+        reservation links. Affiliate links to KOA, Good Sam, Thousand Trails.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Stay: Vacation Rentals -->
+  <url>
+    <loc>https://exploregoncoast.com/stay/vacation-rentals/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Vacation Rentals &amp; Beach Houses — Where to Book</content:title>
+      <content:target-keyword>oregon coast vacation rentals</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Category guide</content:template>
+      <content:description>
+        VRBO vs Airbnb for Oregon Coast, best towns for rentals, what to look 
+        for, pricing by season. Embedded search widgets. High affiliate value.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Stay: Glamping -->
+  <url>
+    <loc>https://exploregoncoast.com/stay/glamping/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Glamping — Yurts, Cabins, Treehouses &amp; Airstreams</content:title>
+      <content:target-keyword>oregon coast glamping</content:target-keyword>
+      <content:word-count>1800–2200</content:word-count>
+      <content:template>Category guide</content:template>
+      <content:description>
+        Yurts, cabins, treehouses, Airstream resorts. State park yurt listings, 
+        boutique glamping properties, Hipcamp features.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Stay: Budget vs Luxury comparison -->
+  <url>
+    <loc>https://exploregoncoast.com/stay/budget-vs-luxury/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast on a Budget vs. Luxury — What Each Level Gets You</content:title>
+      <content:target-keyword>oregon coast budget travel</content:target-keyword>
+      <content:word-count>1500–2000</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Example individual listing pages under /stay/ -->
+  <url>
+    <loc>https://exploregoncoast.com/listings/beverly-beach-state-park/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Beverly Beach State Park Campground — Sites, Reservations &amp; Tips</content:title>
+      <content:target-keyword>beverly beach state park camping</content:target-keyword>
+      <content:word-count>500–900</content:word-count>
+      <content:template>Listing / directory card</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/listings/cape-lookout-state-park/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Cape Lookout State Park — Campground, Trails &amp; What to Know</content:title>
+      <content:target-keyword>cape lookout state park campground</content:target-keyword>
+      <content:word-count>500–900</content:word-count>
+      <content:template>Listing / directory card</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/listings/hallmark-resort-cannon-beach/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Hallmark Resort Cannon Beach — Rooms, Rates &amp; Oceanfront Views</content:title>
+      <content:target-keyword>hallmark resort cannon beach</content:target-keyword>
+      <content:word-count>350–600</content:word-count>
+      <content:template>Listing / directory card</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/listings/surftides-lincoln-city/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Surftides Lincoln City — Hotel Review, Rates &amp; Beach Access</content:title>
+      <content:target-keyword>surftides lincoln city</content:target-keyword>
+      <content:word-count>350–600</content:word-count>
+      <content:template>Listing / directory card</content:template>
+    </content:outline>
+  </url>
+
+
+  <!-- ============================================================
+       HUB 2: THINGS TO DO  /do/
+       ============================================================ -->
+  <url>
+    <loc>https://exploregoncoast.com/do/</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+    <content:outline>
+      <content:title>Things to Do on the Oregon Coast — Activities, Beaches &amp; Adventures</content:title>
+      <content:target-keyword>oregon coast things to do</content:target-keyword>
+      <content:word-count>1200–1800</content:word-count>
+      <content:template>Hub landing page</content:template>
+      <content:description>
+        Hub page linking to activity guides. Featured cards grid for top 
+        activities, seasonal activity callout, category filters, FAQ.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Do: Whale Watching -->
+  <url>
+    <loc>https://exploregoncoast.com/do/whale-watching/</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Whale Watching — Best Spots, Seasons &amp; Tours (2026)</content:title>
+      <content:target-keyword>oregon coast whale watching</content:target-keyword>
+      <content:word-count>2500–3000</content:word-count>
+      <content:template>Guide / article</content:template>
+      <content:description>
+        When to go (Dec–Jan gray whales, May–June blue/humpback), best 
+        viewpoints (Depoe Bay, Cape Perpetua, Yaquina Head), guided tours 
+        vs shore watching, what to bring. Seasonal migration calendar visual. 
+        Affiliate links to tour operators via Viator/GetYourGuide.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Do: Beaches -->
+  <url>
+    <loc>https://exploregoncoast.com/do/beaches/</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>20 Best Beaches on the Oregon Coast — Family, Surfing, Dogs &amp; Hidden Gems</content:title>
+      <content:target-keyword>best beaches oregon coast</content:target-keyword>
+      <content:word-count>2500–3000</content:word-count>
+      <content:template>Guide / article</content:template>
+      <content:description>
+        Top 20 beaches ranked by type: family-friendly, secluded, dog-friendly, 
+        surfing, tide pooling. Interactive map of all beaches. Local tips 
+        callout boxes.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Do: Hiking -->
+  <url>
+    <loc>https://exploregoncoast.com/do/hiking/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Best Oregon Coast Hikes — Easy to Epic Trails Along the Shore</content:title>
+      <content:target-keyword>oregon coast hiking trails</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+      <content:description>
+        Top trails by difficulty. Cape Lookout, Tillamook Head, Cape Falcon, 
+        Shore Acres. Trail stats: length, elevation, dog-friendly. AllTrails 
+        embeds. Map of trailheads.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Do: Tide Pools -->
+  <url>
+    <loc>https://exploregoncoast.com/do/tide-pools/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Tide Pools — Where to Go, What You'll Find &amp; How to Read Tides</content:title>
+      <content:target-keyword>oregon coast tide pools</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+      <content:description>
+        Best tide pool locations, species guide, how to read a tide chart, 
+        leave-no-trace rules. Embedded live NOAA tide chart widget.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Do: Oregon Dunes -->
+  <url>
+    <loc>https://exploregoncoast.com/do/oregon-dunes/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Dunes — ATV Rentals, Sandboarding, Hiking &amp; Camping Guide</content:title>
+      <content:target-keyword>oregon dunes</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Do: Fishing -->
+  <url>
+    <loc>https://exploregoncoast.com/do/fishing/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Fishing — Crabbing, Surf Fishing, Charters &amp; Seasons</content:title>
+      <content:target-keyword>oregon coast fishing</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Do: Lighthouses -->
+  <url>
+    <loc>https://exploregoncoast.com/do/lighthouses/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>All 11 Oregon Coast Lighthouses — History, Tours &amp; Photography Guide</content:title>
+      <content:target-keyword>oregon coast lighthouses</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Do: Surfing -->
+  <url>
+    <loc>https://exploregoncoast.com/do/surfing/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Surfing the Oregon Coast — Best Breaks, Conditions &amp; What to Wear</content:title>
+      <content:target-keyword>oregon coast surfing</content:target-keyword>
+      <content:word-count>1800–2200</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Do: Scenic Drives -->
+  <url>
+    <loc>https://exploregoncoast.com/do/scenic-drives/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Scenic Drives — The Best Stretches of Highway 101</content:title>
+      <content:target-keyword>oregon coast scenic drives</content:target-keyword>
+      <content:word-count>1800–2200</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Do: Storm Watching -->
+  <url>
+    <loc>https://exploregoncoast.com/do/storm-watching/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Storm Watching — When to Go &amp; Where to Stay</content:title>
+      <content:target-keyword>oregon coast storm watching</content:target-keyword>
+      <content:word-count>1500–2000</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+
+  <!-- ============================================================
+       HUB 3: CITY GUIDES  /cities/
+       ============================================================ -->
+  <url>
+    <loc>https://exploregoncoast.com/cities/</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Cities &amp; Towns — Your Guide to Every Coastal Community</content:title>
+      <content:target-keyword>oregon coast cities</content:target-keyword>
+      <content:word-count>1200–1500</content:word-count>
+      <content:template>Hub landing page</content:template>
+      <content:description>
+        Interactive map of all coastal towns. Cards for each city with hero 
+        photo, tagline, and quick stats. Filter by region (north/central/south).
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Priority 1 Cities (top 5 by search volume) -->
+  <url>
+    <loc>https://exploregoncoast.com/cities/cannon-beach/</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Cannon Beach, Oregon — Things to Do, Where to Stay &amp; Local Tips</content:title>
+      <content:target-keyword>cannon beach oregon</content:target-keyword>
+      <content:word-count>2000–2600</content:word-count>
+      <content:template>City / town guide</content:template>
+      <content:description>
+        Haystack Rock, Ecola State Park, galleries, restaurants, hotels by 
+        price tier. Drive time from Portland (90 min). Best seasons to visit.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/seaside/</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Seaside, Oregon — Promenade, Arcades, Beaches &amp; Trip Planning</content:title>
+      <content:target-keyword>seaside oregon</content:target-keyword>
+      <content:word-count>2000–2600</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/astoria/</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Astoria, Oregon — History, Breweries, Film Locations &amp; River Views</content:title>
+      <content:target-keyword>astoria oregon</content:target-keyword>
+      <content:word-count>2000–2600</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/newport/</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Newport, Oregon — Aquarium, Bayfront, Nye Beach &amp; Local Guide</content:title>
+      <content:target-keyword>newport oregon</content:target-keyword>
+      <content:word-count>2000–2600</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/lincoln-city/</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Lincoln City, Oregon — Glass Floats, Outlet Mall, Kite Flying &amp; More</content:title>
+      <content:target-keyword>lincoln city oregon</content:target-keyword>
+      <content:word-count>2000–2600</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Priority 2 Cities -->
+  <url>
+    <loc>https://exploregoncoast.com/cities/depoe-bay/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Depoe Bay, Oregon — Whale Watching Capital of the Coast</content:title>
+      <content:target-keyword>depoe bay oregon</content:target-keyword>
+      <content:word-count>1800–2400</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/pacific-city/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Pacific City, Oregon — Cape Kiwanda, Dory Boats &amp; Pelican Brewing</content:title>
+      <content:target-keyword>pacific city oregon</content:target-keyword>
+      <content:word-count>1800–2400</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/yachats/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Yachats, Oregon — The Gem of the Coast (Hiking, Tide Pools &amp; Quiet)</content:title>
+      <content:target-keyword>yachats oregon</content:target-keyword>
+      <content:word-count>1800–2400</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/florence/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Florence, Oregon — Sand Dunes, Old Town &amp; Heceta Head Lighthouse</content:title>
+      <content:target-keyword>florence oregon</content:target-keyword>
+      <content:word-count>1800–2400</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/tillamook/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Tillamook, Oregon — Cheese Factory, Creamery &amp; Coastal Access</content:title>
+      <content:target-keyword>tillamook oregon</content:target-keyword>
+      <content:word-count>1800–2400</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/bandon/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Bandon, Oregon — Face Rock, Cranberry Bogs &amp; the Wild South Coast</content:title>
+      <content:target-keyword>bandon oregon</content:target-keyword>
+      <content:word-count>1800–2400</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/brookings/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Brookings, Oregon — The Banana Belt, Samuel Boardman &amp; Warm Days</content:title>
+      <content:target-keyword>brookings oregon</content:target-keyword>
+      <content:word-count>1800–2400</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/gold-beach/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Gold Beach, Oregon — Rogue River Jet Boats, Fishing &amp; Remote Beauty</content:title>
+      <content:target-keyword>gold beach oregon</content:target-keyword>
+      <content:word-count>1800–2400</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/coos-bay/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Coos Bay, Oregon — Shore Acres, Charleston Harbor &amp; South Coast Hub</content:title>
+      <content:target-keyword>coos bay oregon</content:target-keyword>
+      <content:word-count>1800–2400</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/cities/reedsport/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Reedsport, Oregon — Gateway to the Oregon Dunes</content:title>
+      <content:target-keyword>reedsport oregon</content:target-keyword>
+      <content:word-count>1800–2400</content:word-count>
+      <content:template>City / town guide</content:template>
+    </content:outline>
+  </url>
+
+
+  <!-- ============================================================
+       HUB 4: TRIP PLANNING  /plan/
+       ============================================================ -->
+  <url>
+    <loc>https://exploregoncoast.com/plan/</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+    <content:outline>
+      <content:title>Plan Your Oregon Coast Trip — Maps, Itineraries &amp; Travel Tips</content:title>
+      <content:target-keyword>oregon coast trip planning</content:target-keyword>
+      <content:word-count>1200–1500</content:word-count>
+      <content:template>Hub landing page</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Plan: Road Trip -->
+  <url>
+    <loc>https://exploregoncoast.com/plan/road-trip/</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>The Ultimate Oregon Coast Road Trip — Astoria to Brookings on Hwy 101</content:title>
+      <content:target-keyword>oregon coast road trip</content:target-keyword>
+      <content:word-count>3000–4000</content:word-count>
+      <content:template>Guide / article</content:template>
+      <content:description>
+        Highest-potential single article. Driving Hwy 101 end to end (363 mi), 
+        3-day / 5-day / 7-day itinerary options, top stops per segment, 
+        where to sleep each night, estimated daily costs, driving tips, 
+        interactive route map embed.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Plan: Interactive Map -->
+  <url>
+    <loc>https://exploregoncoast.com/plan/map/</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Map — Interactive Guide to Beaches, Towns &amp; Attractions</content:title>
+      <content:target-keyword>oregon coast map</content:target-keyword>
+      <content:word-count>800–1200</content:word-count>
+      <content:template>Utility / tool page</content:template>
+      <content:description>
+        Full-screen interactive Leaflet.js map with filterable layers: 
+        beaches, campgrounds, hotels, restaurants, whale watching spots, 
+        lighthouses, state parks. Each pin links to its listing page.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Plan: Best Time to Visit -->
+  <url>
+    <loc>https://exploregoncoast.com/plan/best-time-to-visit/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Best Time to Visit the Oregon Coast — Month-by-Month Weather &amp; Events</content:title>
+      <content:target-keyword>best time to visit oregon coast</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+      <content:description>
+        Monthly breakdown: weather averages, crowd levels, pricing trends, 
+        what's in season (whale migration, crab, storm watching). Visual 
+        calendar graphic.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Plan: Itineraries -->
+  <url>
+    <loc>https://exploregoncoast.com/plan/itineraries/3-day-weekend/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>3-Day Oregon Coast Weekend Itinerary — From Portland &amp; Back</content:title>
+      <content:target-keyword>oregon coast weekend trip</content:target-keyword>
+      <content:word-count>1800–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/plan/itineraries/5-day-road-trip/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>5-Day Oregon Coast Road Trip — The Ideal Mid-Length Drive</content:title>
+      <content:target-keyword>5 day oregon coast itinerary</content:target-keyword>
+      <content:word-count>2000–2800</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/plan/itineraries/7-day-full-coast/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>7-Day Oregon Coast Itinerary — Every Major Stop, North to South</content:title>
+      <content:target-keyword>oregon coast 7 day itinerary</content:target-keyword>
+      <content:word-count>2500–3500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Plan: Packing List -->
+  <url>
+    <loc>https://exploregoncoast.com/plan/packing-list/</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Packing List — What to Bring (Every Season)</content:title>
+      <content:target-keyword>oregon coast packing list</content:target-keyword>
+      <content:word-count>1200–1500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Plan: Getting There -->
+  <url>
+    <loc>https://exploregoncoast.com/plan/getting-there/</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+    <content:outline>
+      <content:title>How to Get to the Oregon Coast — Driving, Flying &amp; Transit Options</content:title>
+      <content:target-keyword>how to get to oregon coast</content:target-keyword>
+      <content:word-count>1200–1500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Plan: Oregon Coast in Winter -->
+  <url>
+    <loc>https://exploregoncoast.com/plan/oregon-coast-in-winter/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast in Winter — Storm Watching, Whale Season &amp; Cozy Stays</content:title>
+      <content:target-keyword>oregon coast in winter</content:target-keyword>
+      <content:word-count>1800–2200</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Plan: Oregon Coast with Dogs -->
+  <url>
+    <loc>https://exploregoncoast.com/plan/dog-friendly/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Dog-Friendly Oregon Coast — Beaches, Hotels &amp; Trails That Welcome Pets</content:title>
+      <content:target-keyword>oregon coast with dogs</content:target-keyword>
+      <content:word-count>1800–2200</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Plan: Trip Builder Tool -->
+  <url>
+    <loc>https://exploregoncoast.com/trip-builder/</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Trip Builder — Save Stops &amp; Build Your Itinerary</content:title>
+      <content:target-keyword>oregon coast trip planner</content:target-keyword>
+      <content:word-count>400–600</content:word-count>
+      <content:template>Interactive tool page</content:template>
+      <content:description>
+        User tool: save listings and cities, drag to reorder stops, 
+        generate a shareable itinerary URL. Email capture for saving trips.
+      </content:description>
+    </content:outline>
+  </url>
+
+
+  <!-- ============================================================
+       HUB 5: NATURE & SCIENCE  /nature/
+       ============================================================ -->
+  <url>
+    <loc>https://exploregoncoast.com/nature/</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Nature &amp; Science — Wildlife, Geology &amp; Coastal Wonders</content:title>
+      <content:target-keyword>oregon coast nature</content:target-keyword>
+      <content:word-count>1200–1500</content:word-count>
+      <content:template>Hub landing page</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Nature: Tsunami Guide -->
+  <url>
+    <loc>https://exploregoncoast.com/nature/tsunami-guide/</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Tsunami Guide — Zones, Evacuation Routes &amp; What to Know</content:title>
+      <content:target-keyword>oregon coast tsunami</content:target-keyword>
+      <content:word-count>2500–3000</content:word-count>
+      <content:template>Guide / article</content:template>
+      <content:description>
+        Almost uncontested keyword. Tsunami zone maps, warning signs, 
+        evacuation routes by town, historical context, how the Cascadia 
+        Subduction Zone works. Cites Oregon OEM, USGS, NOAA. Strong 
+        backlink magnet for .edu and news sites.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Nature: Tide Charts -->
+  <url>
+    <loc>https://exploregoncoast.com/nature/tides/</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Tide Charts — Live Tides for Every Coastal Town</content:title>
+      <content:target-keyword>oregon coast tides</content:target-keyword>
+      <content:word-count>600–800</content:word-count>
+      <content:template>Utility / tool page</content:template>
+      <content:description>
+        Embedded NOAA tide data for major stations. Selector by town. 
+        Explanation of how to read tides for tide pooling and beach safety. 
+        Repeat-visit utility page.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Nature: Wildlife -->
+  <url>
+    <loc>https://exploregoncoast.com/nature/wildlife/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Wildlife — Whales, Sea Lions, Puffins &amp; What to Spot</content:title>
+      <content:target-keyword>oregon coast wildlife</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Nature: Geology / Sea Stacks -->
+  <url>
+    <loc>https://exploregoncoast.com/nature/geology/</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Geology — Sea Stacks, Basalt Cliffs &amp; How the Coast Formed</content:title>
+      <content:target-keyword>oregon coast sea stacks geology</content:target-keyword>
+      <content:word-count>1800–2200</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Nature: Weather -->
+  <url>
+    <loc>https://exploregoncoast.com/nature/weather/</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Weather — Current Forecast, Averages &amp; What to Expect</content:title>
+      <content:target-keyword>oregon coast weather</content:target-keyword>
+      <content:word-count>800–1200</content:word-count>
+      <content:template>Utility / tool page</content:template>
+      <content:description>
+        Live weather widgets for coastal zones, historical averages by month, 
+        tips for packing and planning around coast weather patterns.
+      </content:description>
+    </content:outline>
+  </url>
+
+
+  <!-- ============================================================
+       HUB 6: LIVING ON THE COAST  /live/
+       ============================================================ -->
+  <url>
+    <loc>https://exploregoncoast.com/live/</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Living on the Oregon Coast — Real Estate, Schools &amp; Local Life</content:title>
+      <content:target-keyword>living on oregon coast</content:target-keyword>
+      <content:word-count>1200–1500</content:word-count>
+      <content:template>Hub landing page</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Live: Houses for Sale -->
+  <url>
+    <loc>https://exploregoncoast.com/live/houses-for-sale/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Houses for Sale — Market Overview, Prices &amp; Where to Buy</content:title>
+      <content:target-keyword>oregon coast houses for sale</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+      <content:description>
+        Real estate market by town, price ranges, flood zones, vacation 
+        rental regulations, HOA considerations. Embedded Zillow/Realtor.com 
+        search widget. Extremely high CPC keyword.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Live: Community Colleges -->
+  <url>
+    <loc>https://exploregoncoast.com/live/community-colleges/</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Community Colleges — Programs, Campuses &amp; Transfer Paths</content:title>
+      <content:target-keyword>oregon coast community colleges</content:target-keyword>
+      <content:word-count>1500–2000</content:word-count>
+      <content:template>Guide / article</content:template>
+      <content:description>
+        Oregon Coast CC (Newport), Clatsop CC (Astoria), Southwestern Oregon 
+        CC (Coos Bay). Programs, costs, transfer pathways. Easy to rank, 
+        .edu backlink potential.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <!-- Live: Moving Guide -->
+  <url>
+    <loc>https://exploregoncoast.com/live/moving-guide/</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+    <content:outline>
+      <content:title>Moving to the Oregon Coast — Cost of Living, Jobs &amp; What to Expect</content:title>
+      <content:target-keyword>moving to oregon coast</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <!-- Live: Local Restaurants -->
+  <url>
+    <loc>https://exploregoncoast.com/live/restaurants/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Best Oregon Coast Restaurants — Seafood, Breweries &amp; Local Favorites</content:title>
+      <content:target-keyword>oregon coast restaurants</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+
+  <!-- ============================================================
+       REGIONS  /regions/
+       ============================================================ -->
+  <url>
+    <loc>https://exploregoncoast.com/regions/north-coast/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon North Coast — Astoria to Lincoln City Guide</content:title>
+      <content:target-keyword>north oregon coast</content:target-keyword>
+      <content:word-count>1800–2200</content:word-count>
+      <content:template>Region rollup</content:template>
+      <content:description>
+        Overview of the north coast region. Anchor towns: Astoria, Seaside, 
+        Cannon Beach, Tillamook, Pacific City, Lincoln City. Major attractions, 
+        character of the region, links to city and listing pages.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/regions/central-coast/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Central Coast — Depoe Bay to Florence Guide</content:title>
+      <content:target-keyword>central oregon coast</content:target-keyword>
+      <content:word-count>1800–2200</content:word-count>
+      <content:template>Region rollup</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/regions/south-coast/</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon South Coast — Coos Bay to Brookings Guide</content:title>
+      <content:target-keyword>south oregon coast</content:target-keyword>
+      <content:word-count>1800–2200</content:word-count>
+      <content:template>Region rollup</content:template>
+    </content:outline>
+  </url>
+
+
+  <!-- ============================================================
+       EVENTS & NEWS
+       ============================================================ -->
+  <url>
+    <loc>https://exploregoncoast.com/events/</loc>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Events — Festivals, Markets &amp; Things Happening Now</content:title>
+      <content:target-keyword>oregon coast events</content:target-keyword>
+      <content:word-count>600–800</content:word-count>
+      <content:template>Dynamic feed page</content:template>
+      <content:description>
+        Filterable events calendar. Pulls from city chamber sites, venue 
+        pages, and manual editorial additions. Each event card links to 
+        source or ticket URL.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/news/</loc>
+    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast News &amp; Updates — What's New on the Coast</content:title>
+      <content:target-keyword>oregon coast news</content:target-keyword>
+      <content:word-count>variable</content:word-count>
+      <content:template>Blog / news feed</content:template>
+      <content:description>
+        Timely posts: new restaurant openings, road closures, seasonal 
+        announcements, whale sighting updates. Signals freshness to Google.
+      </content:description>
+    </content:outline>
+  </url>
+
+
+  <!-- ============================================================
+       LONG-TAIL / SEASONAL CONTENT
+       ============================================================ -->
+  <url>
+    <loc>https://exploregoncoast.com/do/hidden-gems/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Hidden Gems on the Oregon Coast — Secret Beaches &amp; Overlooked Spots</content:title>
+      <content:target-keyword>hidden gems oregon coast</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/stay/oregon-coast-with-kids/</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast with Kids — Family-Friendly Beaches, Hotels &amp; Activities</content:title>
+      <content:target-keyword>oregon coast with kids</content:target-keyword>
+      <content:word-count>2000–2500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/nature/oregon-coast-railroad/</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast Scenic Railroad — Routes, Tickets &amp; What to Expect</content:title>
+      <content:target-keyword>oregon coast railroad</content:target-keyword>
+      <content:word-count>1200–1500</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/plan/oregon-coast-in-december/</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast in December — Whale Watching, Storm Season &amp; Holiday Events</content:title>
+      <content:target-keyword>oregon coast in december</content:target-keyword>
+      <content:word-count>1500–2000</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/plan/oregon-coast-in-summer/</loc>
+    <priority>0.6</priority>
+    <changefreq>yearly</changefreq>
+    <content:outline>
+      <content:title>Oregon Coast in Summer — Best Beaches, Crowds &amp; Booking Tips</content:title>
+      <content:target-keyword>oregon coast summer</content:target-keyword>
+      <content:word-count>1500–2000</content:word-count>
+      <content:template>Guide / article</content:template>
+    </content:outline>
+  </url>
+
+
+  <!-- ============================================================
+       UTILITY / ABOUT / LEGAL
+       ============================================================ -->
+  <url>
+    <loc>https://exploregoncoast.com/about/</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+    <content:outline>
+      <content:title>About ExplOregon Coast — A Local's Directory to the Oregon Coast</content:title>
+      <content:target-keyword>n/a — trust and E-E-A-T page</content:target-keyword>
+      <content:word-count>600–800</content:word-count>
+      <content:description>
+        Author bio, personal connection to the coast, mission statement, 
+        editorial standards, contact info. Establishes E-E-A-T trust signal.
+      </content:description>
+    </content:outline>
+  </url>
+
+  <url>
+    <loc>https://exploregoncoast.com/contact/</loc>
+    <priority>0.5</priority>
+    <changefreq>yearly</changefreq>
+    <content:outline>
+      <content:title>Contact ExplOregon Coast</content:title>
+      <content:target-keyword>n/a</content:target-keyword>
+      <content:word-count>200–300</content:word-count>
+    </content:outline>
+  </url>
+
+</urlset>

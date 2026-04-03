@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Explore Oregon Coast | Premium Travel Directory</title>
+<!-- Google Fonts: Instrument Serif for headings, Instrument Sans for body/UI -->
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#ebf2f5",
+                    "surface-variant": "#dde3e7",
+                    "surface-tint": "#3e646f",
+                    "surface-container": "#e8eff2",
+                    "on-error": "#ffffff",
+                    "surface": "#f4fafe",
+                    "surface-dim": "#d4dbde",
+                    "inverse-surface": "#2b3134",
+                    "primary-fixed": "#c1e9f6",
+                    "on-secondary-fixed": "#0b2012",
+                    "on-secondary-container": "#546a58",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed-dim": "#e0c29f",
+                    "secondary-fixed-dim": "#b4cdb7",
+                    "surface-bright": "#f4fafe",
+                    "outline-variant": "#c1c7ca",
+                    "on-tertiary-fixed-variant": "#584329",
+                    "on-tertiary-container": "#ccaf8d",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#41484a",
+                    "tertiary-container": "#574228",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#fdddb9",
+                    "on-secondary-fixed-variant": "#364c3b",
+                    "surface-container-highest": "#dde3e7",
+                    "secondary-container": "#d0e9d2",
+                    "surface-container-low": "#eef5f8",
+                    "surface-container-high": "#e2e9ed",
+                    "secondary-fixed": "#d0e9d2",
+                    "primary-container": "#244b55",
+                    "outline": "#72787a",
+                    "background": "#f4fafe",
+                    "on-background": "#161d1f",
+                    "on-primary-container": "#93bac6",
+                    "on-tertiary-fixed": "#281803",
+                    "tertiary": "#3e2c14",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed": "#001f26",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "on-primary": "#ffffff",
+                    "secondary": "#4e6452",
+                    "on-primary-fixed-variant": "#254c56",
+                    "primary-fixed-dim": "#a5cdd9",
+                    "primary": "#07343e",
+                    "on-surface": "#161d1f",
+                    "inverse-primary": "#a5cdd9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Instrument Serif", "serif"],
+                    "body": ["Instrument Sans", "sans-serif"],
+                    "label": ["Instrument Sans", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .driftwood-gradient {
+            background: linear-gradient(135deg, #07343e 0%, #244b55 100%);
+        }
+        .sea-glass {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Top Navigation Bar -->
+<nav class="bg-stone-50/85 dark:bg-slate-950/85 backdrop-blur-md docked full-width top-0 sticky z-50 shadow-[0_12px_32px_rgba(22,29,31,0.06)] dark:shadow-none">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+<a class="text-2xl font-headline font-bold text-cyan-950 dark:text-cyan-50 tracking-tight" href="#">Explore Oregon Coast</a>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-stone-600 dark:text-stone-400 hover:text-cyan-900 dark:hover:text-cyan-100 transition-colors font-body text-sm" href="#">Cities</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-cyan-900 dark:hover:text-cyan-100 transition-colors font-body text-sm" href="#">Stay</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-cyan-900 dark:hover:text-cyan-100 transition-colors font-body text-sm" href="#">Things to Do</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-cyan-900 dark:hover:text-cyan-100 transition-colors font-body text-sm" href="#">Plan Your Trip</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-cyan-900 dark:hover:text-cyan-100 transition-colors font-body text-sm" href="#">Events</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-cyan-900 dark:hover:text-cyan-100 transition-colors font-body text-sm" href="#">Map</a>
+</div>
+<div class="flex items-center space-x-6">
+<button class="material-symbols-outlined text-on-surface hover:scale-95 duration-150" data-icon="bookmark">bookmark</button>
+<a class="text-sm font-semibold text-stone-600 dark:text-stone-400" href="#">Sign In</a>
+<button class="driftwood-gradient text-white px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-lg active:scale-95 duration-150">Build a Trip</button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative min-h-[870px] flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover grayscale-[0.2] contrast-[1.1]" data-alt="dramatic wide shot of foggy oregon coast with jagged basalt sea stacks and waves crashing against the rocky shore at dusk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4tmuzvlxB653QsAbKOvkBz3qljk6hNI6hEn4MBPO-ZYggYLx5ZlKX3dsDClvfTH91umrJKMZLXIHgmqM2fN05pm8CxzjmqxakiCwjhEsTy1t8ben9f0c3FhwkcxEGy-5pwN5TjHRXhpIw_TK6gDgdBqzbg8mhOYSFU8DUfN27sHsXXJBZGanzrE5va3FJXUQx0fvSRoEYvRG9Wsv3_CaAftBCH16ZAC1hOwaLQUy7QHpA5PW-e45DfWRdzWubybhjDOq9g5Nzw0Gk"/>
+<div class="absolute inset-0 bg-primary/40 mix-blend-multiply"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
+</div>
+<div class="relative z-10 max-w-4xl px-8 text-center mt-12">
+<h1 class="text-white font-headline italic text-5xl md:text-8xl leading-none mb-6">
+                Plan the Oregon Coast trip that <span class="block">actually fits your style</span>
+</h1>
+<p class="text-surface-container text-lg md:text-xl font-body max-w-2xl mx-auto mb-10 leading-relaxed">
+                Discover the best towns, stays, and hidden gems with our expert planning tools. Rugged adventures or quiet mists—find your path.
+            </p>
+<div class="bg-surface-container-lowest/90 sea-glass p-2 rounded-xl shadow-2xl flex flex-col md:flex-row items-center gap-2 max-w-3xl mx-auto">
+<div class="flex items-center w-full px-4 gap-3">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface font-body py-4" placeholder="Search by town, activity, lodging..." type="text"/>
+</div>
+<button class="w-full md:w-auto driftwood-gradient text-white px-10 py-4 font-bold rounded-lg whitespace-nowrap active:scale-95 duration-150">Search Directory</button>
+</div>
+<div class="flex flex-wrap justify-center gap-3 mt-8">
+<button class="bg-surface-container-low/20 sea-glass text-white px-4 py-1.5 rounded-full border border-white/20 text-xs font-semibold backdrop-blur-md">Hotels</button>
+<button class="bg-surface-container-low/20 sea-glass text-white px-4 py-1.5 rounded-full border border-white/20 text-xs font-semibold backdrop-blur-md">Campgrounds</button>
+<button class="bg-surface-container-low/20 sea-glass text-white px-4 py-1.5 rounded-full border border-white/20 text-xs font-semibold backdrop-blur-md">Beaches</button>
+<button class="bg-surface-container-low/20 sea-glass text-white px-4 py-1.5 rounded-full border border-white/20 text-xs font-semibold backdrop-blur-md">Whale Watching</button>
+<button class="bg-surface-container-low/20 sea-glass text-white px-4 py-1.5 rounded-full border border-white/20 text-xs font-semibold backdrop-blur-md">Family Friendly</button>
+<button class="bg-surface-container-low/20 sea-glass text-white px-4 py-1.5 rounded-full border border-white/20 text-xs font-semibold backdrop-blur-md">Map View</button>
+</div>
+</div>
+</header>
+<!-- Category Shortcuts -->
+<section class="max-w-screen-2xl mx-auto px-8 py-24">
+<div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+<a class="group relative aspect-square overflow-hidden rounded-lg bg-surface-container-low flex flex-col items-center justify-center p-6 text-center hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-primary text-4xl mb-3" data-icon="hotel">hotel</span>
+<span class="font-bold text-sm text-on-surface uppercase tracking-tight font-body">Hotels</span>
+</a>
+<a class="group relative aspect-square overflow-hidden rounded-lg bg-surface-container-low flex flex-col items-center justify-center p-6 text-center hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-primary text-4xl mb-3" data-icon="cottage">cottage</span>
+<span class="font-bold text-sm text-on-surface uppercase tracking-tight font-body">Vacation Rentals</span>
+</a>
+<a class="group relative aspect-square overflow-hidden rounded-lg bg-surface-container-low flex flex-col items-center justify-center p-6 text-center hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-primary text-4xl mb-3" data-icon="landscape">landscape</span>
+<span class="font-bold text-sm text-on-surface uppercase tracking-tight font-body">Hiking</span>
+</a>
+<a class="group relative aspect-square overflow-hidden rounded-lg bg-surface-container-low flex flex-col items-center justify-center p-6 text-center hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-primary text-4xl mb-3" data-icon="waves">waves</span>
+<span class="font-bold text-sm text-on-surface uppercase tracking-tight font-body">Tide Pools</span>
+</a>
+<a class="group relative aspect-square overflow-hidden rounded-lg bg-surface-container-low flex flex-col items-center justify-center p-6 text-center hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined text-primary text-4xl mb-3" data-icon="set_meal">set_meal</span>
+<span class="font-bold text-sm text-on-surface uppercase tracking-tight font-body">Seafood</span>
+</a>
+</div>
+</section>
+<!-- Browse By Town -->
+<section class="bg-surface-container-low py-24">
+<div class="max-w-screen-2xl mx-auto px-8">
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="font-headline text-5xl text-primary mb-2">Coastal Basecamps</h2>
+<p class="text-on-surface-variant max-w-xl font-body">Every town on the coast has its own soul. Compare vibes and find where you belong this season.</p>
+</div>
+<button class="text-primary font-bold flex items-center gap-2 hover:translate-x-1 transition-transform font-body">
+                    View All Towns <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<!-- Astoria -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col h-full shadow-sm">
+<img class="h-48 w-full object-cover" data-alt="Astoria Oregon bridge in the fog with historic cannery buildings and river view" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEmXE-pYA0yd0Y68md-CxUyKp7qJSemhoPdsUq-fJwNDjVo1Ac7MeKnUhs2hD6LAWrp3cJsxYz1WN_Vu6odXMf4wB7e4ax3Nvz5tQLHITxeRfh-IiPu2zO79pzldSo1l8ywti_7ftlYRhcVirybrxJCKpjA41DNXx8fHj-vn3Taj72GqVs7X54tBB77fxBCo8dSk-YFC_JDOX4BIZ32M4yvv97rEoEFJHpZTQgW6fElsHH5c3IGu7LSjuZ3uUJ5ImYef05eJasqI3Z"/>
+<div class="p-6 flex-grow">
+<h3 class="font-headline text-3xl mb-4">Astoria</h3>
+<div class="space-y-3">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold uppercase text-tertiary px-2 py-0.5 bg-tertiary-fixed rounded font-body">Historic</span>
+<span class="text-[10px] font-bold uppercase text-secondary px-2 py-0.5 bg-secondary-container rounded font-body">Best for Foodies</span>
+</div>
+<div class="text-xs text-on-surface-variant leading-relaxed font-body">
+<p><strong>Beach Access:</strong> Indirect (15min drive)</p>
+<p><strong>Lodging:</strong> Boutique &amp; Historic</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Cannon Beach -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col h-full shadow-sm">
+<img class="h-48 w-full object-cover" data-alt="Haystack Rock at Cannon Beach under a moody gray sky with low tide reflecting on the sand" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnrCifGh66rk7Sb186WgH5kptsQXhhfvA9ZS7nSxVqlBnqQ4UrRJe8lgOqljDPpA3Ouu28EZomtlHkOiDwR-0Qfd0wTZnelTrce2r2YkpMxCAnElR4MQVO7Oj6WNjlVvu27BLN2lVlcgwTvyl1eso0IN-E3KLDUT1RJ8rJ6nFXvsRiildWpKCWhcCwGoupwrqr3lUo81HsRCDo7zCq2fDCPmV8ZPr33YFbHa0y0Y1OiM9pplTQgqiGc_2h2egmupuwyprUyMa0azd9"/>
+<div class="p-6 flex-grow">
+<h3 class="font-headline text-3xl mb-4">Cannon Beach</h3>
+<div class="space-y-3">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold uppercase text-tertiary px-2 py-0.5 bg-tertiary-fixed rounded font-body">Iconic</span>
+<span class="text-[10px] font-bold uppercase text-secondary px-2 py-0.5 bg-secondary-container rounded font-body">Best for Romance</span>
+</div>
+<div class="text-xs text-on-surface-variant leading-relaxed font-body">
+<p><strong>Beach Access:</strong> Immediate</p>
+<p><strong>Lodging:</strong> Luxury Resorts</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Newport -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col h-full shadow-sm">
+<img class="h-48 w-full object-cover" data-alt="Newport bayfront with fishing boats and a large bridge in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBtYuLasOXeI-cEddd8jLY8mlWSP0_F43JdJXSIGwhwcDpxdqUoPc8a8uq2R12K3VmoSv_4VzPjd2nvVMdG3aib5YYAOEJGjM_3zXZzW0pZGxJn8kfnzBWYFxffUTTOnhgibMZ9Dzf3n6x9z-DvxlwdG-2A3y3_mOkd2D7AXkyar_O-tNAjpskJIiZQEXLAa7qz-3BEApxZyf9krUl-RBAOXPbeq4Li2vKyC9BxJSkJv-zW_nYISHUtHn4va0NNEEheVSXILjr0-tL"/>
+<div class="p-6 flex-grow">
+<h3 class="font-headline text-3xl mb-4">Newport</h3>
+<div class="space-y-3">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold uppercase text-tertiary px-2 py-0.5 bg-tertiary-fixed rounded font-body">Authentic</span>
+<span class="text-[10px] font-bold uppercase text-secondary px-2 py-0.5 bg-secondary-container rounded font-body">Best for Families</span>
+</div>
+<div class="text-xs text-on-surface-variant leading-relaxed font-body">
+<p><strong>Beach Access:</strong> Easy</p>
+<p><strong>Lodging:</strong> Hotels &amp; Condos</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bandon -->
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col h-full shadow-sm">
+<img class="h-48 w-full object-cover" data-alt="Bandon Oregon beach at sunset with dramatic rock monoliths and crashing waves" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAElPXAWg-ZxmpcF-YwVymQxrpIidI-TYtGIdg5iW6WF-mXWXfsXoBzkiu6FoNwYVT637bj8AkzMwb6xVDziuTy2ps-Acax9zMXxi320x6e4AhkhW3tUMd0_VSehKTwMJoWpJda3Ni0VypTliI7lhT7Vl5zw5YldGZBnCHX3iaFUg6mfbH0n2qlRWPu8Fc02-57maZB-LGz-WpKAYSl548VzCuD_Q7ZtpPSN_gMO4fMI_PPlinfCMp8VJhAWHDl-NU-VauU1LnXtnQD"/>
+<div class="p-6 flex-grow">
+<h3 class="font-headline text-3xl mb-4">Bandon</h3>
+<div class="space-y-3">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold uppercase text-tertiary px-2 py-0.5 bg-tertiary-fixed rounded font-body">Wild</span>
+<span class="text-[10px] font-bold uppercase text-secondary px-2 py-0.5 bg-secondary-container rounded font-body">Best for Golfers</span>
+</div>
+<div class="text-xs text-on-surface-variant leading-relaxed font-body">
+<p><strong>Beach Access:</strong> Dramatic</p>
+<p><strong>Lodging:</strong> Inns &amp; Rentals</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Compare Towns Module -->
+<section class="max-w-screen-2xl mx-auto px-8 py-24">
+<div class="bg-surface-container rounded-2xl p-12 overflow-hidden relative">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-16 relative z-10">
+<div class="lg:col-span-1">
+<h2 class="font-headline text-5xl text-primary mb-6">Find your ideal match</h2>
+<p class="text-on-surface-variant mb-8 font-body">Not sure where to set up camp? Compare our top destinations across what matters most for your trip style.</p>
+<button class="bg-primary text-white px-8 py-3 font-bold rounded hover:opacity-90 transition-opacity font-body">Compare All Towns</button>
+</div>
+<div class="lg:col-span-2">
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-xl border border-outline-variant/10">
+<table class="w-full text-left font-body">
+<thead>
+<tr class="border-b border-outline-variant/20">
+<th class="p-6 font-bold text-sm text-outline font-body">CRITERIA</th>
+<th class="p-6 font-headline text-2xl">Cannon Beach</th>
+<th class="p-6 font-headline text-2xl">Florence</th>
+<th class="p-6 font-headline text-2xl">Seaside</th>
+</tr>
+</thead>
+<tbody class="text-sm">
+<tr class="border-b border-outline-variant/10">
+<td class="p-6 font-bold text-on-surface-variant font-body">Families</td>
+<td class="p-6"><span class="material-symbols-outlined text-secondary" data-icon="star" data-weight="fill">star</span> High</td>
+<td class="p-6"><span class="material-symbols-outlined text-secondary" data-icon="star" data-weight="fill">star</span> Medium</td>
+<td class="p-6"><span class="material-symbols-outlined text-secondary" data-icon="star" data-weight="fill">star</span> Exceptional</td>
+</tr>
+<tr class="border-b border-outline-variant/10">
+<td class="p-6 font-bold text-on-surface-variant font-body">Romantic</td>
+<td class="p-6"><span class="material-symbols-outlined text-secondary" data-icon="star" data-weight="fill">star</span> Exceptional</td>
+<td class="p-6"><span class="material-symbols-outlined text-secondary" data-icon="star" data-weight="fill">star</span> Medium</td>
+<td class="p-6"><span class="material-symbols-outlined text-secondary" data-icon="star" data-weight="fill">star</span> Medium</td>
+</tr>
+<tr class="border-b border-outline-variant/10">
+<td class="p-6 font-bold text-on-surface-variant font-body">Adventure</td>
+<td class="p-6"><span class="material-symbols-outlined text-secondary" data-icon="star" data-weight="fill">star</span> Medium</td>
+<td class="p-6"><span class="material-symbols-outlined text-secondary" data-icon="star" data-weight="fill">star</span> Exceptional</td>
+<td class="p-6"><span class="material-symbols-outlined text-secondary" data-icon="star" data-weight="fill">star</span> Medium</td>
+</tr>
+<tr>
+<td class="p-6 font-bold text-on-surface-variant font-body">Walkability</td>
+<td class="p-6"><span class="material-symbols-outlined text-secondary" data-icon="star" data-weight="fill">star</span> High</td>
+<td class="p-6"><span class="material-symbols-outlined text-secondary" data-icon="star" data-weight="fill">star</span> Low</td>
+<td class="p-6"><span class="material-symbols-outlined text-secondary" data-icon="star" data-weight="fill">star</span> High</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Utility & Real-Time Planning -->
+<section class="max-w-screen-2xl mx-auto px-8 py-24 border-t border-surface-container-high">
+<h2 class="font-headline text-4xl mb-12 text-center">Coastal Real-Time Dashboard</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
+<div class="bg-surface-container-high p-6 rounded-lg text-center">
+<span class="text-xs font-bold uppercase tracking-widest text-outline mb-2 block font-body">Tide Table</span>
+<p class="font-headline text-2xl text-primary">High at 2:14 PM</p>
+<p class="text-xs text-on-surface-variant mt-2 font-body">Next Low: 8:45 PM</p>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg text-center">
+<span class="text-xs font-bold uppercase tracking-widest text-outline mb-2 block font-body">Weather</span>
+<p class="font-headline text-2xl text-primary">54°F &amp; Misty</p>
+<p class="text-xs text-on-surface-variant mt-2 font-body">Wind: 12mph NW</p>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg text-center">
+<span class="text-xs font-bold uppercase tracking-widest text-outline mb-2 block font-body">Highway 101</span>
+<p class="font-headline text-2xl text-secondary">All Clear</p>
+<p class="text-xs text-on-surface-variant mt-2 font-body">No active alerts</p>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg text-center">
+<span class="text-xs font-bold uppercase tracking-widest text-outline mb-2 block font-body">Whale Watching</span>
+<p class="font-headline text-2xl text-primary">Peak Season</p>
+<p class="text-xs text-on-surface-variant mt-2 font-body">High sighting rate</p>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg text-center">
+<span class="text-xs font-bold uppercase tracking-widest text-outline mb-2 block font-body">Events Today</span>
+<p class="font-headline text-2xl text-primary">12 Active</p>
+<p class="text-xs text-on-surface-variant mt-2 font-body">Farmer's Markets open</p>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg text-center">
+<span class="text-xs font-bold uppercase tracking-widest text-outline mb-2 block font-body">Water Temp</span>
+<p class="font-headline text-2xl text-primary">51°F</p>
+<p class="text-xs text-on-surface-variant mt-2 font-body">Wetsuit required</p>
+</div>
+</div>
+</section>
+<!-- Trip Builder Preview -->
+<section class="max-w-screen-2xl mx-auto px-8 py-24">
+<div class="flex flex-col lg:flex-row gap-16 items-center">
+<div class="lg:w-1/2">
+<span class="text-primary font-bold text-sm tracking-widest uppercase mb-4 block font-body">Interactive Planning</span>
+<h2 class="font-headline text-6xl leading-tight mb-8">Build your coastal loop in seconds.</h2>
+<p class="text-lg text-on-surface-variant mb-10 leading-relaxed font-body">Save your favorite spots, reorder them into a logical route, and sync directly to your phone for offline coastal navigation.</p>
+<div class="flex flex-wrap gap-4">
+<button class="driftwood-gradient text-white px-10 py-4 font-bold rounded active:scale-95 duration-150 font-body">Start Building My Trip</button>
+<button class="border border-primary text-primary px-10 py-4 font-bold rounded hover:bg-surface-container transition-colors font-body">See Example Itineraries</button>
+</div>
+</div>
+<div class="lg:w-1/2 w-full">
+<div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-surface-container-high">
+<div class="bg-primary p-6 text-white flex justify-between items-center font-body">
+<div>
+<h4 class="font-bold">3-Day Coastal Explorer</h4>
+<p class="text-xs opacity-80">May 14 - May 16, 2024</p>
+</div>
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+</div>
+<div class="p-8 space-y-6">
+<div class="flex gap-6 items-start relative pb-6 border-l-2 border-dashed border-outline-variant/30 ml-3 pl-8">
+<div class="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-primary flex items-center justify-center text-[10px] text-white font-bold font-body">1</div>
+<div class="flex-grow">
+<h5 class="font-bold text-on-surface font-body">Cannon Beach</h5>
+<p class="text-xs text-on-surface-variant mb-2 font-body">Sunrise at Haystack Rock &amp; Village Browsing</p>
+<img class="h-20 w-full object-cover rounded" data-alt="close up of seashells on wet sand in cannon beach oregon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbG8R0tl677O9wDD_KJ5LCzui_tQmVINFRiPS8HSev7qc2zRz_u_2buDJHNmczfg7D_VfWdewD0PT5yIT8nfFaaof96vw7PEZUeDOVcsw3s3Jd2nZKOW7z-bLz031sbQdTM3B4DQywFegKBIIWPcXxmf-pGObn3mmYQHwa7zi6b2lBa-YNUShwaZEzQDDaYNAqTiX4qGgiiabMTa5TFrHglfsE7LvRhdDGa1_0imdIb13IHiY3JYFsRg8-ZIsoYc7GmVSOhEHU7VbJ"/>
+</div>
+</div>
+<div class="flex gap-6 items-start relative pb-6 border-l-2 border-dashed border-outline-variant/30 ml-3 pl-8">
+<div class="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-primary-fixed text-primary flex items-center justify-center text-[10px] font-bold font-body">2</div>
+<div class="flex-grow">
+<h5 class="font-bold text-on-surface font-body">Tillamook</h5>
+<p class="text-xs text-on-surface-variant mb-2 font-body">Cheese Factory &amp; Cape Meares Lighthouse</p>
+</div>
+</div>
+<div class="flex gap-6 items-start relative ml-3 pl-8">
+<div class="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-primary-fixed text-primary flex items-center justify-center text-[10px] font-bold font-body">3</div>
+<div class="flex-grow">
+<h5 class="font-bold text-on-surface font-body">Newport</h5>
+<p class="text-xs text-on-surface-variant font-body">Oregon Coast Aquarium &amp; Yaquina Bay</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 flex justify-between gap-4 font-body">
+<button class="flex-grow bg-white py-2.5 rounded border border-outline-variant text-xs font-bold">Reorder Route</button>
+<button class="flex-grow bg-white py-2.5 rounded border border-outline-variant text-xs font-bold">Share Link</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Listings -->
+<section class="bg-surface py-24">
+<div class="max-w-screen-2xl mx-auto px-8">
+<h2 class="font-headline text-5xl mb-12">Editor's Choice Directory</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="group relative bg-surface-container-lowest rounded-lg border border-transparent hover:border-outline-variant/30 transition-all">
+<div class="relative overflow-hidden aspect-[4/3] rounded-t-lg">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="a luxurious coastal inn with large windows looking out over the ocean mist" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeVwsvWAbYPTjmu_w2eSy96eSkq0w_2v0SY8p6QY1yIXZPc85M9VwDOHrpzcswLFJxSbCs51zTGqyaa7hKW7UJzUt3At-OjE_WE8J8vcvxqjyfoHY30WKDyoqZjIqXHwDB2j3t0vaT5gACL_EC386OTyfwG-l_rTDIMIdqNzqzxoNZ1UxoCYCsmYlXvDGQeoJKqcAEWjjaHWPhv-2563oUUpB-3A5RocgFhMnld_S0RwGJ2Rhyeph8fedBwWm9vZWYKskQgvh91o4R"/>
+<span class="absolute top-4 left-4 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded uppercase tracking-widest font-body">Editor's Choice</span>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-headline text-3xl">The Driftwood Inn</h4>
+<div class="flex items-center gap-1 text-secondary font-body">
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="text-xs font-bold">4.9</span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant mb-6 uppercase tracking-widest font-body">Luxury Stay • Cannon Beach</p>
+<button class="w-full py-3 bg-surface-container-high hover:bg-primary hover:text-white font-bold rounded transition-colors text-sm font-body">View Details</button>
+</div>
+</div>
+<!-- Card 2: Sponsored -->
+<div class="group relative bg-surface-container-lowest rounded-lg border border-tertiary-fixed-dim/40 shadow-lg">
+<div class="relative overflow-hidden aspect-[4/3] rounded-t-lg">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="a local seafood restaurant with steaming plates of dungeness crab and oysters" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxXkY_-VFSpVEdZBbZAjvqZTgMDuqaIU-EKjTr-NBLG0oHE7qUd_DM3LvOBrmmDWZlfwxVx8KcjF_oaE1CXFXt5uPeMaNbej2arR3_jaShPk-zOwQESHUbc9Zzsvkk6lXngvDfD8DqeI5pVjUqQagse3skhAoBWEe-2j_0vKWJlbInnxoKfQTzqnFV5Jn90SZ2DpafayjumXKHjoO2wfojHkbo4up1lVc7hL7eRQmH5qOUvN7KjQvnWppN6MAeUtwXQsomhQa03bLh"/>
+<span class="absolute top-4 left-4 bg-tertiary text-white text-[10px] font-bold px-3 py-1 rounded uppercase tracking-widest font-body">Sponsored</span>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-headline text-3xl">Bayside Crab Shack</h4>
+<div class="flex items-center gap-1 text-secondary font-body">
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="text-xs font-bold">4.7</span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant mb-6 uppercase tracking-widest font-body">Seafood • Newport</p>
+<button class="w-full py-3 bg-tertiary text-white font-bold rounded hover:opacity-90 transition-opacity text-sm font-body">Book a Table</button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative bg-surface-container-lowest rounded-lg border border-transparent hover:border-outline-variant/30 transition-all">
+<div class="relative overflow-hidden aspect-[4/3] rounded-t-lg">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="a historic lighthouse atop a grassy cliff under a dramatic sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAyzXzvAVVL8QmbD90wmhy6T2JiHqKEshLAGLvjh07UUIHkz3g3bdqiQlBYWUCZbP9p3ZCSErySyZf5z8rNOOScc2BH5TGbDROi6B4qpKZ3AONgEKVJxhjuPegVe2XQsP94DNFR1myWkaFHjzqc6XdMSVHX1JeY6yUj4zBIFDlP-yT1aXap77jBBHBKBhLk82bx2lNAfC5yFLFYoZ6boYVYUxrTJov9Ek8Osj7tdTnQtpe8mJyrVqziua_PnHiZ65Mhj27hbosy9y6"/>
+<span class="absolute top-4 left-4 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded uppercase tracking-widest font-body">Popular</span>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-headline text-3xl">Heceta Head Lighthouse</h4>
+<div class="flex items-center gap-1 text-secondary font-body">
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill">star</span>
+<span class="text-xs font-bold">4.8</span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant mb-6 uppercase tracking-widest font-body">Historic Site • Florence</p>
+<button class="w-full py-3 bg-surface-container-high hover:bg-primary hover:text-white font-bold rounded transition-colors text-sm font-body">View Details</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Editorial: Deep Dives -->
+<section class="max-w-screen-2xl mx-auto px-8 py-24">
+<div class="flex items-baseline justify-between mb-12">
+<h2 class="font-headline text-5xl">Coastal Pulse</h2>
+<div class="flex gap-8 font-body">
+<button class="font-bold border-b-2 border-primary pb-1">Deep Dives</button>
+<button class="font-bold text-outline pb-1">This Weekend</button>
+<button class="font-bold text-outline pb-1">Local Tales</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="group cursor-pointer">
+<div class="overflow-hidden rounded-xl mb-6">
+<img class="w-full h-[400px] object-cover group-hover:scale-105 transition-transform duration-700" data-alt="scenic aerial of whale tail breaking the water surface near a rocky coastline" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKmF_8G-vQOZddC9Hb820y2_Cz6-n1HDA-jCXbh3mAJVlnYpYQ3zK4m1nfPYAFgdVvWZqhRhrq0OeDCK3xzamOlEIHK7hIws4E8_FJUx-WLyT4l0JJs3sqV4mQKL54JPZYcx1P-ZZaY_mCmsATzWxYIIYDjgzxJSZ7Jzrv-wVHJVO1Und-jUzblTQrq9d2_ISP1lERRhKb-UoGoInj2G_wtyzjylyTOTEI3FKepgRCDzmCvC2pI8yksH6X9JMpCNi2fRK5u-IcBWlC"/>
+</div>
+<h3 class="font-headline text-4xl mb-4 group-hover:text-primary transition-colors">The Ultimate Winter Whale Watching Guide</h3>
+<p class="text-on-surface-variant leading-relaxed mb-6 font-body">The peak migration is approaching. Here are the best secret vantages and boat tours for a guaranteed sighting between Brookings and Astoria.</p>
+<a class="font-bold text-sm uppercase tracking-wider flex items-center gap-2 font-body" href="#">Read the Guide <span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span></a>
+</div>
+<div class="space-y-12">
+<div class="flex gap-6 group cursor-pointer">
+<img class="w-32 h-32 object-cover rounded-lg" data-alt="family walking on a wide flat beach with kite flying in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsx64Y7Osk3X9sJOBUwBeOSZQqYJp105iqk8U13QkKqedvxhHkREQbM3gglZWaJvaj_UwpR4krDCPnpEe9Vi3DjzIU3cd4N-3jLP6apGghS6x3hDxQtwrNUFBZkluBIOI5sDyOWJ19Q_jkC2emPOpaKGSfHFFalM8qjXB2MJp0MYc1GxaP7EFEU35wvYnofpkgexwHGUGza4DMSGf8dZZIJVD9RrDqONDfiRAmrN3mtKnBkqH23_px6MHMTB8KoBiF2c_7OBC3DYm3"/>
+<div>
+<h4 class="font-headline text-2xl mb-2 group-hover:text-primary transition-colors">Top 5 Coastal Towns for Young Families</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2 font-body">From the Prom at Seaside to the Aquarium at Newport, where to take the kids.</p>
+</div>
+</div>
+<div class="flex gap-6 group cursor-pointer">
+<img class="w-32 h-32 object-cover rounded-lg" data-alt="a steaming bowl of clam chowder in a bread bowl on a wooden table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCng8X_gnaLcSK6uujTUOxzewQ2FqVmSU3ZT4D1lbWYWNIJ2S8q70-E_XTZnHfcAR3qg1dPhLL19dwk0KpgxHLLx3RvFau7en24AeB0aCwmIovWmM7oLl8ewqqs-MKwmS54OTztJa-rl8NO2G4r_YSw24fDHzEbZgldjXGrblclt6IJ8E8VvrI0tjVmpZx0PPhrWbbd-Bwk2ZgN5OHnYDcSXMXVAIgRpDgg-MxG-wnUAwz6cdp0Q4LoH7N0GEnJrREZSqLUlK5P5mX-"/>
+<div>
+<h4 class="font-headline text-2xl mb-2 group-hover:text-primary transition-colors">Clam Chowder Quest: The Coast's Top 10</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2 font-body">We sampled every bowl from Astoria to Brookings to find the definitive winner.</p>
+</div>
+</div>
+<div class="flex gap-6 group cursor-pointer">
+<img class="w-32 h-32 object-cover rounded-lg" data-alt="close up of driftwood logs on a gray sand beach" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3Lv8BPP_jTO33FXSvw9Yf7SwCA5VUjqdBL49mkF-epZmY-isN9LfaMQML-PXDuZa8ievF5ZhWPwtuZjNBcnfrSGP671JJIBdvqPwO3263_lGhztB-YEPo4xVHqXdwVMTc-6X_sYYAla3GrbE46kKL9ie6GaDcXQPtK3wsvMqqOlYscmBvd6tkbDee2Z0UQq6WeMCxJD6s7WmPNKobny250uG8sQMe0SVCJHcpdI4dwYnPmc65KeNvuKl_7G-pqUuKdeAzaA6V_C2m"/>
+<div>
+<h4 class="font-headline text-2xl mb-2 group-hover:text-primary transition-colors">The Secret Art of Driftwood Foraging</h4>
+<p class="text-sm text-on-surface-variant line-clamp-2 font-body">Rules, regulations, and where to find the best sculptural specimens.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Email CTA -->
+<section class="max-w-screen-2xl mx-auto px-8 py-24 mb-24">
+<div class="driftwood-gradient rounded-3xl p-16 text-center relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
+<div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24"></div>
+<div class="relative z-10 max-w-2xl mx-auto">
+<span class="text-on-primary-container font-bold text-xs tracking-[0.2em] uppercase mb-6 block font-body">Stay Informed</span>
+<h2 class="text-white font-headline text-6xl mb-6">Get local tide, event, and travel tips.</h2>
+<p class="text-primary-fixed text-lg mb-10 font-body">We send one email a week with curated events, peak seasonal sightings, and exclusive coastal lodging deals.</p>
+<form class="flex flex-col md:flex-row gap-3">
+<input class="flex-grow bg-white/10 border border-white/20 text-white placeholder:text-white/40 rounded-lg px-6 py-4 focus:bg-white/20 focus:ring-2 focus:ring-white/30 outline-none font-body" placeholder="Your email address" type="email"/>
+<button class="bg-white text-primary font-bold px-8 py-4 rounded-lg hover:bg-primary-fixed transition-colors font-body">Join the Pulse</button>
+</form>
+<div class="flex justify-center gap-8 mt-10 font-body">
+<div class="flex items-center gap-2 text-white/60 text-xs">
+<span class="material-symbols-outlined text-sm" data-icon="verified">verified</span> Locally Curated
+                    </div>
+<div class="flex items-center gap-2 text-white/60 text-xs">
+<span class="material-symbols-outlined text-sm" data-icon="task_alt">task_alt</span> Verified Info
+                    </div>
+<div class="flex items-center gap-2 text-white/60 text-xs">
+<span class="material-symbols-outlined text-sm" data-icon="no_spam">no_adult_content</span> No Junk
+                    </div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-stone-100 dark:bg-slate-900 border-t border-stone-200 dark:border-slate-800 py-16 w-full">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 px-12 py-16 w-full max-w-screen-2xl mx-auto">
+<div class="col-span-2 md:col-span-1">
+<h3 class="text-2xl font-headline font-bold text-cyan-950 dark:text-cyan-50 mb-6">Explore Oregon Coast</h3>
+<p class="text-stone-500 dark:text-stone-400 text-sm leading-relaxed mb-6 font-body">© 2024 Explore Oregon Coast. Crafted for the rugged spirit and the lovers of the mist.</p>
+</div>
+<div>
+<h4 class="font-headline text-2xl text-cyan-950 dark:text-cyan-50 mb-4">Top Cities</h4>
+<ul class="space-y-2 text-sm font-body">
+<li><a class="text-stone-500 hover:text-cyan-700 transition-colors" href="#">Astoria</a></li>
+<li><a class="text-stone-500 hover:text-cyan-700 transition-colors" href="#">Cannon Beach</a></li>
+<li><a class="text-stone-500 hover:text-cyan-700 transition-colors" href="#">Newport</a></li>
+<li><a class="text-stone-500 hover:text-cyan-700 transition-colors" href="#">Bandon</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-headline text-2xl text-cyan-950 dark:text-cyan-50 mb-4">Plan Your Trip</h4>
+<ul class="space-y-2 text-sm font-body">
+<li><a class="text-stone-500 hover:text-cyan-700 transition-colors" href="#">Map</a></li>
+<li><a class="text-stone-500 hover:text-cyan-700 transition-colors" href="#">Events</a></li>
+<li><a class="text-stone-500 hover:text-cyan-700 transition-colors" href="#">Travel Guides</a></li>
+<li><a class="text-stone-500 hover:text-cyan-700 transition-colors" href="#">Tide Tables</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-headline text-2xl text-cyan-950 dark:text-cyan-50 mb-4">Company</h4>
+<ul class="space-y-2 text-sm font-body">
+<li><a class="text-stone-500 hover:text-cyan-700 transition-colors" href="#">About</a></li>
+<li><a class="text-stone-500 hover:text-cyan-700 transition-colors" href="#">Contact</a></li>
+<li><a class="text-stone-500 hover:text-cyan-700 transition-colors" href="#">Submit a listing</a></li>
+<li><a class="text-stone-500 hover:text-cyan-700 transition-colors" href="#">Advertise</a></li>
+</ul>
+</div>
+</div>
+</footer>
+</body></html>
