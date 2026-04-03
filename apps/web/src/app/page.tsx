@@ -364,8 +364,8 @@ export default async function HomePage() {
                 </p>
               ) : null}
               <div className="home-hero-actions">
-                <Link href={model.homepage.planningCtaBlock?.buttonUrl ?? '/itineraries'} className="button-primary">
-                  {model.homepage.planningCtaBlock?.buttonLabel ?? 'View Itinerary'}
+                <Link href="/trip-builder" className="button-primary">
+                  {model.homepage.planningCtaBlock?.buttonLabel ?? 'Build Your Trip'}
                 </Link>
                 <Link href="/cities" className="button-secondary">
                   Browse by City
