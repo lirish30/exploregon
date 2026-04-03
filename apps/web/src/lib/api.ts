@@ -519,6 +519,50 @@ export const getRegionBySlug = async (
   return doc ? normalizeRegion(doc) : null
 }
 
+export const getRegions = async (options: CollectionQuery = {}): Promise<NormalizedRegion[]> => {
+  const docs = await fetchCollection<RegionDoc>(COLLECTIONS.regions, {
+    sort: 'name',
+    limit: 50,
+    ...options
+  })
+
+  return docs.map((doc) => normalizeRegion(doc))
+}
+
+export const getCitiesByRegion = async (
+  regionId: ID,
+  options: CollectionQuery = {}
+): Promise<NormalizedCity[]> => {
+  const docs = await fetchCollection<CityDoc>(COLLECTIONS.cities, {
+    status: 'published',
+    sort: 'name',
+    limit: 48,
+    where: {
+      'where[region][equals]': regionId
+    },
+    ...options
+  })
+
+  return docs.map((doc) => normalizeCity(doc))
+}
+
+export const getListingsByRegion = async (
+  regionId: ID,
+  options: CollectionQuery = {}
+): Promise<NormalizedListing[]> => {
+  const docs = await fetchCollection<ListingDoc>(COLLECTIONS.listings, {
+    status: 'published',
+    sort: 'name',
+    limit: 48,
+    where: {
+      'where[region][equals]': regionId
+    },
+    ...options
+  })
+
+  return docs.map((doc) => normalizeListing(doc))
+}
+
 export const getGuideBySlug = async (
   routeSlug: string | string[] | undefined,
   options: FetchBehavior = {}

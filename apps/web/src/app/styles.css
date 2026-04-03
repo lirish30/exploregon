@@ -1489,6 +1489,210 @@ a {
   background: #f7fbfd;
 }
 
+/* ─── Region page ─────────────────────────────────────── */
+
+.region-hero {
+  color: #edf7fb;
+  background-color: #122e35;
+  background-size: cover;
+  background-position: center;
+}
+
+.region-hero-inner {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(2.8rem, 8vw, 5.5rem) 0;
+}
+
+.region-hero .breadcrumbs-link,
+.region-hero .breadcrumbs-current,
+.region-hero .breadcrumbs-separator {
+  color: #c6dfe8;
+}
+
+.region-hero-kicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  color: #bdd6e0;
+}
+
+.region-hero-title {
+  margin: 0;
+  font-family: var(--font-display), 'Newsreader', serif;
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  line-height: 0.94;
+  letter-spacing: -0.016em;
+}
+
+.region-hero-summary {
+  margin: 0;
+  max-width: 64ch;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  opacity: 0.88;
+}
+
+.region-hero-cities {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.45rem;
+  margin-top: 0.4rem;
+  font-size: 0.88rem;
+  color: #c6dfe8;
+}
+
+.region-hero-cities-label {
+  opacity: 0.7;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.region-hero-city-link {
+  color: #edf7fb;
+  text-decoration: underline;
+  text-decoration-color: rgba(237, 247, 251, 0.35);
+  text-underline-offset: 2px;
+  transition: text-decoration-color 0.15s;
+}
+
+.region-hero-city-link:hover {
+  text-decoration-color: #edf7fb;
+}
+
+.region-hero-cities-sep {
+  color: #9bbfca;
+}
+
+/* City cards within the region page */
+
+.region-city-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.region-city-card {
+  display: grid;
+  gap: 0.55rem;
+  padding: 1.35rem 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.region-city-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 10px rgba(0, 105, 130, 0.07);
+}
+
+.region-city-name {
+  margin: 0;
+  font-family: var(--font-display), 'Newsreader', serif;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  line-height: 1.1;
+}
+
+.region-city-link {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.region-city-link:hover {
+  color: var(--accent-strong);
+}
+
+.region-city-summary {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+
+.region-city-highlights {
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.2rem;
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+}
+
+.region-city-cta {
+  display: inline-block;
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-strong);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.region-city-cta:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Region internal links grid */
+
+.region-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.region-links-group {
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+}
+
+.region-links-label {
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  font-weight: 600;
+  font-family: var(--font-body), sans-serif;
+}
+
+/* View-all nudge */
+
+.region-view-all {
+  margin-top: 1.8rem;
+  text-align: center;
+}
+
+.region-view-all-link {
+  display: inline-block;
+  padding: 0.65rem 1.4rem;
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--accent-strong);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.region-view-all-link:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.region-empty {
+  padding: 0.85rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink-muted);
+  background: #f7fbfd;
+  font-size: 0.88rem;
+}
+
 @media (max-width: 820px) {
   .site-header-inner {
     min-height: auto;
