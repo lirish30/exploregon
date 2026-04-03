@@ -17,6 +17,8 @@
   --radius-lg: 0.625rem;
   --shadow-soft: 0 12px 32px rgba(22, 29, 31, 0.06);
   --shell-max: 1180px;
+  --font-body: var(--font-instrument-sans), 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --font-heading: var(--font-instrument-serif), 'Times New Roman', serif;
 }
 
 * {
@@ -36,8 +38,17 @@ body {
     radial-gradient(circle at 86% 4%, rgba(121, 162, 176, 0.2), transparent 30%),
     var(--surface);
   color: var(--ink);
-  font-family: var(--font-body), 'Manrope', 'Segoe UI', sans-serif;
+  font-family: var(--font-body);
   line-height: 1.55;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
 }
 
 a {
@@ -101,7 +112,7 @@ a {
 
 .section-heading-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', 'Times New Roman', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.7rem, 2.8vw, 2.7rem);
   line-height: 1.08;
   letter-spacing: -0.01em;
@@ -137,7 +148,7 @@ a {
 
 .brand-name {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', 'Times New Roman', serif;
+  font-family: var(--font-heading);
   font-size: 1.35rem;
   line-height: 1;
   letter-spacing: -0.015em;
@@ -188,6 +199,12 @@ a {
   gap: 0.25rem;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .header-nav-link {
   font-size: 0.9rem;
   text-decoration: none;
@@ -204,6 +221,23 @@ a {
 .header-nav-link:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+.header-utility-links {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.header-utility-link {
+  color: var(--ink-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.header-cta {
+  white-space: nowrap;
 }
 
 .button-primary,
@@ -263,7 +297,7 @@ a {
 
 .footer-brand-name {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: 1.25rem;
 }
 
@@ -333,7 +367,7 @@ a {
 .page-hero-title {
   margin: 0;
   max-width: 18ch;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   line-height: 0.96;
   letter-spacing: -0.015em;
   font-size: clamp(2.4rem, 7.5vw, 4.8rem);
@@ -393,7 +427,7 @@ a {
 
 .cta-block-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.35rem, 2.1vw, 2rem);
   line-height: 1.07;
 }
@@ -429,7 +463,7 @@ a {
 
 .card-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   line-height: 1.08;
   font-size: clamp(1.2rem, 2.3vw, 1.7rem);
 }
@@ -565,7 +599,7 @@ a {
 
 .map-placeholder-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: 1.75rem;
   line-height: 1.05;
 }
@@ -590,7 +624,7 @@ a {
 
 .newsletter-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.3rem, 2vw, 1.9rem);
 }
 
@@ -675,7 +709,7 @@ a {
 
 .home-hero-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   line-height: 0.96;
   letter-spacing: -0.015em;
   font-size: clamp(2.05rem, 6vw, 4rem);
@@ -783,7 +817,7 @@ a {
 
 .home-city-name {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.25rem, 2vw, 1.7rem);
   line-height: 1.05;
 }
@@ -822,7 +856,7 @@ a {
 
 .home-compare-card h3 {
   margin: 0 0 0.4rem;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: 1.35rem;
 }
 
@@ -932,7 +966,7 @@ a {
 .home-pulse-guide-card h3,
 .home-pulse-event-card h3 {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: 1.38rem;
   line-height: 1.04;
 }
@@ -974,7 +1008,7 @@ a {
 
 .cities-index-region-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.4rem, 2.2vw, 1.85rem);
   line-height: 1.08;
 }
@@ -1011,7 +1045,7 @@ a {
 .cities-index-card-title,
 .city-listing-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.2rem, 2vw, 1.55rem);
   line-height: 1.07;
 }
@@ -1066,7 +1100,7 @@ a {
 
 .utility-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.2rem, 2vw, 1.55rem);
   line-height: 1.07;
 }
@@ -1124,7 +1158,7 @@ a {
 
 .city-hero-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: clamp(2rem, 6vw, 4rem);
   line-height: 0.96;
   letter-spacing: -0.014em;
@@ -1180,7 +1214,7 @@ a {
 
 .city-related-title {
   margin: 0 0 0.5rem;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: 1.3rem;
 }
 
@@ -1224,7 +1258,7 @@ a {
 
 .category-hero-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: clamp(2rem, 6vw, 3.4rem);
   line-height: 0.96;
   letter-spacing: -0.014em;
@@ -1300,7 +1334,7 @@ a {
 
 .listing-hero-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: clamp(2rem, 6vw, 3.8rem);
   line-height: 0.96;
   letter-spacing: -0.014em;
@@ -1345,7 +1379,7 @@ a {
 
 .listing-detail-panel h3 {
   margin: 0 0 0.55rem;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: 1.35rem;
   line-height: 1.08;
 }
@@ -1467,7 +1501,7 @@ a {
 .event-hero-title,
 .itinerary-hero-title {
   margin: 0;
-  font-family: var(--font-display), 'Newsreader', serif;
+  font-family: var(--font-heading);
   font-size: clamp(2rem, 6vw, 3.8rem);
   line-height: 0.96;
   letter-spacing: -0.014em;
@@ -1646,7 +1680,15 @@ a {
     background: var(--surface-low);
   }
 
-  /* Footer & homepage layout adjustments */
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-utility-links {
+    flex-wrap: wrap;
+  }
   .site-footer-inner {
     grid-template-columns: 1fr 1fr;
   }
@@ -1667,5 +1709,548 @@ a {
 
   .home-search {
     padding: 0.6rem;
+  }
+}
+
+.coast-home-hero {
+  position: relative;
+  min-height: min(88vh, 58rem);
+  overflow: clip;
+  background: #102d34;
+  color: #f7f3eb;
+}
+
+.coast-home-hero-visual,
+.coast-home-hero-image,
+.coast-home-hero-overlay,
+.coast-home-hero-mist {
+  position: absolute;
+  inset: 0;
+}
+
+.coast-home-hero-image {
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.9) contrast(1.05) brightness(0.82);
+}
+
+.coast-home-image-fallback {
+  background:
+    linear-gradient(180deg, rgba(9, 28, 33, 0.28), rgba(9, 28, 33, 0.72)),
+    radial-gradient(circle at 15% 20%, rgba(188, 214, 220, 0.22), transparent 28%),
+    linear-gradient(135deg, #35535c, #102d34 62%, #d9e7ee);
+}
+
+.coast-home-hero-overlay {
+  background:
+    linear-gradient(180deg, rgba(8, 26, 31, 0.18), rgba(8, 26, 31, 0.76)),
+    linear-gradient(180deg, transparent 50%, rgba(244, 250, 254, 0.3) 100%);
+}
+
+.coast-home-hero-mist {
+  inset: auto 0 0;
+  height: 16rem;
+  background:
+    radial-gradient(circle at 20% 45%, rgba(248, 250, 251, 0.4), transparent 22%),
+    radial-gradient(circle at 72% 58%, rgba(248, 250, 251, 0.32), transparent 18%),
+    linear-gradient(180deg, rgba(244, 250, 254, 0), rgba(244, 250, 254, 0.86));
+}
+
+.coast-home-hero-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  min-height: min(88vh, 58rem);
+  padding: clamp(5rem, 10vw, 7.5rem) 0 clamp(3rem, 8vw, 5rem);
+}
+
+.coast-home-hero-copy {
+  width: min(100%, 46rem);
+  display: grid;
+  gap: 1.25rem;
+}
+
+.coast-home-eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: rgba(241, 246, 248, 0.88);
+}
+
+.coast-home-eyebrow-dark {
+  color: var(--accent-strong);
+}
+
+.coast-home-hero-title,
+.coast-home-section-title,
+.coast-home-signup h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.coast-home-hero-title {
+  font-size: clamp(3.2rem, 8vw, 5.8rem);
+  max-width: 12ch;
+}
+
+.coast-home-hero-summary,
+.coast-home-section-copy,
+.coast-home-signup p {
+  margin: 0;
+  max-width: 56ch;
+  color: rgba(247, 243, 235, 0.88);
+  font-size: 1.05rem;
+}
+
+.coast-home-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  width: min(100%, 42rem);
+  padding: 0.65rem;
+  border-radius: 0.85rem;
+  background: rgba(248, 249, 247, 0.92);
+  box-shadow: 0 22px 50px rgba(6, 20, 24, 0.18);
+}
+
+.coast-home-search-input,
+.coast-home-signup-form input,
+.coast-home-filter-group select {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  border-radius: 0.6rem;
+  min-height: 3.25rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--ink);
+  padding: 0 1rem;
+  font: inherit;
+}
+
+.coast-home-search-input::placeholder,
+.coast-home-signup-form input::placeholder {
+  color: #60757d;
+}
+
+.coast-home-search-button {
+  min-width: 12rem;
+}
+
+.coast-home-chip-row,
+.coast-home-badge-row,
+.coast-home-trip-actions,
+.coast-home-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.coast-home-chip {
+  text-decoration: none;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(241, 245, 247, 0.16);
+  border: 1px solid rgba(241, 245, 247, 0.16);
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.coast-home-outline-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  color: #fff;
+}
+
+.coast-home-outline-link-dark {
+  color: var(--accent-strong);
+}
+
+.coast-home-shortcuts {
+  margin-top: -2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.coast-home-shortcut-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.coast-home-shortcut-card,
+.coast-home-filter-panel,
+.coast-home-destination-card,
+.coast-home-story-card,
+.coast-home-listing-card,
+.coast-home-signup,
+.coast-home-trip-finder,
+.coast-home-utility-panel {
+  background: rgba(247, 250, 250, 0.96);
+  border: 1px solid rgba(28, 49, 56, 0.08);
+  box-shadow: 0 18px 44px rgba(13, 29, 35, 0.08);
+}
+
+.coast-home-shortcut-card {
+  display: grid;
+  gap: 0.45rem;
+  text-decoration: none;
+  min-height: 7.5rem;
+  padding: 1.2rem;
+  border-radius: 0.35rem;
+  color: var(--ink);
+}
+
+.coast-home-shortcut-name {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.82rem;
+}
+
+.coast-home-shortcut-copy {
+  color: var(--ink-muted);
+  font-size: 0.88rem;
+}
+
+.coast-home-panel {
+  background: linear-gradient(180deg, rgba(230, 239, 243, 0.7), rgba(244, 250, 254, 0));
+}
+
+.coast-home-section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: end;
+  margin-bottom: 2rem;
+}
+
+.coast-home-section-head-stack {
+  align-items: start;
+}
+
+.coast-home-section-title {
+  font-size: clamp(2rem, 4vw, 3.35rem);
+  max-width: 13ch;
+  color: #163740;
+}
+
+.coast-home-section-copy {
+  color: var(--ink-muted);
+}
+
+.coast-home-section-link,
+.coast-home-inline-link {
+  color: var(--accent-strong);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.coast-home-destination-grid,
+.coast-home-editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.coast-home-destination-card,
+.coast-home-listing-card {
+  overflow: hidden;
+  border-radius: 0.3rem;
+}
+
+.coast-home-destination-media,
+.coast-home-story-media,
+.coast-home-listing-media {
+  position: relative;
+  overflow: hidden;
+  min-height: 14rem;
+  background: #d5e4ea;
+}
+
+.coast-home-card-image {
+  object-fit: cover;
+}
+
+.coast-home-destination-body,
+.coast-home-story-body,
+.coast-home-listing-body {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.15rem 1.15rem 1.3rem;
+}
+
+.coast-home-destination-body h3,
+.coast-home-story-body h3,
+.coast-home-listing-body h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  color: #183c45;
+}
+
+.coast-home-destination-body p,
+.coast-home-story-body p,
+.coast-home-listing-body p {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.coast-home-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+  background: #e2ece4;
+  color: #29503a;
+  font-size: 0.67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.coast-home-meta-list {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.coast-home-meta-list div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.coast-home-meta-list dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #31515b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.coast-home-meta-list dd {
+  margin: 0;
+  color: #203d46;
+}
+
+.coast-home-trip-finder {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  padding: clamp(1.5rem, 4vw, 2rem);
+  border-radius: 0.35rem;
+}
+
+.coast-home-trip-copy {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.coast-home-filter-panel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  padding: 1rem;
+  border-radius: 0.3rem;
+}
+
+.coast-home-filter-group {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.coast-home-filter-group label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #35535c;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.coast-home-filter-submit {
+  grid-column: 1 / -1;
+}
+
+.coast-home-utility-wrap {
+  background: linear-gradient(180deg, rgba(221, 232, 236, 0.5), rgba(244, 250, 254, 0));
+}
+
+.coast-home-utility-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.coast-home-utility-copy {
+  display: grid;
+  gap: 1rem;
+}
+
+.coast-home-utility-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 0.35rem;
+}
+
+.coast-home-metric-card {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem;
+  background: #f2f7f8;
+  border-radius: 0.25rem;
+}
+
+.coast-home-metric-card p,
+.coast-home-story-tag {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4a6870;
+}
+
+.coast-home-metric-card strong {
+  color: #173941;
+  font-size: 1rem;
+}
+
+.coast-home-metric-card span {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
+.coast-home-editorial {
+  background: rgba(232, 240, 244, 0.5);
+}
+
+.coast-home-editorial-grid {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+}
+
+.coast-home-editorial-column {
+  display: grid;
+  gap: 1rem;
+}
+
+.coast-home-story-card {
+  overflow: hidden;
+  border-radius: 0.35rem;
+}
+
+.coast-home-story-card-large .coast-home-story-media {
+  min-height: 18rem;
+}
+
+.coast-home-story-card-compact {
+  min-height: 100%;
+}
+
+.coast-home-listing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.coast-home-listing-card-featured {
+  grid-column: span 2;
+}
+
+.coast-home-signup {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 1.5rem;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  border-radius: 0.45rem;
+  background:
+    linear-gradient(135deg, #123a43, #0d313a),
+    radial-gradient(circle at top right, rgba(221, 236, 241, 0.2), transparent 32%);
+  color: #eaf3f6;
+}
+
+.coast-home-signup h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  max-width: 13ch;
+}
+
+.coast-home-signup-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.8rem;
+  align-content: center;
+}
+
+.coast-home-signup-form input {
+  background: rgba(249, 252, 253, 0.95);
+}
+
+@media (max-width: 1080px) {
+  .coast-home-shortcut-grid,
+  .coast-home-destination-grid,
+  .coast-home-listing-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .coast-home-editorial-grid,
+  .coast-home-trip-finder,
+  .coast-home-utility-grid,
+  .coast-home-signup {
+    grid-template-columns: 1fr;
+  }
+
+  .coast-home-utility-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .coast-home-hero {
+    min-height: auto;
+  }
+
+  .coast-home-hero-inner {
+    min-height: auto;
+    padding-top: 4.75rem;
+  }
+
+  .coast-home-search,
+  .coast-home-signup-form {
+    grid-template-columns: 1fr;
+  }
+
+  .coast-home-shortcuts {
+    margin-top: 0;
+  }
+
+  .coast-home-shortcut-grid,
+  .coast-home-destination-grid,
+  .coast-home-listing-grid,
+  .coast-home-filter-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .coast-home-listing-card-featured {
+    grid-column: auto;
+  }
+
+  .coast-home-section-head {
+    align-items: start;
+    flex-direction: column;
   }
 }

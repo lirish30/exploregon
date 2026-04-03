@@ -21,7 +21,6 @@ export const SiteHeader = ({ siteName, siteTagline, navItems }: SiteHeaderProps)
             </Link>
             <p className="brand-tagline">{siteTagline}</p>
           </div>
-
           {/*
            * Nav uses a <details>/<summary> approach so it is:
            *   - Server-renderable (no 'use client' needed)
@@ -32,32 +31,43 @@ export const SiteHeader = ({ siteName, siteTagline, navItems }: SiteHeaderProps)
            * On mobile:  .nav-toggle shows the hamburger/close icon; .header-nav is
            *             hidden until details[open], then slides in as a dropdown.
            */}
-          <details className="nav-details">
-            <summary className="nav-toggle" aria-label="Toggle navigation">
-              {/* Hamburger bars — shown when menu is closed */}
-              <span className="nav-hamburger-icon" aria-hidden="true">
-                <span className="nav-bar" />
-                <span className="nav-bar" />
-                <span className="nav-bar" />
-              </span>
-              {/* Close icon — shown when menu is open */}
-              <span className="nav-close-icon" aria-hidden="true">✕</span>
-            </summary>
-
-            <nav aria-label="Primary" className="header-nav">
-              {navItems.map((item) => (
-                <Link
-                  key={`${item.label}-${item.url}`}
-                  href={item.url}
-                  className="header-nav-link"
-                  target={item.openInNewTab ? '_blank' : undefined}
-                  rel={item.openInNewTab ? 'noreferrer' : undefined}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-          </details>
+          <div className="header-actions">
+            <details className="nav-details">
+              <summary className="nav-toggle" aria-label="Toggle navigation">
+                {/* Hamburger bars — shown when menu is closed */}
+                <span className="nav-hamburger-icon" aria-hidden="true">
+                  <span className="nav-bar" />
+                  <span className="nav-bar" />
+                  <span className="nav-bar" />
+                </span>
+                {/* Close icon — shown when menu is open */}
+                <span className="nav-close-icon" aria-hidden="true">
+                  ✕
+                </span>
+              </summary>
+              <nav aria-label="Primary" className="header-nav">
+                {navItems.map((item) => (
+                  <Link
+                    key={`${item.label}-${item.url}`}
+                    href={item.url}
+                    className="header-nav-link"
+                    target={item.openInNewTab ? '_blank' : undefined}
+                    rel={item.openInNewTab ? 'noreferrer' : undefined}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+            </details>
+            <div className="header-utility-links">
+              <Link href="/weather-tides" className="header-utility-link">
+                Coast Conditions
+              </Link>
+              <Link href="/itineraries" className="button-primary header-cta">
+                Build a Trip
+              </Link>
+            </div>
+          </div>
         </div>
       </Container>
     </header>
