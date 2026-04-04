@@ -1058,21 +1058,6 @@ const events: EventSeed[] = [
     seoTitle: 'Lincoln City Coastal Kite Weekend (Editorial Seed Event)',
     seoDescription: 'Placeholder Lincoln City event record for launch event filtering and city linking.'
   },
-  {
-    title: 'Oregon Coast Winter Storm Watch Meetup (Seed Placeholder)',
-    slug: 'oregon-coast-winter-storm-watch-meetup-seed',
-    citySlug: 'newport',
-    regionSlug: 'central-coast',
-    startDate: '2026-12-12T19:00:00.000Z',
-    endDate: '2026-12-13T01:00:00.000Z',
-    venue: 'Newport Public Overlook Area',
-    summary:
-      'Editorial seed placeholder event tied to winter planning content in the sitemap.',
-    description:
-      'Launch-only placeholder used for off-season event coverage tests. Confirm safety guidance and hosting details before real publication.',
-    seoTitle: 'Oregon Coast Winter Storm Watch Meetup (Editorial Seed)',
-    seoDescription: 'Placeholder winter event for launch seasonality and event-feed testing.'
-  }
 ]
 
 const itinerary: ItinerarySeed = {

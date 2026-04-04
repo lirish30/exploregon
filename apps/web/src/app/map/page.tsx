@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic'
 import type { Metadata } from 'next'
 
 import { Breadcrumbs } from '../../components/primitives/breadcrumbs'
@@ -6,11 +7,26 @@ import { MapPlaceholder } from '../../components/primitives/map-placeholder'
 import { PageHero } from '../../components/primitives/page-hero'
 import { Section } from '../../components/primitives/section'
 import { SectionHeading } from '../../components/primitives/section-heading'
-import { getSiteSettings } from '../../lib/api'
+import { getCities, getSiteSettings } from '../../lib/api'
 import { createMetadata } from '../../lib/seo'
+import type { MapCity } from '../../components/map/coast-map'
 import type { SiteSettingsGlobal } from '../../lib/types'
 
 export const revalidate = 300
+
+// Dynamic import: Leaflet requires browser APIs — SSR must be false
+const CoastMap = dynamic(
+  () => import('../../components/map/coast-map').then((mod) => mod.CoastMap),
+  {
+    ssr: false,
+    loading: () => (
+      <MapPlaceholder
+        title="Loading coast map…"
+        note="Fetching city coordinates from Payload."
+      />
+    )
+  }
+)
 
 const fallbackSettings: SiteSettingsGlobal = {
   siteName: 'ExplOregon Coast',
@@ -40,20 +56,35 @@ export async function generateMetadata(): Promise<Metadata> {
   return createMetadata(
     {
       title: 'Oregon Coast Map',
-      description: 'Map utility route for Leaflet + OpenStreetMap city and listing exploration.',
+      description: 'Interactive Leaflet + OpenStreetMap map of Oregon Coast cities.',
       path: '/map'
     },
     settings
   )
 }
 
-export default function MapPage() {
+export default async function MapPage() {
+  const [settings, cities] = await Promise.all([
+    getSettings(),
+    getCities({ status: 'published', limit: 50 }).catch(() => [])
+  ])
+
+  const mapCities: MapCity[] = cities
+    .filter((c) => c.latitude && c.longitude)
+    .map((c) => ({
+      id: c.id,
+      name: c.name,
+      slug: c.slug,
+      latitude: c.latitude,
+      longitude: c.longitude
+    }))
+
   return (
     <>
       <PageHero
         kicker="Utility"
         title="Oregon Coast map"
-        description="Planning utility route reserved for Leaflet + OpenStreetMap integration, with city and listing map context."
+        description="Published coastal cities plotted on an interactive OpenStreetMap. Click any marker to jump to that city's guide."
         actions={[
           { label: 'Browse Cities', href: '/cities', variant: 'secondary' },
           { label: 'Browse Listings', href: '/categories', variant: 'secondary' }
@@ -71,14 +102,19 @@ export default function MapPage() {
         </div>
 
         <SectionHeading
-          kicker="Map Module"
-          title="Leaflet + OpenStreetMap utility"
-          lede="MVP map route is live and ready for marker integration from published city and listing records."
+          kicker="Map"
+          title="Coast city map"
+          lede={`${mapCities.length} published ${mapCities.length === 1 ? 'city' : 'cities'} plotted via Leaflet + OpenStreetMap.`}
         />
-        <MapPlaceholder
-          title="Coast map utility"
-          note="Next integration step: render Leaflet map tiles with published city centers and listing markers."
-        />
+
+        {mapCities.length > 0 ? (
+          <CoastMap cities={mapCities} />
+        ) : (
+          <MapPlaceholder
+            title="No published cities found"
+            note="Run the seed script to populate city records with coordinates."
+          />
+        )}
       </Section>
 
       <Section surface="muted">

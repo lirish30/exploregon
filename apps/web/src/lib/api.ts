@@ -527,16 +527,6 @@ export const getRegionBySlug = async (
   return doc ? normalizeRegion(doc) : null
 }
 
-export const getRegions = async (options: CollectionQuery = {}): Promise<NormalizedRegion[]> => {
-  const docs = await fetchCollection<RegionDoc>(COLLECTIONS.regions, {
-    sort: 'name',
-    limit: 24,
-    ...options
-  })
-
-  return docs.map((doc) => normalizeRegion(doc))
-}
-
 export const getGuideBySlug = async (
   routeSlug: string | string[] | undefined,
   options: FetchBehavior = {}

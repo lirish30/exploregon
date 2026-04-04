@@ -11,11 +11,14 @@
     "seo:validate": "node ./scripts/validate-sitemap-coverage.mjs"
   },
   "dependencies": {
+    "leaflet": "^1.9.4",
     "next": "^15.2.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.14",
     "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4"
