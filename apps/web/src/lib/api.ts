@@ -199,9 +199,22 @@ const normalizeReferences = (
   values: Array<PayloadRelationship<Record<string, unknown>>> | undefined,
   labelKeys: string[]
 ): NormalizedReference[] => {
-  return (values ?? [])
+  if (!Array.isArray(values)) {
+    return []
+  }
+
+  return values
     .map((value) => normalizeReference(value, labelKeys))
     .filter((value): value is NormalizedReference => value !== null)
+}
+
+const asNonEmptyString = (value: unknown, fallback: string): string => {
+  if (typeof value !== 'string') {
+    return fallback
+  }
+
+  const normalized = value.trim()
+  return normalized.length > 0 ? normalized : fallback
 }
 
 const normalizeRegion = (doc: RegionDoc): NormalizedRegion => ({
@@ -350,8 +363,11 @@ const normalizeItinerary = (doc: ItineraryDoc): NormalizedItinerary => ({
 })
 
 const normalizeHomepage = (global: HomepageGlobal): NormalizedHomepage => ({
-  heroHeadline: global.heroHeadline,
-  heroSubheadline: global.heroSubheadline,
+  heroHeadline: asNonEmptyString(global.heroHeadline, 'Plan your Oregon Coast trip with confidence'),
+  heroSubheadline: asNonEmptyString(
+    global.heroSubheadline,
+    'Find practical guides, vetted listings, and city-by-city planning tools.'
+  ),
   heroCta: global.heroCta
     ? {
         label: global.heroCta.label,
@@ -388,13 +404,35 @@ const normalizeHomepage = (global: HomepageGlobal): NormalizedHomepage => ({
     : null
 })
 
+const normalizeSiteSettings = (settings: Partial<SiteSettingsGlobal> | null | undefined): SiteSettingsGlobal => ({
+  siteName: asNonEmptyString(settings?.siteName, 'ExplOregon Coast'),
+  siteTagline: asNonEmptyString(settings?.siteTagline, 'Plan the Oregon Coast with trusted local structure.'),
+  defaultSeo: {
+    title: asNonEmptyString(settings?.defaultSeo?.title, 'ExplOregon Coast'),
+    description: asNonEmptyString(
+      settings?.defaultSeo?.description,
+      'Structured Oregon Coast travel and planning resources.'
+    )
+  },
+  socialLinks: Array.isArray(settings?.socialLinks) ? settings.socialLinks : [],
+  contact: {
+    email: asNonEmptyString(settings?.contact?.email, 'editorial@exploregoncoast.com'),
+    phone: typeof settings?.contact?.phone === 'string' ? settings.contact.phone : null
+  }
+})
+
 export const getHomepageData = async (behavior: FetchBehavior = {}): Promise<NormalizedHomepage> => {
   const data = await fetchGlobal<HomepageGlobal>(GLOBALS.homepage, behavior)
   return normalizeHomepage(data)
 }
 
-export const getSiteSettings = (behavior: FetchBehavior = {}): Promise<SiteSettingsGlobal> => {
-  return fetchGlobal<SiteSettingsGlobal>(GLOBALS.siteSettings, behavior)
+export const getSiteSettings = async (behavior: FetchBehavior = {}): Promise<SiteSettingsGlobal> => {
+  try {
+    const data = await fetchGlobal<SiteSettingsGlobal>(GLOBALS.siteSettings, behavior)
+    return normalizeSiteSettings(data)
+  } catch {
+    return normalizeSiteSettings(null)
+  }
 }
 
 export const getNavigation = (behavior: FetchBehavior = {}): Promise<NavigationGlobal> => {
@@ -704,4 +742,3 @@ export const getUpcomingEvents = async (options: CollectionQuery = {}): Promise<
 
   return docs.map((doc) => normalizeEvent(doc))
 }
-

@@ -1,14 +1,14 @@
 import type { CollectionConfig } from 'payload'
 
-import { Cities } from './Cities.ts'
-import { Events } from './Events.ts'
-import { Guides } from './Guides.ts'
-import { Itineraries } from './Itineraries.ts'
-import { ListingCategories } from './ListingCategories.ts'
-import { Listings } from './Listings.ts'
-import { Media } from './Media.ts'
-import { Regions } from './Regions.ts'
-import { Users } from './Users.ts'
+import { Cities } from './Cities'
+import { Events } from './Events'
+import { Guides } from './Guides'
+import { Itineraries } from './Itineraries'
+import { ListingCategories } from './ListingCategories'
+import { Listings } from './Listings'
+import { Media } from './Media'
+import { Regions } from './Regions'
+import { Users } from './Users'
 
 export const collections: CollectionConfig[] = [
   Regions,

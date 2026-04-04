@@ -17,8 +17,12 @@
   --radius-lg: 0.625rem;
   --shadow-soft: 0 12px 32px rgba(22, 29, 31, 0.06);
   --shell-max: 1180px;
-  --font-body: var(--font-manrope), 'Segoe UI', 'Helvetica Neue', sans-serif;
-  --font-heading: var(--font-newsreader), 'Times New Roman', serif;
+  --font-manrope: 'Segoe UI';
+  --font-newsreader: 'Times New Roman';
+  --font-instrument-sans: 'Segoe UI';
+  --font-instrument-serif: 'Times New Roman';
+  --font-body: var(--font-manrope), var(--font-instrument-sans), 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --font-heading: var(--font-newsreader), var(--font-instrument-serif), 'Times New Roman', serif;
 }
 
 * {

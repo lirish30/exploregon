@@ -6,6 +6,9 @@
   "scripts": {
     "dev:web": "pnpm --filter @exploregon/web dev",
     "dev:cms": "pnpm --filter @exploregon/cms dev",
+    "cms:db:up": "docker compose -f docker-compose.cms.yml up -d",
+    "cms:db:down": "docker compose -f docker-compose.cms.yml down",
+    "cms:migrate": "pnpm --filter @exploregon/cms migrate",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
     "format": "prettier --check .",

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Manrope, Newsreader } from 'next/font/google'
 import Script from 'next/script'
 import type { ReactNode } from 'react'
 
@@ -11,19 +10,6 @@ import './styles.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '')
 const gaMeasurementId = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID?.trim()
-
-const manrope = Manrope({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-manrope'
-})
-
-const newsreader = Newsreader({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  style: ['normal', 'italic'],
-  variable: '--font-newsreader'
-})
 
 export const metadata: Metadata = {
   metadataBase: siteUrl ? new URL(siteUrl) : undefined,
@@ -107,7 +93,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
   return (
     <html lang="en">
-      <body className={`${manrope.variable} ${newsreader.variable}`}>
+      <body>
         {gaMeasurementId ? (
           <>
             <Script

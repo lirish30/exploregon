@@ -5,6 +5,8 @@ node_modules/
 .next/
 dist/
 build/
+*.tsbuildinfo
+apps/cms/payload.db
 
 # Logs
 *.log

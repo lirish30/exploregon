@@ -2,21 +2,37 @@
   "name": "@exploregon/cms",
   "private": true,
   "version": "0.1.0",
+  "type": "module",
   "scripts": {
-    "dev": "payload dev --config src/payload.config.ts",
-    "build": "payload build --config src/payload.config.ts",
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev -p ${PAYLOAD_PORT:-3001}",
+    "build": "cross-env NODE_OPTIONS=--no-deprecation next build --no-lint",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start -p ${PAYLOAD_PORT:-3001}",
     "lint": "eslint src --max-warnings=0",
     "typecheck": "tsc --noEmit",
-    "typegen": "payload generate:types --config src/payload.config.ts",
+    "typegen": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types --config src/payload.config.ts",
+    "importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap --config src/payload.config.ts",
+    "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate --config src/payload.config.ts",
     "seed": "tsx src/seed/index.ts",
     "import": "tsx src/import/runner.ts"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "^3.30.0",
+    "@payloadcms/next": "3.30.0",
+    "@payloadcms/ui": "3.30.0",
+    "@payloadcms/db-postgres": "3.30.0",
+    "@payloadcms/db-sqlite": "3.30.0",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
-    "payload": "^3.30.0"
+    "graphql": "^16.8.1",
+    "next": "^15.2.0",
+    "payload": "3.30.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sharp": "^0.34.2"
   },
   "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
     "tsx": "^4.19.3"
   }
 }

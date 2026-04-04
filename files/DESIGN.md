@@ -29,9 +29,9 @@ We do not use flat backgrounds. Depth is achieved through a "Stacked Paper" meta
 
 The typography strategy pairs the structural reliability of a clean sans-serif with the storytelling authority of a sturdy serif.
 
-*   **Editorial Headings (Newsreader):** Used for `display` and `headline` scales. This serif is our "voice." It is intentional, slightly academic, and deeply rugged. Use `display-lg` (3.5rem) with tight letter-spacing for high-impact travel stories.
-*   **Utility & Navigation (Manrope):** Used for `title`, `body`, and `label` scales. A modern sans-serif that ensures high readability for directory listings and technical data.
-*   **Hierarchy Note:** Always lead with a Newsreader headline to ground the page in editorial quality, then transition to Manrope for the "workhorse" information.
+*   **Editorial Headings (Instrument):** Used for `display` and `headline` scales. This serif is our "voice." It is intentional, slightly academic, and deeply rugged. Use `regular-400` (3.5rem) with tight letter-spacing for high-impact travel stories.
+*   **Utility & Navigation (Instrument):** Used for `title`, `body`, and `label` scales. A modern sans-serif that ensures high readability for directory listings and technical data.
+*   **Hierarchy Note:** Always lead with a Instrument headline to ground the page in editorial quality, then transition to Instrument for the "workhorse" information.
 
 ---
 

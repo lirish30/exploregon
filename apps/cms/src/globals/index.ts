@@ -1,8 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
-import { Footer } from './Footer.ts'
-import { Homepage } from './Homepage.ts'
-import { Navigation } from './Navigation.ts'
-import { SiteSettings } from './SiteSettings.ts'
+import { Footer } from './Footer'
+import { Homepage } from './Homepage'
+import { Navigation } from './Navigation'
+import { SiteSettings } from './SiteSettings'
 
 export const globals: GlobalConfig[] = [SiteSettings, Homepage, Navigation, Footer]

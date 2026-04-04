@@ -23,7 +23,26 @@ pnpm dev:cms
 pnpm dev:web
 ```
 
-4. Quality checks:
+4. Open:
+
+- CMS admin: `http://localhost:3001/admin`
+- Website: `http://localhost:3000`
+
+If port `3001` is already used on your machine, run CMS on another port:
+
+```bash
+PAYLOAD_PORT=3002 pnpm dev:cms
+```
+
+SQLite is the default local CMS DB (`apps/cms/payload.db`), so Docker is not required for local login/publishing.
+If you want Postgres instead, set `DATABASE_URI`/`DATABASE_URL` in `apps/cms/.env`, then run:
+
+```bash
+pnpm cms:db:up
+pnpm cms:migrate
+```
+
+5. Quality checks:
 
 ```bash
 pnpm lint

@@ -1532,7 +1532,7 @@ export async function seed(): Promise<void> {
     console.log(`- events: ${events.length}`)
     console.log('- globals: homepage, navigation, siteSettings, footer')
   } finally {
-    await payload.destroy()
+    await (payload as { destroy?: () => Promise<void> }).destroy?.()
   }
 }
 
