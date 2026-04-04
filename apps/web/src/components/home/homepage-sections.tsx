@@ -33,14 +33,13 @@ export const HomepageDestinations = ({ model, resolveMediaUrl }: SharedProps) =>
       <div className="container">
         <div className="coast-home-section-head">
           <div>
-            <p className="coast-home-eyebrow coast-home-eyebrow-dark">Coastal Basecamps</p>
-            <h2 className="coast-home-section-title">Every town has a different rhythm.</h2>
+            <h2 className="coast-home-section-title">Coastal Basecamps</h2>
             <p className="coast-home-section-copy">
-              Compare launch cities by vibe, access, and what kind of coast weekend they support best.
+              Every town on the coast has its own soul. Compare vibes and find where you belong this season.
             </p>
           </div>
           <Link href="/cities" className="coast-home-section-link">
-            View all towns
+            View All Towns →
           </Link>
         </div>
         <div className="coast-home-destination-grid">
@@ -130,79 +129,84 @@ export const HomepageTripFinder = ({ model }: SharedProps) => {
 export const HomepageUtilitySnapshot = ({ model }: SharedProps) => {
   return (
     <section className="section coast-home-utility-wrap">
-      <div className="container coast-home-utility-grid">
-        <div className="coast-home-utility-copy">
-          <p className="coast-home-eyebrow coast-home-eyebrow-dark">Coastal planning dashboard</p>
-          <h2 className="coast-home-section-title">{model.utilitySnapshot.title}</h2>
-          <p className="coast-home-section-copy">{model.utilitySnapshot.intro}</p>
-          <div className="coast-home-trip-actions">
-            <Link href={model.utilitySnapshot.primaryLink.href} className="button-primary">
-              {model.utilitySnapshot.primaryLink.label}
-            </Link>
-            <Link href={model.utilitySnapshot.secondaryLink.href} className="coast-home-outline-link coast-home-outline-link-dark">
-              {model.utilitySnapshot.secondaryLink.label}
-            </Link>
-          </div>
-        </div>
-        <aside className="coast-home-utility-panel">
+      <div className="container">
+        <h2 className="coast-home-utility-heading">{model.utilitySnapshot.title}</h2>
+        <div className="coast-home-utility-panel">
           {model.utilitySnapshot.metrics.map((metric) => (
             <article key={metric.label} className="coast-home-metric-card">
-              <p>{metric.label}</p>
-              <strong>{metric.value}</strong>
-              <span>{metric.detail}</span>
+              <p className="coast-home-metric-label">{metric.label}</p>
+              <strong className="coast-home-metric-value">{metric.value}</strong>
+              <span className="coast-home-metric-detail">{metric.detail}</span>
             </article>
           ))}
-        </aside>
+        </div>
       </div>
     </section>
   )
 }
 
 export const HomepageEditorial = ({ model, resolveMediaUrl }: SharedProps) => {
+  const [leadGuide, ...moreGuides] = model.coastalPulse.guides
+  const sidebarItems = [...moreGuides, ...model.coastalPulse.events].slice(0, 3)
+
   return (
     <section className="section coast-home-editorial">
       <div className="container">
-        <div className="coast-home-section-head coast-home-section-head-stack">
-          <div>
-            <p className="coast-home-eyebrow coast-home-eyebrow-dark">Editor&apos;s Choice Weekly</p>
-            <h2 className="coast-home-section-title">{model.coastalPulse.title}</h2>
-            <p className="coast-home-section-copy">{model.coastalPulse.intro}</p>
-          </div>
+        <div className="coast-home-pulse-header">
+          <h2 className="coast-home-pulse-title">{model.coastalPulse.title}</h2>
+          <nav aria-label="Editorial categories">
+            <ul className="coast-home-pulse-tabs">
+              <li>
+                <span className="coast-home-pulse-tab coast-home-pulse-tab-active">Deep Dives</span>
+              </li>
+              <li>
+                <span className="coast-home-pulse-tab">This Weekend</span>
+              </li>
+              <li>
+                <span className="coast-home-pulse-tab">Local Tales</span>
+              </li>
+            </ul>
+          </nav>
         </div>
         <div className="coast-home-editorial-grid">
           <div className="coast-home-editorial-column">
-            {model.coastalPulse.guides.map((guide) => (
-              <article key={guide.href} className="coast-home-story-card coast-home-story-card-large">
+            {leadGuide && (
+              <article className="coast-home-story-card coast-home-story-card-large">
                 <div className="coast-home-story-media">
                   <HomeMedia
-                    media={guide.image}
-                    src={resolveMediaUrl(guide.image?.url)}
-                    altFallback={guide.title}
+                    media={leadGuide.image}
+                    src={resolveMediaUrl(leadGuide.image?.url)}
+                    altFallback={leadGuide.title}
                     className="coast-home-card-image"
-                    sizes="(max-width: 900px) 100vw, 50vw"
+                    sizes="(max-width: 900px) 100vw, 55vw"
                   />
                 </div>
                 <div className="coast-home-story-body">
-                  <p className="coast-home-story-tag">{guide.eyebrow}</p>
-                  <h3>{guide.title}</h3>
-                  <p>{guide.summary}</p>
-                  <Link href={guide.href} className="coast-home-inline-link">
-                    Read guide
+                  <p className="coast-home-story-tag">{leadGuide.eyebrow}</p>
+                  <h3>{leadGuide.title}</h3>
+                  <p>{leadGuide.summary}</p>
+                  <Link href={leadGuide.href} className="coast-home-editorial-read-link">
+                    Read the guide →
                   </Link>
                 </div>
               </article>
-            ))}
+            )}
           </div>
           <div className="coast-home-editorial-column">
-            {model.coastalPulse.events.map((event) => (
-              <article key={event.href} className="coast-home-story-card coast-home-story-card-compact">
+            {sidebarItems.map((item) => (
+              <article key={item.href} className="coast-home-story-card coast-home-story-card-compact">
+                <div className="coast-home-story-media">
+                  <HomeMedia
+                    media={item.image}
+                    src={resolveMediaUrl(item.image?.url)}
+                    altFallback={item.title}
+                    className="coast-home-card-image"
+                    sizes="(max-width: 900px) 100vw, 25vw"
+                  />
+                </div>
                 <div className="coast-home-story-body">
-                  <p className="coast-home-story-tag">{event.eyebrow}</p>
-                  <h3>{event.title}</h3>
-                  <p>{event.summary}</p>
-                  <Link href={event.href} className="coast-home-inline-link">
-                    View event
-                  </Link>
+                  <h3>{item.title}</h3>
+                  <p>{item.summary}</p>
                 </div>
               </article>
             ))}
@@ -213,43 +217,62 @@ export const HomepageEditorial = ({ model, resolveMediaUrl }: SharedProps) => {
   )
 }
 
+const BADGE_LABELS = ["EDITOR'S CHOICE", 'SPONSORED', 'POPULAR'] as const
+const BADGE_VARIANTS = ['', 'sponsored', 'popular'] as const
+const CTA_LABELS = ['View Details', 'Book a Table', 'View Details'] as const
+
 export const HomepageListings = ({ model, resolveMediaUrl }: SharedProps) => {
+  const listings = model.editorsChoice.slice(0, 3)
+
   return (
     <section className="section">
       <div className="container">
         <div className="coast-home-section-head coast-home-section-head-stack">
           <div>
-            <p className="coast-home-eyebrow coast-home-eyebrow-dark">Coastal Finds</p>
-            <h2 className="coast-home-section-title">Practical directory picks for launch.</h2>
+            <h2 className="coast-home-section-title">Editor&apos;s Choice Directory</h2>
           </div>
         </div>
         <div className="coast-home-listing-grid">
-          {model.editorsChoice.map((listing, index) => (
-            <article
-              key={listing.href}
-              className={index === 0 ? 'coast-home-listing-card coast-home-listing-card-featured' : 'coast-home-listing-card'}
-            >
-              <div className="coast-home-listing-media">
-                <HomeMedia
-                  media={listing.image}
-                  src={resolveMediaUrl(listing.image?.url)}
-                  altFallback={listing.name}
-                  className="coast-home-card-image"
-                  sizes={index === 0 ? '(max-width: 900px) 100vw, 50vw' : '(max-width: 900px) 100vw, 25vw'}
-                />
-              </div>
-              <div className="coast-home-listing-body">
-                <p className="coast-home-story-tag">
-                  {listing.city} · {listing.category}
-                </p>
-                <h3>{listing.name}</h3>
-                <p>{listing.summary}</p>
-                <Link href={listing.href} className="coast-home-inline-link">
-                  Open listing
-                </Link>
-              </div>
-            </article>
-          ))}
+          {listings.map((listing, index) => {
+            const badgeVariant = BADGE_VARIANTS[index] ?? ''
+            const ctaLabel = CTA_LABELS[index] ?? 'View Details'
+            const isSponsored = badgeVariant === 'sponsored'
+
+            return (
+              <article key={listing.href} className="coast-home-listing-card">
+                <div className="coast-home-listing-media">
+                  <HomeMedia
+                    media={listing.image}
+                    src={resolveMediaUrl(listing.image?.url)}
+                    altFallback={listing.name}
+                    className="coast-home-card-image"
+                    sizes="(max-width: 900px) 100vw, 33vw"
+                  />
+                  <span
+                    className={`coast-home-listing-badge${badgeVariant ? ` coast-home-listing-badge-${badgeVariant}` : ''}`}
+                  >
+                    {BADGE_LABELS[index]}
+                  </span>
+                  {/* PLACEHOLDER: static rating until CMS ratings field is wired */}
+                  <span className="coast-home-listing-rating">☆ 4.8</span>
+                </div>
+                <div className="coast-home-listing-body">
+                  <p className="coast-home-listing-meta">
+                    {listing.category} · {listing.city}
+                  </p>
+                  <h3>{listing.name}</h3>
+                </div>
+                <div className="coast-home-listing-footer">
+                  <Link
+                    href={listing.href}
+                    className={`coast-home-listing-cta${isSponsored ? ' coast-home-listing-cta-sponsored' : ''}`}
+                  >
+                    {ctaLabel}
+                  </Link>
+                </div>
+              </article>
+            )
+          })}
         </div>
       </div>
     </section>
@@ -260,20 +283,18 @@ export const HomepagePlanningBanner = ({ model }: SharedProps) => {
   return (
     <section className="section">
       <div className="container">
-        <div className="coast-home-signup">
-          <div className="coast-home-signup-copy">
-            <h2>{model.planningBanner.title}</h2>
-            <p>{model.planningBanner.body}</p>
-          </div>
-          <form className="coast-home-signup-form" action="#" method="post">
-            <label htmlFor="coast-home-email" className="sr-only">
-              Email address
-            </label>
-            <input id="coast-home-email" name="email" type="email" required placeholder="Email Address" />
+        <div className="coast-home-planning-inner">
+          <p className="coast-home-eyebrow coast-home-eyebrow-dark">Interactive Planning</p>
+          <h2 className="coast-home-planning-title">{model.planningBanner.title}</h2>
+          <p className="coast-home-planning-copy">{model.planningBanner.body}</p>
+          <div className="coast-home-planning-actions">
             <Link href={model.planningBanner.button.href} className="button-primary">
               {model.planningBanner.button.label}
             </Link>
-          </form>
+            <Link href="/itineraries" className="button-secondary">
+              See Example Itineraries
+            </Link>
+          </div>
         </div>
       </div>
     </section>

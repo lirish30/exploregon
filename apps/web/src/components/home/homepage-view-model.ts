@@ -126,19 +126,34 @@ const fallbackTripFilters: HomepageFilterGroup[] = [
 
 const fallbackMetrics: HomepageMetricCard[] = [
   {
-    label: 'Weather window',
-    value: 'Placeholder live feed',
-    detail: 'Wire Open-Meteo or NWS in the next milestone.'
+    label: 'Tide Table',
+    value: 'Data pending',
+    detail: 'NOAA integration deferred'
   },
   {
-    label: 'Tide snapshot',
-    value: 'Placeholder low/high tide',
-    detail: 'NOAA integration is intentionally deferred.'
+    label: 'Weather',
+    value: 'Data pending',
+    detail: 'Open-Meteo integration deferred'
   },
   {
-    label: 'Seasonal pulse',
-    value: 'Whale migration + spring events',
-    detail: 'Editorial placeholder until utility data is live.'
+    label: 'Highway 101',
+    value: 'Check ODOT',
+    detail: 'ODOT feed deferred'
+  },
+  {
+    label: 'Whale Watching',
+    value: 'Peak Season',
+    detail: 'Editorial placeholder'
+  },
+  {
+    label: 'Events Today',
+    value: 'See calendar',
+    detail: 'Browse events section'
+  },
+  {
+    label: 'Water Temp',
+    value: 'Data pending',
+    detail: 'NOAA integration deferred'
   }
 ]
 
@@ -285,7 +300,7 @@ export const buildHomepageViewModel = ({
       filters: fallbackTripFilters
     },
     utilitySnapshot: {
-      title: 'Coast conditions and timing',
+      title: 'Coastal Real-Time Dashboard',
       intro:
         homepage.editorialIntroBlock?.headline ??
         'Practical planning signals anchored by weather, tides, and seasonal editorial guidance.',
@@ -370,12 +385,12 @@ export const buildHomepageViewModel = ({
       events: coastalPulseEvents.length > 0 ? coastalPulseEvents.slice(0, 2).map(buildEventCard) : [fallbackEventCard]
     },
     planningBanner: {
-      title: homepage.planningCtaBlock?.headline ?? 'Get local tide, event, and travel tips.',
+      title: homepage.planningCtaBlock?.headline ?? 'Build your coastal loop in seconds.',
       body:
         homepage.planningCtaBlock?.body ??
-        'Placeholder signup copy until the email system is wired. Keep this CTA visible for conversion intent.',
+        'Save your favorite spots, reorder them into a logical route, and sync directly to your phone for offline coastal navigation.',
       button: {
-        label: homepage.planningCtaBlock?.buttonLabel ?? 'Browse itineraries',
+        label: homepage.planningCtaBlock?.buttonLabel ?? 'Start Building My Trip',
         href: homepage.planningCtaBlock?.buttonUrl ?? '/itineraries'
       }
     }
