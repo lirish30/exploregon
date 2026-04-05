@@ -194,7 +194,7 @@ export const buildHomepageViewModel = ({
   planningItinerary
 }: BuildHomepageViewModelArgs): HomepageViewModel => {
   const quickLinks = categoryLinks(featuredCategories)
-  const heroImage = featuredCities[0]?.heroImage ?? editorsChoiceListings[0]?.heroImage ?? planningItinerary?.heroImage ?? null
+  const heroImage = homepage.heroImage ?? featuredCities[0]?.heroImage ?? editorsChoiceListings[0]?.heroImage ?? planningItinerary?.heroImage ?? null
 
   return {
     settings,

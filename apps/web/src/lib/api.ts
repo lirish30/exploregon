@@ -363,6 +363,7 @@ const normalizeItinerary = (doc: ItineraryDoc): NormalizedItinerary => ({
 })
 
 const normalizeHomepage = (global: Partial<HomepageGlobal> | null | undefined): NormalizedHomepage => ({
+  heroImage: normalizeMedia(global?.heroImage as PayloadRelationship<PayloadMedia> | undefined),
   heroHeadline: asNonEmptyString(global?.heroHeadline, 'Explore the Oregon Coast'),
   heroSubheadline: asNonEmptyString(global?.heroSubheadline, 'Plan your route, stays, and activities from CMS content.'),
   heroCta: global?.heroCta

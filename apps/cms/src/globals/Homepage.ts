@@ -8,6 +8,15 @@ export const Homepage: GlobalConfig = {
   label: 'Homepage',
   fields: [
     {
+      name: 'heroImage',
+      label: 'Hero Background Image',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Background image for the homepage hero section. If set, this overrides the image pulled from featured cities.'
+      }
+    },
+    {
       name: 'heroHeadline',
       label: 'Hero Headline',
       type: 'text',
