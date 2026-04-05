@@ -1750,7 +1750,7 @@ a {
 
 .coast-home-hero-mist {
   inset: auto 0 0;
-  height: 16rem;
+  height: 50rem;
   background:
     radial-gradient(circle at 20% 45%, rgba(248, 250, 251, 0.4), transparent 22%),
     radial-gradient(circle at 72% 58%, rgba(248, 250, 251, 0.32), transparent 18%),
@@ -1800,15 +1800,21 @@ a {
 .coast-home-hero-title {
   font-size: clamp(3.2rem, 8vw, 5.8rem);
   max-width: 12ch;
+  margin: 0 auto;
+  text-shadow: 0 2px 16px rgba(6, 20, 24, 0.35);
 }
 
 .coast-home-hero-summary,
 .coast-home-section-copy,
 .coast-home-signup p {
-  margin: 0;
+  margin: 0 auto;
   max-width: 56ch;
   color: rgba(247, 243, 235, 0.88);
   font-size: 1.05rem;
+}
+
+.coast-home-hero-summary {
+  text-shadow: 0 2px 16px rgba(6, 20, 24, 0.35);
 }
 
 .coast-home-search {
@@ -1867,6 +1873,12 @@ a {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  transition: background 0.2s ease;
+  box-shadow: 0 4px 20px rgba(6, 20, 24, 0.18);
+}
+
+.coast-home-chip:hover {
+  background: rgba(241, 245, 247, 0.8);
 }
 
 .coast-home-outline-link {
@@ -1882,10 +1894,15 @@ a {
   border: 3px solid #fff;
   border-radius: 0.5rem;
   background: transparent;
+  box-shadow: 0 4px 20px rgba(6, 20, 24, 0.18);
 }
 
 .coast-home-outline-link-dark {
   color: var(--accent-strong);
+}
+
+.coast-home-hero-actions .button-primary {
+  box-shadow: 0 4px 20px rgba(6, 20, 24, 0.18);
 }
 
 .coast-home-shortcuts {
