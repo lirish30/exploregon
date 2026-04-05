@@ -25,9 +25,15 @@ export const HomepageHero = ({ hero, heroImageUrl }: HomepageHeroProps) => {
       </div>
       <div className="container coast-home-hero-inner">
         <div className="coast-home-hero-copy">
-          <p className="coast-home-eyebrow">{hero.eyebrow}</p>
           <h1 className="coast-home-hero-title">{hero.title}</h1>
           <p className="coast-home-hero-summary">{hero.summary}</p>
+          <div className="coast-home-chip-row">
+            {hero.quickLinks.map((link) => (
+              <Link key={`${link.label}-${link.href}`} href={link.href} className="coast-home-chip">
+                {link.label}
+              </Link>
+            ))}
+          </div>
           <form className="coast-home-search" action="/listings" method="get">
             <label htmlFor="coast-home-search" className="sr-only">
               Search the Oregon Coast directory
@@ -42,13 +48,6 @@ export const HomepageHero = ({ hero, heroImageUrl }: HomepageHeroProps) => {
               Search Directory
             </button>
           </form>
-          <div className="coast-home-chip-row">
-            {hero.quickLinks.map((link) => (
-              <Link key={`${link.label}-${link.href}`} href={link.href} className="coast-home-chip">
-                {link.label}
-              </Link>
-            ))}
-          </div>
           <div className="coast-home-hero-actions">
             <Link href={hero.primaryCta.href} className="button-primary">
               {hero.primaryCta.label}
