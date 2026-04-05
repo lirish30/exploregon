@@ -787,6 +787,10 @@ export interface SiteSetting {
  */
 export interface Homepage {
   id: number;
+  /**
+   * Background image for the homepage hero section. If set, this overrides the image pulled from featured cities.
+   */
+  heroImage?: (number | null) | Media;
   heroHeadline: string;
   heroSubheadline: string;
   heroCta: {
@@ -897,6 +901,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
  * via the `definition` "homepage_select".
  */
 export interface HomepageSelect<T extends boolean = true> {
+  heroImage?: T;
   heroHeadline?: T;
   heroSubheadline?: T;
   heroCta?:

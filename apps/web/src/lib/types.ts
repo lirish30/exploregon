@@ -136,6 +136,7 @@ export type ItineraryDoc = SeoFields & {
 }
 
 export type HomepageGlobal = {
+  heroImage?: PayloadRelationship<PayloadMedia>
   heroHeadline: string
   heroSubheadline: string
   heroCta?: { label: string; url: string }
@@ -320,6 +321,7 @@ export type NormalizedItinerary = {
 }
 
 export type NormalizedHomepage = {
+  heroImage: NormalizedMedia | null
   heroHeadline: string
   heroSubheadline: string
   heroCta: { label: string; url: string } | null
