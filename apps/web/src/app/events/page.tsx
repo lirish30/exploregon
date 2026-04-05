@@ -61,7 +61,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function EventsIndexPage() {
-  const events = await getEvents({ limit: 120 })
+  const events = await getEvents({ limit: 60 })
 
   return (
     <>

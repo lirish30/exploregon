@@ -1,6 +1,11 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 /** @type {import('next').NextConfig} */
 const payloadServerUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL
 let payloadRemotePattern
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
 
 if (payloadServerUrl) {
   try {
@@ -18,6 +23,7 @@ if (payloadServerUrl) {
 
 const nextConfig = {
   reactStrictMode: true,
+  outputFileTracingRoot: path.join(dirname, '../..'),
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60 * 60 * 24,

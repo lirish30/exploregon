@@ -47,7 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GuidesIndexPage() {
-  const guides = await getGuides({ limit: 120 })
+  const guides = await getGuides({ limit: 60 })
 
   return (
     <>

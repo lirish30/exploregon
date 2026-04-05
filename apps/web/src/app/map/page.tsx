@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic'
 import type { Metadata } from 'next'
 
 import { Breadcrumbs } from '../../components/primitives/breadcrumbs'
@@ -7,26 +6,13 @@ import { MapPlaceholder } from '../../components/primitives/map-placeholder'
 import { PageHero } from '../../components/primitives/page-hero'
 import { Section } from '../../components/primitives/section'
 import { SectionHeading } from '../../components/primitives/section-heading'
+import { CoastMap } from '../../components/map/coast-map'
 import { getCities, getSiteSettings } from '../../lib/api'
 import { createMetadata } from '../../lib/seo'
 import type { MapCity } from '../../components/map/coast-map'
 import type { SiteSettingsGlobal } from '../../lib/types'
 
 export const revalidate = 300
-
-// Dynamic import: Leaflet requires browser APIs — SSR must be false
-const CoastMap = dynamic(
-  () => import('../../components/map/coast-map').then((mod) => mod.CoastMap),
-  {
-    ssr: false,
-    loading: () => (
-      <MapPlaceholder
-        title="Loading coast map…"
-        note="Fetching city coordinates from Payload."
-      />
-    )
-  }
-)
 
 const fallbackSettings: SiteSettingsGlobal = {
   siteName: 'ExplOregon Coast',

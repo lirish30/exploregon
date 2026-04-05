@@ -65,9 +65,9 @@ const loadShellData = async (): Promise<{
 }> => {
   try {
     const [siteSettings, navigation, footer] = await Promise.all([
-      getSiteSettings({ revalidate: 30 }),
-      getNavigation({ revalidate: 30 }),
-      getFooter({ revalidate: 30 })
+      getSiteSettings({ revalidate: 1800 }),
+      getNavigation({ revalidate: 1800 }),
+      getFooter({ revalidate: 1800 })
     ])
 
     return { siteSettings, navigation, footer }

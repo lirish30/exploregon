@@ -45,14 +45,25 @@ type CollectionQuery = FetchBehavior & {
   where?: Record<string, string | number | undefined>
 }
 
-const DEFAULT_DEPTH = 2
-const DEFAULT_REVALIDATE = 300
+const DEFAULT_DEPTH = 1
+const DEFAULT_REVALIDATE = 1800
 
 const ensurePayloadBaseUrl = (): string => {
-  const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL
+  const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL?.trim()
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim()
 
   if (!baseUrl) {
+    if (process.env.NODE_ENV !== 'production') {
+      return 'http://localhost:3001'
+    }
+
     throw new Error('Missing PAYLOAD_PUBLIC_SERVER_URL. Add it to your environment.')
+  }
+
+  if (process.env.NODE_ENV !== 'production' && siteUrl && baseUrl.replace(/\/$/, '') === siteUrl.replace(/\/$/, '')) {
+    throw new Error(
+      `PAYLOAD_PUBLIC_SERVER_URL (${baseUrl}) points to NEXT_PUBLIC_SITE_URL. Set PAYLOAD_PUBLIC_SERVER_URL to your CMS server (usually http://localhost:3001).`
+    )
   }
 
   return baseUrl.replace(/\/$/, '')
@@ -648,6 +659,23 @@ export const getEventsByCity = async (
   return docs.map((doc) => normalizeEvent(doc))
 }
 
+export const getEventsByRegion = async (
+  regionId: ID,
+  options: CollectionQuery = {}
+): Promise<NormalizedEvent[]> => {
+  const docs = await fetchCollection<EventDoc>(COLLECTIONS.events, {
+    status: 'published',
+    sort: 'startDate',
+    limit: 24,
+    where: {
+      'where[region][equals]': regionId
+    },
+    ...options
+  })
+
+  return docs.map((doc) => normalizeEvent(doc))
+}
+
 export const getEvents = async (options: CollectionQuery = {}): Promise<NormalizedEvent[]> => {
   const docs = await fetchCollection<EventDoc>(COLLECTIONS.events, {
     status: 'published',
@@ -737,6 +765,23 @@ export const getListingsByCategory = async (
     limit: 48,
     where: {
       'where[categories][in][0]': categoryId
+    },
+    ...options
+  })
+
+  return docs.map((doc) => normalizeListing(doc))
+}
+
+export const getListingsByRegion = async (
+  regionId: ID,
+  options: CollectionQuery = {}
+): Promise<NormalizedListing[]> => {
+  const docs = await fetchCollection<ListingDoc>(COLLECTIONS.listings, {
+    status: 'published',
+    sort: 'name',
+    limit: 48,
+    where: {
+      'where[region][equals]': regionId
     },
     ...options
   })

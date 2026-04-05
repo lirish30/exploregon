@@ -64,7 +64,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CitiesIndexPage() {
-  const [cities] = await Promise.all([getCities({ sort: 'name', limit: 250 })])
+  const [cities] = await Promise.all([getCities({ sort: 'name', limit: 120 })])
   const groupedCities = groupCitiesByRegion(cities)
 
   return (

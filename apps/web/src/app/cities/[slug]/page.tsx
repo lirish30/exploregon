@@ -5,17 +5,19 @@ import { notFound } from 'next/navigation'
 import { Breadcrumbs } from '../../../components/primitives/breadcrumbs'
 import { Container } from '../../../components/primitives/container'
 import { FaqAccordion } from '../../../components/primitives/faq-accordion'
+import { HeroBackground } from '../../../components/primitives/hero-background'
 import { MapPlaceholder } from '../../../components/primitives/map-placeholder'
 import { Section } from '../../../components/primitives/section'
 import { SectionHeading } from '../../../components/primitives/section-heading'
 import {
-  getCities,
+  getCitiesByRegion,
   getCityBySlug,
   getEventsByCity,
   getGuides,
   getListingsByCity,
   getSiteSettings
 } from '../../../lib/api'
+import { toPayloadMediaUrl } from '../../../lib/schema'
 import { buildEntityBreadcrumbs, createMetadata } from '../../../lib/seo'
 import type {
   NormalizedCategory,
@@ -46,23 +48,6 @@ const fallbackSettings: SiteSettingsGlobal = {
     email: 'editorial@exploregoncoast.com',
     phone: null
   }
-}
-
-const toPayloadMediaUrl = (pathOrUrl: string | null | undefined): string | null => {
-  if (!pathOrUrl) {
-    return null
-  }
-
-  if (pathOrUrl.startsWith('http://') || pathOrUrl.startsWith('https://')) {
-    return pathOrUrl
-  }
-
-  const payloadBase = process.env.PAYLOAD_PUBLIC_SERVER_URL
-  if (!payloadBase) {
-    return pathOrUrl
-  }
-
-  return `${payloadBase.replace(/\/$/, '')}${pathOrUrl.startsWith('/') ? '' : '/'}${pathOrUrl}`
 }
 
 const formatDate = (value: string): string => {
@@ -166,27 +151,26 @@ export default async function CityPage({ params }: CityPageProps) {
     notFound()
   }
 
-  const [listings, events, guides, cities] = await Promise.all([
+  const [listings, events, guides, nearbyRegionCities] = await Promise.all([
     getListingsByCity(city.id, { limit: 24 }),
     getEventsByCity(city.id, { limit: 8 }),
-    getGuides({ limit: 120 }),
-    getCities({ sort: 'name', limit: 250 })
+    getGuides({ limit: 80 }),
+    city.region ? getCitiesByRegion(city.region.id, { sort: 'name', limit: 24 }) : Promise.resolve([])
   ])
 
   const featuredListings = listings.slice(0, 6)
   const topCategories = topCategoriesFromListings(listings)
   const relatedGuides = relatedGuidesForCity(guides, city.slug)
-  const nearbyCities = nearbyCitiesForRegion(cities, city)
+  const nearbyCities = nearbyCitiesForRegion(nearbyRegionCities, city)
   const breadcrumbs = buildEntityBreadcrumbs('cities', city.name, city.slug)
 
   const heroBackgroundImage = toPayloadMediaUrl(city.heroImage?.url)
-  const heroBackground = heroBackgroundImage
-    ? `linear-gradient(180deg, rgba(8, 39, 47, 0.2) 0%, rgba(8, 39, 47, 0.72) 100%), url('${heroBackgroundImage}')`
-    : 'linear-gradient(166deg, rgba(7, 52, 62, 0.9), rgba(12, 47, 56, 0.75)), #173f49'
 
   return (
     <>
-      <section className="city-hero" style={{ backgroundImage: heroBackground }}>
+      <section className="city-hero">
+        <HeroBackground src={heroBackgroundImage} alt={city.heroImage?.alt ?? city.name} />
+        <div className="entity-hero-overlay" />
         <Container>
           <div className="city-hero-inner">
             <Breadcrumbs items={breadcrumbs} />

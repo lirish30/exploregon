@@ -47,7 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ItinerariesIndexPage() {
-  const itineraries = await getItineraries({ limit: 120 })
+  const itineraries = await getItineraries({ limit: 60 })
 
   return (
     <>

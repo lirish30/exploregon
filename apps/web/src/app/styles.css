@@ -1130,7 +1130,26 @@ a {
   padding: 0.55rem 0.68rem;
 }
 
+.entity-hero-media {
+  position: absolute;
+  inset: 0;
+}
+
+.entity-hero-image {
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.9) contrast(1.04) brightness(0.82);
+}
+
+.entity-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 39, 47, 0.18) 0%, rgba(8, 39, 47, 0.72) 100%);
+}
+
 .city-hero {
+  position: relative;
+  overflow: clip;
   color: #edf7fb;
   background-color: #173f49;
   background-size: cover;
@@ -1138,6 +1157,8 @@ a {
 }
 
 .city-hero-inner {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 0.8rem;
   padding: clamp(2.1rem, 6vw, 4.2rem) 0;
@@ -1303,6 +1324,8 @@ a {
 }
 
 .listing-hero {
+  position: relative;
+  overflow: clip;
   color: #edf7fb;
   background-color: #173f49;
   background-size: cover;
@@ -1314,6 +1337,8 @@ a {
 }
 
 .listing-hero-inner {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 0.8rem;
   padding: clamp(2.1rem, 6vw, 4.2rem) 0;
@@ -1462,6 +1487,8 @@ a {
 .guide-hero,
 .event-hero,
 .itinerary-hero {
+  position: relative;
+  overflow: clip;
   color: #edf7fb;
   background-color: #173f49;
   background-size: cover;
@@ -1471,6 +1498,8 @@ a {
 .guide-hero-inner,
 .event-hero-inner,
 .itinerary-hero-inner {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 0.8rem;
   padding: clamp(2.1rem, 6vw, 4rem) 0;

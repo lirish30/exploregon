@@ -4,9 +4,11 @@ import { notFound } from 'next/navigation'
 
 import { Breadcrumbs } from '../../../components/primitives/breadcrumbs'
 import { Container } from '../../../components/primitives/container'
+import { HeroBackground } from '../../../components/primitives/hero-background'
 import { Section } from '../../../components/primitives/section'
 import { SectionHeading } from '../../../components/primitives/section-heading'
 import { getGuides, getItineraryBySlug, getSiteSettings } from '../../../lib/api'
+import { toPayloadMediaUrl } from '../../../lib/schema'
 import { buildEntityBreadcrumbs, createMetadata } from '../../../lib/seo'
 import type { NormalizedGuide, SiteSettingsGlobal } from '../../../lib/types'
 
@@ -30,23 +32,6 @@ const fallbackSettings: SiteSettingsGlobal = {
     email: 'editorial@exploregoncoast.com',
     phone: null
   }
-}
-
-const toPayloadMediaUrl = (pathOrUrl: string | null | undefined): string | null => {
-  if (!pathOrUrl) {
-    return null
-  }
-
-  if (pathOrUrl.startsWith('http://') || pathOrUrl.startsWith('https://')) {
-    return pathOrUrl
-  }
-
-  const payloadBase = process.env.PAYLOAD_PUBLIC_SERVER_URL
-  if (!payloadBase) {
-    return pathOrUrl
-  }
-
-  return `${payloadBase.replace(/\/$/, '')}${pathOrUrl.startsWith('/') ? '' : '/'}${pathOrUrl}`
 }
 
 const splitBody = (body: string): string[] => {
@@ -105,13 +90,10 @@ export default async function ItineraryPage({ params }: ItineraryPageProps) {
     notFound()
   }
 
-  const guides = await getGuides({ limit: 120 })
+  const guides = await getGuides({ limit: 60 })
   const breadcrumbs = buildEntityBreadcrumbs('itineraries', itinerary.title, itinerary.slug)
 
   const heroImageUrl = toPayloadMediaUrl(itinerary.heroImage?.url)
-  const heroBackground = heroImageUrl
-    ? `linear-gradient(180deg, rgba(8, 39, 47, 0.18) 0%, rgba(8, 39, 47, 0.72) 100%), url('${heroImageUrl}')`
-    : 'linear-gradient(166deg, rgba(7, 52, 62, 0.9), rgba(12, 47, 56, 0.75)), #173f49'
 
   const bodyParagraphs = splitBody(itinerary.body)
   const citySlugSet = new Set(itinerary.relatedCities.map((city) => city.slug))
@@ -119,7 +101,9 @@ export default async function ItineraryPage({ params }: ItineraryPageProps) {
 
   return (
     <>
-      <section className="itinerary-hero" style={{ backgroundImage: heroBackground }}>
+      <section className="itinerary-hero">
+        <HeroBackground src={heroImageUrl} alt={itinerary.heroImage?.alt ?? itinerary.title} />
+        <div className="entity-hero-overlay" />
         <Container>
           <div className="itinerary-hero-inner">
             <Breadcrumbs items={breadcrumbs} />

@@ -67,13 +67,13 @@ const byUrl = (a: Entry, b: Entry): number => a.url.localeCompare(b.url)
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [cities, categories, listings, guides, events, itineraries, regions] = await Promise.all([
-    getCities({ limit: 500 }),
-    getCategories({ limit: 500 }),
-    getListings({ limit: 1000 }),
-    getGuides({ limit: 500 }),
-    getEvents({ limit: 500 }),
-    getItineraries({ limit: 500 }),
-    getRegions({ limit: 100 })
+    getCities({ limit: 250 }),
+    getCategories({ limit: 250 }),
+    getListings({ limit: 500 }),
+    getGuides({ limit: 250 }),
+    getEvents({ limit: 250 }),
+    getItineraries({ limit: 250 }),
+    getRegions({ limit: 60 })
   ])
 
   const dynamicEntries: Entry[] = [

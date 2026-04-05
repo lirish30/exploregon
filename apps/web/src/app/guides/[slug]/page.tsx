@@ -4,9 +4,11 @@ import { notFound } from 'next/navigation'
 
 import { Breadcrumbs } from '../../../components/primitives/breadcrumbs'
 import { Container } from '../../../components/primitives/container'
+import { HeroBackground } from '../../../components/primitives/hero-background'
 import { Section } from '../../../components/primitives/section'
 import { SectionHeading } from '../../../components/primitives/section-heading'
 import { getGuideBySlug, getGuides, getItineraries, getSiteSettings } from '../../../lib/api'
+import { toPayloadMediaUrl } from '../../../lib/schema'
 import { buildEntityBreadcrumbs, createMetadata } from '../../../lib/seo'
 import type { NormalizedGuide, NormalizedItinerary, SiteSettingsGlobal } from '../../../lib/types'
 
@@ -30,23 +32,6 @@ const fallbackSettings: SiteSettingsGlobal = {
     email: 'editorial@exploregoncoast.com',
     phone: null
   }
-}
-
-const toPayloadMediaUrl = (pathOrUrl: string | null | undefined): string | null => {
-  if (!pathOrUrl) {
-    return null
-  }
-
-  if (pathOrUrl.startsWith('http://') || pathOrUrl.startsWith('https://')) {
-    return pathOrUrl
-  }
-
-  const payloadBase = process.env.PAYLOAD_PUBLIC_SERVER_URL
-  if (!payloadBase) {
-    return pathOrUrl
-  }
-
-  return `${payloadBase.replace(/\/$/, '')}${pathOrUrl.startsWith('/') ? '' : '/'}${pathOrUrl}`
 }
 
 const splitBody = (body: string): string[] => {
@@ -107,12 +92,9 @@ export default async function GuidePage({ params }: GuidePageProps) {
     notFound()
   }
 
-  const [guides, itineraries] = await Promise.all([getGuides({ limit: 120 }), getItineraries({ limit: 120 })])
+  const [guides, itineraries] = await Promise.all([getGuides({ limit: 60 }), getItineraries({ limit: 60 })])
   const breadcrumbs = buildEntityBreadcrumbs('guides', guide.title, guide.slug)
   const heroImageUrl = toPayloadMediaUrl(guide.heroImage?.url)
-  const heroBackground = heroImageUrl
-    ? `linear-gradient(180deg, rgba(8, 39, 47, 0.18) 0%, rgba(8, 39, 47, 0.72) 100%), url('${heroImageUrl}')`
-    : 'linear-gradient(166deg, rgba(7, 52, 62, 0.9), rgba(12, 47, 56, 0.75)), #173f49'
 
   const bodyParagraphs = splitBody(guide.body)
   const moreGuides = guides.filter((item) => item.slug !== guide.slug).slice(0, 4)
@@ -120,7 +102,9 @@ export default async function GuidePage({ params }: GuidePageProps) {
 
   return (
     <>
-      <section className="guide-hero" style={{ backgroundImage: heroBackground }}>
+      <section className="guide-hero">
+        <HeroBackground src={heroImageUrl} alt={guide.heroImage?.alt ?? guide.title} />
+        <div className="entity-hero-overlay" />
         <Container>
           <div className="guide-hero-inner">
             <Breadcrumbs items={breadcrumbs} />

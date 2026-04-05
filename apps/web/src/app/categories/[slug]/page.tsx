@@ -7,9 +7,9 @@ import { Container } from '../../../components/primitives/container'
 import { FaqAccordion } from '../../../components/primitives/faq-accordion'
 import { Section } from '../../../components/primitives/section'
 import { SectionHeading } from '../../../components/primitives/section-heading'
-import { getCategories, getCategoryBySlug, getCities, getGuides, getListings, getSiteSettings } from '../../../lib/api'
+import { getCategories, getCategoryBySlug, getGuides, getListingsByCategory, getSiteSettings } from '../../../lib/api'
 import { buildEntityBreadcrumbs, createMetadata } from '../../../lib/seo'
-import type { NormalizedCategory, NormalizedCity, NormalizedGuide, NormalizedListing, SiteSettingsGlobal } from '../../../lib/types'
+import type { NormalizedCategory, NormalizedGuide, NormalizedListing, SiteSettingsGlobal } from '../../../lib/types'
 
 export const revalidate = 300
 
@@ -83,12 +83,7 @@ const getSettings = async (): Promise<SiteSettingsGlobal> => {
   }
 }
 
-const getListingsForCategory = (listings: NormalizedListing[], categorySlug: string): NormalizedListing[] => {
-  return listings.filter((listing) => listing.categories.some((category) => category.slug === categorySlug))
-}
-
-const getRelatedCities = (listings: NormalizedListing[], cities: NormalizedCity[]): RelatedCity[] => {
-  const cityMap = new Map(cities.map((city) => [city.slug, city]))
+const getRelatedCities = (listings: NormalizedListing[]): RelatedCity[] => {
   const related = new Map<string, RelatedCity>()
 
   for (const listing of listings) {
@@ -97,11 +92,10 @@ const getRelatedCities = (listings: NormalizedListing[], cities: NormalizedCity[
       continue
     }
 
-    const city = cityMap.get(cityRef.slug)
     related.set(cityRef.slug, {
       slug: cityRef.slug,
-      name: city?.name ?? cityRef.label,
-      summary: city?.summary ?? 'City summary is not available yet.'
+      name: cityRef.label,
+      summary: 'City summary is available on the city detail page.'
     })
   }
 
@@ -168,15 +162,13 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
     notFound()
   }
 
-  const [allListings, cities, guides, allCategories] = await Promise.all([
-    getListings({ limit: 250 }),
-    getCities({ sort: 'name', limit: 250 }),
+  const [categoryListings, guides, allCategories] = await Promise.all([
+    getListingsByCategory(category.id, { limit: 120 }),
     getGuides({ limit: 120 }),
     getCategories({ sort: 'name', limit: 250 })
   ])
 
-  const categoryListings = getListingsForCategory(allListings, category.slug)
-  const relatedCities = getRelatedCities(categoryListings, cities)
+  const relatedCities = getRelatedCities(categoryListings)
   const relatedGuides = getRelatedGuides(guides, category.slug)
   const breadcrumbs = buildEntityBreadcrumbs('categories', category.name, category.slug)
   const editorialCopy = categoryEditorialCopy[category.slug]

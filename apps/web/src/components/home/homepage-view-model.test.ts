@@ -34,6 +34,7 @@ const baseHomepage: NormalizedHomepage = {
     label: 'Build a Trip',
     url: '/itineraries/3-day-oregon-coast-weekend-itinerary'
   },
+  heroImage: null,
   featuredCities: [],
   featuredCategories: [],
   editorialIntroBlock: {

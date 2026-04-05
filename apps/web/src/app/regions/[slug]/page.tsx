@@ -4,10 +4,19 @@ import { notFound } from 'next/navigation'
 
 import { Breadcrumbs } from '../../../components/primitives/breadcrumbs'
 import { Container } from '../../../components/primitives/container'
+import { HeroBackground } from '../../../components/primitives/hero-background'
 import { MapPlaceholder } from '../../../components/primitives/map-placeholder'
 import { Section } from '../../../components/primitives/section'
 import { SectionHeading } from '../../../components/primitives/section-heading'
-import { getCities, getEvents, getGuides, getListings, getRegionBySlug, getSiteSettings } from '../../../lib/api'
+import {
+  getCitiesByRegion,
+  getEventsByRegion,
+  getGuides,
+  getListingsByRegion,
+  getRegionBySlug,
+  getSiteSettings
+} from '../../../lib/api'
+import { toPayloadMediaUrl } from '../../../lib/schema'
 import { buildBreadcrumbs, createMetadata } from '../../../lib/seo'
 import type { SiteSettingsGlobal } from '../../../lib/types'
 
@@ -31,23 +40,6 @@ const fallbackSettings: SiteSettingsGlobal = {
     email: 'editorial@exploregoncoast.com',
     phone: null
   }
-}
-
-const toPayloadMediaUrl = (pathOrUrl: string | null | undefined): string | null => {
-  if (!pathOrUrl) {
-    return null
-  }
-
-  if (pathOrUrl.startsWith('http://') || pathOrUrl.startsWith('https://')) {
-    return pathOrUrl
-  }
-
-  const payloadBase = process.env.PAYLOAD_PUBLIC_SERVER_URL
-  if (!payloadBase) {
-    return pathOrUrl
-  }
-
-  return `${payloadBase.replace(/\/$/, '')}${pathOrUrl.startsWith('/') ? '' : '/'}${pathOrUrl}`
 }
 
 const getSettings = async (): Promise<SiteSettingsGlobal> => {
@@ -93,16 +85,15 @@ export default async function RegionPage({ params }: RegionPageProps) {
     notFound()
   }
 
-  const [cities, listings, events, guides] = await Promise.all([
-    getCities({ sort: 'name', limit: 250 }),
-    getListings({ sort: 'name', limit: 250 }),
-    getEvents({ sort: 'startDate', limit: 120 }),
-    getGuides({ sort: '-createdAt', limit: 120 })
+  const [regionCities, regionListings, regionEvents, guides] = await Promise.all([
+    getCitiesByRegion(region.id, { sort: 'name', limit: 24 }),
+    getListingsByRegion(region.id, { sort: 'name', limit: 36 }),
+    getEventsByRegion(region.id, { sort: 'startDate', limit: 24 }),
+    getGuides({ sort: '-createdAt', limit: 80 })
   ])
-
-  const regionCities = cities.filter((city) => city.region?.slug === region.slug).slice(0, 8)
-  const regionListings = listings.filter((listing) => listing.region?.slug === region.slug).slice(0, 8)
-  const regionEvents = events.filter((event) => event.region?.slug === region.slug).slice(0, 6)
+  const featuredRegionCities = regionCities.slice(0, 8)
+  const featuredRegionListings = regionListings.slice(0, 8)
+  const featuredRegionEvents = regionEvents.slice(0, 6)
   const regionCitySlugs = new Set(regionCities.map((city) => city.slug))
   const regionGuides = guides
     .filter((guide) => guide.relatedCities.some((city) => regionCitySlugs.has(city.slug)))
@@ -116,13 +107,12 @@ export default async function RegionPage({ params }: RegionPageProps) {
   ])
 
   const heroImageUrl = toPayloadMediaUrl(region.heroImage?.url)
-  const heroBackground = heroImageUrl
-    ? `linear-gradient(180deg, rgba(8, 39, 47, 0.18) 0%, rgba(8, 39, 47, 0.72) 100%), url('${heroImageUrl}')`
-    : 'linear-gradient(166deg, rgba(7, 52, 62, 0.9), rgba(12, 47, 56, 0.75)), #173f49'
 
   return (
     <>
-      <section className="city-hero" style={{ backgroundImage: heroBackground }}>
+      <section className="city-hero">
+        <HeroBackground src={heroImageUrl} alt={region.heroImage?.alt ?? region.name} />
+        <div className="entity-hero-overlay" />
         <Container>
           <div className="city-hero-inner">
             <Breadcrumbs items={breadcrumbs} />
@@ -143,9 +133,9 @@ export default async function RegionPage({ params }: RegionPageProps) {
           title="Core city pages in this region"
           lede="Published city records assigned to this region."
         />
-        {regionCities.length ? (
+        {featuredRegionCities.length ? (
           <div className="city-card-grid">
-            {regionCities.map((city) => (
+            {featuredRegionCities.map((city) => (
               <article key={city.slug} className="city-listing-card">
                 <h2 className="city-listing-title">{city.name}</h2>
                 <p className="city-listing-summary">{city.summary}</p>
@@ -166,9 +156,9 @@ export default async function RegionPage({ params }: RegionPageProps) {
           title="Featured listings in this region"
           lede="Published listing records assigned to this region."
         />
-        {regionListings.length ? (
+        {featuredRegionListings.length ? (
           <div className="city-card-grid">
-            {regionListings.map((listing) => (
+            {featuredRegionListings.map((listing) => (
               <article key={listing.slug} className="city-listing-card">
                 <p className="city-listing-kicker">{listing.city?.label ?? 'Oregon Coast'}</p>
                 <h2 className="city-listing-title">{listing.name}</h2>
@@ -198,9 +188,9 @@ export default async function RegionPage({ params }: RegionPageProps) {
 
       <Section>
         <SectionHeading kicker="Events" title={`Upcoming events in ${region.name}`} />
-        {regionEvents.length ? (
+        {featuredRegionEvents.length ? (
           <div className="city-card-grid">
-            {regionEvents.map((event) => (
+            {featuredRegionEvents.map((event) => (
               <article key={event.slug} className="city-listing-card">
                 <p className="city-listing-kicker">{event.city?.label ?? 'Region Event'}</p>
                 <h2 className="city-listing-title">{event.title}</h2>

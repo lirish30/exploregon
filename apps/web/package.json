@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "dev": "next dev -p 3001",
+    "dev": "node ./scripts/dev-with-port.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint src --max-warnings=0",
@@ -15,8 +15,7 @@
     "leaflet": "^1.9.4",
     "next": "^15.2.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-leaflet": "^4.2.1"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.14",

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { cache } from 'react'
 
 import { HomepagePage } from '../components/home/homepage-page'
 import { buildHomepageViewModel } from '../components/home/homepage-view-model'
@@ -51,8 +52,11 @@ type HomepageRouteModel = {
   planningItinerary: NormalizedItinerary | null
 }
 
-const loadHomepageRouteModel = async (): Promise<HomepageRouteModel> => {
-  const [settings, homepage] = await Promise.all([getSiteSettings(), getHomepageData()])
+const loadHomepageRouteModelImpl = async (): Promise<HomepageRouteModel> => {
+  const [settings, homepage] = await Promise.all([
+    getSiteSettings({ revalidate: 1800 }),
+    getHomepageData({ revalidate: 900 })
+  ])
 
   const featuredCitySlugs = homepage.featuredCities.map((city) => city.slug)
   const featuredCategorySlugs = homepage.featuredCategories.map((category) => category.slug)
@@ -97,6 +101,8 @@ const loadHomepageRouteModel = async (): Promise<HomepageRouteModel> => {
     planningItinerary: itineraryFromCta ?? fallbackItineraries[0] ?? null
   }
 }
+
+const loadHomepageRouteModel = cache(loadHomepageRouteModelImpl)
 
 export async function generateMetadata(): Promise<Metadata> {
   const model = await loadHomepageRouteModel()

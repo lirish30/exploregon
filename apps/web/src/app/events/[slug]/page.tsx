@@ -5,9 +5,11 @@ import { notFound } from 'next/navigation'
 import { Breadcrumbs } from '../../../components/primitives/breadcrumbs'
 import { Container } from '../../../components/primitives/container'
 import { CtaBlock } from '../../../components/primitives/cta-block'
+import { HeroBackground } from '../../../components/primitives/hero-background'
 import { Section } from '../../../components/primitives/section'
 import { SectionHeading } from '../../../components/primitives/section-heading'
 import { getEventBySlug, getEventsByCity, getSiteSettings } from '../../../lib/api'
+import { toPayloadMediaUrl } from '../../../lib/schema'
 import { buildEntityBreadcrumbs, createMetadata } from '../../../lib/seo'
 
 export const revalidate = 300
@@ -16,23 +18,6 @@ type EventPageProps = {
   params: Promise<{
     slug: string
   }>
-}
-
-const toPayloadMediaUrl = (pathOrUrl: string | null | undefined): string | null => {
-  if (!pathOrUrl) {
-    return null
-  }
-
-  if (pathOrUrl.startsWith('http://') || pathOrUrl.startsWith('https://')) {
-    return pathOrUrl
-  }
-
-  const payloadBase = process.env.PAYLOAD_PUBLIC_SERVER_URL
-  if (!payloadBase) {
-    return pathOrUrl
-  }
-
-  return `${payloadBase.replace(/\/$/, '')}${pathOrUrl.startsWith('/') ? '' : '/'}${pathOrUrl}`
 }
 
 const formatDate = (value: string): string => {
@@ -99,13 +84,12 @@ export default async function EventPage({ params }: EventPageProps) {
 
   const breadcrumbs = buildEntityBreadcrumbs('events', event.title, event.slug)
   const heroImageUrl = toPayloadMediaUrl(event.heroImage?.url)
-  const heroBackground = heroImageUrl
-    ? `linear-gradient(180deg, rgba(8, 39, 47, 0.18) 0%, rgba(8, 39, 47, 0.72) 100%), url('${heroImageUrl}')`
-    : 'linear-gradient(166deg, rgba(7, 52, 62, 0.9), rgba(12, 47, 56, 0.75)), #173f49'
 
   return (
     <>
-      <section className="event-hero" style={{ backgroundImage: heroBackground }}>
+      <section className="event-hero">
+        <HeroBackground src={heroImageUrl} alt={event.heroImage?.alt ?? event.title} />
+        <div className="entity-hero-overlay" />
         <Container>
           <div className="event-hero-inner">
             <Breadcrumbs items={breadcrumbs} />

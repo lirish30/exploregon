@@ -5,10 +5,19 @@ import { notFound } from 'next/navigation'
 import { Breadcrumbs } from '../../../components/primitives/breadcrumbs'
 import { Container } from '../../../components/primitives/container'
 import { CtaBlock } from '../../../components/primitives/cta-block'
+import { HeroBackground } from '../../../components/primitives/hero-background'
 import { MapPlaceholder } from '../../../components/primitives/map-placeholder'
 import { Section } from '../../../components/primitives/section'
 import { SectionHeading } from '../../../components/primitives/section-heading'
-import { getCities, getListingBySlug, getListingRecordBySlug, getListings, getSiteSettings } from '../../../lib/api'
+import {
+  getCitiesByRegion,
+  getListingBySlug,
+  getListingRecordBySlug,
+  getListingsByCategory,
+  getListingsByCity,
+  getSiteSettings
+} from '../../../lib/api'
+import { toPayloadMediaUrl } from '../../../lib/schema'
 import { buildEntityBreadcrumbs, createMetadata } from '../../../lib/seo'
 import type { NormalizedCity, NormalizedListing, SiteSettingsGlobal } from '../../../lib/types'
 
@@ -32,23 +41,6 @@ const fallbackSettings: SiteSettingsGlobal = {
     email: 'editorial@exploregoncoast.com',
     phone: null
   }
-}
-
-const toPayloadMediaUrl = (pathOrUrl: string | null | undefined): string | null => {
-  if (!pathOrUrl) {
-    return null
-  }
-
-  if (pathOrUrl.startsWith('http://') || pathOrUrl.startsWith('https://')) {
-    return pathOrUrl
-  }
-
-  const payloadBase = process.env.PAYLOAD_PUBLIC_SERVER_URL
-  if (!payloadBase) {
-    return pathOrUrl
-  }
-
-  return `${payloadBase.replace(/\/$/, '')}${pathOrUrl.startsWith('/') ? '' : '/'}${pathOrUrl}`
 }
 
 const toOpenStreetMapUrl = (latitude: number, longitude: number): string => {
@@ -224,22 +216,25 @@ export default async function ListingPage({ params }: ListingPageProps) {
     )
   }
 
-  const [allListings, allCities] = await Promise.all([getListings({ limit: 250 }), getCities({ sort: 'name', limit: 250 })])
-  const relatedListings = getRelatedListings(allListings, listing)
-  const nearbyCities = getNearbyCities(allCities, listing)
+  const primaryCategory = listing.categories[0]
+  const [sameCityListings, sameCategoryListings, nearbyRegionCities] = await Promise.all([
+    listing.city ? getListingsByCity(listing.city.id, { limit: 36 }) : Promise.resolve([]),
+    primaryCategory ? getListingsByCategory(primaryCategory.id, { limit: 36 }) : Promise.resolve([]),
+    listing.region ? getCitiesByRegion(listing.region.id, { sort: 'name', limit: 24 }) : Promise.resolve([])
+  ])
+  const relatedListings = getRelatedListings([...sameCityListings, ...sameCategoryListings], listing)
+  const nearbyCities = getNearbyCities(nearbyRegionCities, listing)
   const heroImageUrl = toPayloadMediaUrl(listing.heroImage?.url)
-  const heroBackground = heroImageUrl
-    ? `linear-gradient(180deg, rgba(8, 39, 47, 0.18) 0%, rgba(8, 39, 47, 0.72) 100%), url('${heroImageUrl}')`
-    : 'linear-gradient(166deg, rgba(7, 52, 62, 0.9), rgba(12, 47, 56, 0.75)), #173f49'
 
   const jsonLd = toJsonLd(listing)
-  const primaryCategory = listing.categories[0]
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <section className="listing-hero" style={{ backgroundImage: heroBackground }}>
+      <section className="listing-hero">
+        <HeroBackground src={heroImageUrl} alt={listing.heroImage?.alt ?? listing.name} />
+        <div className="entity-hero-overlay" />
         <Container>
           <div className="listing-hero-inner">
             <Breadcrumbs items={breadcrumbs} />
