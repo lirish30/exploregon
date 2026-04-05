@@ -38,7 +38,7 @@ export const ListingCategories: CollectionConfig = {
       required: true,
       maxLength: 60,
       admin: {
-        description: 'Use a stable icon token, e.g., hotel, beach, hiking.'
+        description: 'Phosphor icon name (kebab-case). Examples: "house", "waves", "binoculars", "tent", "fork-knife". Browse all icons at phosphoricons.com.'
       }
     },
     {

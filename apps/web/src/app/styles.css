@@ -1940,6 +1940,12 @@ a {
   color: var(--ink);
 }
 
+.coast-home-shortcut-icon {
+  display: flex;
+  color: var(--ink-muted);
+  margin-bottom: 0.15rem;
+}
+
 .coast-home-shortcut-name {
   font-weight: 800;
   text-transform: uppercase;
