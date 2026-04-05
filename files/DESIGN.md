@@ -29,9 +29,10 @@ We do not use flat backgrounds. Depth is achieved through a "Stacked Paper" meta
 
 The typography strategy pairs the structural reliability of a clean sans-serif with the storytelling authority of a sturdy serif.
 
-*   **Editorial Headings (Instrument):** Used for `display` and `headline` scales. This serif is our "voice." It is intentional, slightly academic, and deeply rugged. Use `regular-400` (3.5rem) with tight letter-spacing for high-impact travel stories.
-*   **Utility & Navigation (Instrument):** Used for `title`, `body`, and `label` scales. A modern sans-serif that ensures high readability for directory listings and technical data.
-*   **Hierarchy Note:** Always lead with a Instrument headline to ground the page in editorial quality, then transition to Instrument for the "workhorse" information.
+*   **Editorial Headings (Instrument Serif):** Used for all `display` and `headline` scales. This serif is our "voice." It is intentional, slightly academic, and deeply rugged. Use `regular-400` (3.5rem) with tight letter-spacing for high-impact travel stories.
+*   **Utility & Navigation (Instrument Sans):** Used for all `title`, `body`, and `label` scales. A modern sans-serif that ensures high readability for directory listings and technical data.
+*   **Hierarchy Note:** Always lead with an Instrument Serif headline to ground the page in editorial quality, then transition to Instrument Sans for the "workhorse" information.
+*   **Non-Negotiable Typeface Rule:** Sitewide typography is locked to Instrument Serif for headings/headlines and Instrument Sans for body copy. Do not replace, remap, or override these families in future design or engineering updates.
 
 ---
 
@@ -49,7 +50,7 @@ We reject the "floating" shadow-heavy look of standard Material Design. Instead,
 ## 5. Components
 
 ### Search Modules (The Portal)
-The central directory tool. Use a `surface_container_lowest` background with a `Ghost Border`. Incorporate `Newsreader` for the prompt ("Find your path...") and `Manrope` for the input text.
+The central directory tool. Use a `surface_container_lowest` background with a `Ghost Border`. Use Instrument Serif for prompts/headlines ("Find your path...") and Instrument Sans for inputs and supporting text.
 
 ### Buttons (The Beacon)
 *   **Primary:** Uses the "Driftwood Gradient" (`primary` to `primary_container`). `label-md` uppercase for the text. 
@@ -58,7 +59,7 @@ The central directory tool. Use a `surface_container_lowest` background with a `
 
 ### Cards & Lists (The Directory)
 *   **Constraint:** Zero divider lines. Use `surface_container_low` backgrounds to group related content.
-*   **Editorial Overlays:** For travel stories, use large-scale imagery with `Newsreader` headlines overlapping the edge of the image container to break the rigid grid.
+*   **Editorial Overlays:** For travel stories, use large-scale imagery with Instrument Serif headlines overlapping the edge of the image container to break the rigid grid.
 
 ### Input Fields
 *   **State:** Use `surface_container_highest` for the active background state. 

@@ -43,7 +43,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }
@@ -69,7 +69,7 @@ const formatDate = (value: string): string => {
   const date = new Date(value)
 
   if (Number.isNaN(date.getTime())) {
-    return 'Date placeholder'
+    return 'Date unavailable'
   }
 
   return new Intl.DateTimeFormat('en-US', {
@@ -243,7 +243,7 @@ export default async function CityPage({ params }: CityPageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Featured listings placeholder: publish listings related to this city in Payload.</p>
+          <p className="city-empty">No featured listings are available for this city yet.</p>
         )}
       </Section>
 
@@ -262,7 +262,7 @@ export default async function CityPage({ params }: CityPageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Top categories placeholder: add categorized listings for this city.</p>
+          <p className="city-empty">No listing categories are available for this city yet.</p>
         )}
       </Section>
 
@@ -294,7 +294,7 @@ export default async function CityPage({ params }: CityPageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Events placeholder: publish city events to populate this preview.</p>
+          <p className="city-empty">No events are available for this city yet.</p>
         )}
       </Section>
 
@@ -303,7 +303,7 @@ export default async function CityPage({ params }: CityPageProps) {
         {city.faq.length ? (
           <FaqAccordion items={city.faq} />
         ) : (
-          <p className="city-empty">FAQ placeholder: add city FAQ entries in Payload.</p>
+          <p className="city-empty">No FAQ entries are available for this city yet.</p>
         )}
       </Section>
 
@@ -322,7 +322,7 @@ export default async function CityPage({ params }: CityPageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Nearby cities placeholder: add additional cities within this region.</p>
+          <p className="city-empty">No nearby cities are available yet.</p>
         )}
       </Section>
 
@@ -346,7 +346,7 @@ export default async function CityPage({ params }: CityPageProps) {
                 ))}
               </ul>
             ) : (
-              <p className="city-empty">Related guides placeholder: connect published guides to this city.</p>
+              <p className="city-empty">No related guides are available yet.</p>
             )}
           </div>
           <div>
@@ -362,7 +362,7 @@ export default async function CityPage({ params }: CityPageProps) {
                 ))}
               </ul>
             ) : (
-              <p className="city-empty">Related categories placeholder: add categorized city listings.</p>
+              <p className="city-empty">No related categories are available yet.</p>
             )}
           </div>
         </div>

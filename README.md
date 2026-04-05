@@ -55,3 +55,4 @@ pnpm format
 - This scaffold is Phase 0 foundation only (no feature pages built).
 - Payload schema files are placeholders for the required PRD collections/globals and will be implemented in schema-lock phase.
 - Route-family placeholders exist for required dynamic paths, but page implementations are intentionally deferred.
+- Sitewide typography rule: use `Instrument Serif` for headings/headlines and `Instrument Sans` for body/UI text. Do not override this mapping.

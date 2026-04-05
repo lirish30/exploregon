@@ -20,7 +20,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }
@@ -104,7 +104,7 @@ export default async function CategoriesIndexPage() {
             ))}
           </div>
         ) : (
-          <p className="cities-index-empty">Category index placeholder: add listing categories in Payload.</p>
+          <p className="cities-index-empty">No listing categories are available yet.</p>
         )}
       </Section>
     </>

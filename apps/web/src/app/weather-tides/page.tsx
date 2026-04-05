@@ -19,7 +19,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }

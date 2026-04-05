@@ -1,7 +1,10 @@
 import type { GlobalConfig } from 'payload'
 
+import { contentGlobalAccess } from '../access/contentAccess.ts'
+
 export const Footer: GlobalConfig = {
   slug: 'footer',
+  access: contentGlobalAccess,
   label: 'Footer',
   fields: [
     {

@@ -362,39 +362,36 @@ const normalizeItinerary = (doc: ItineraryDoc): NormalizedItinerary => ({
   }
 })
 
-const normalizeHomepage = (global: HomepageGlobal): NormalizedHomepage => ({
-  heroHeadline: asNonEmptyString(global.heroHeadline, 'Plan your Oregon Coast trip with confidence'),
-  heroSubheadline: asNonEmptyString(
-    global.heroSubheadline,
-    'Find practical guides, vetted listings, and city-by-city planning tools.'
-  ),
-  heroCta: global.heroCta
+const normalizeHomepage = (global: Partial<HomepageGlobal> | null | undefined): NormalizedHomepage => ({
+  heroHeadline: asNonEmptyString(global?.heroHeadline, 'Explore the Oregon Coast'),
+  heroSubheadline: asNonEmptyString(global?.heroSubheadline, 'Plan your route, stays, and activities from CMS content.'),
+  heroCta: global?.heroCta
     ? {
         label: global.heroCta.label,
         url: global.heroCta.url
       }
     : null,
   featuredCities: normalizeReferences(
-    global.featuredCities as Array<PayloadRelationship<Record<string, unknown>>> | undefined,
+    global?.featuredCities as Array<PayloadRelationship<Record<string, unknown>>> | undefined,
     ['name', 'title']
   ),
   featuredCategories: normalizeReferences(
-    global.featuredCategories as Array<PayloadRelationship<Record<string, unknown>>> | undefined,
+    global?.featuredCategories as Array<PayloadRelationship<Record<string, unknown>>> | undefined,
     ['name', 'title']
   ),
-  editorialIntroBlock: global.editorialIntroBlock
+  editorialIntroBlock: global?.editorialIntroBlock
     ? {
         headline: global.editorialIntroBlock.headline,
         body: global.editorialIntroBlock.body
       }
     : null,
-  utilityTeaserBlock: global.utilityTeaserBlock
+  utilityTeaserBlock: global?.utilityTeaserBlock
     ? {
         headline: global.utilityTeaserBlock.headline,
         body: global.utilityTeaserBlock.body
       }
     : null,
-  planningCtaBlock: global.planningCtaBlock
+  planningCtaBlock: global?.planningCtaBlock
     ? {
         headline: global.planningCtaBlock.headline,
         body: global.planningCtaBlock.body,
@@ -421,9 +418,22 @@ const normalizeSiteSettings = (settings: Partial<SiteSettingsGlobal> | null | un
   }
 })
 
+const normalizeNavigation = (navigation: Partial<NavigationGlobal> | null | undefined): NavigationGlobal => ({
+  headerNavItems: Array.isArray(navigation?.headerNavItems) ? navigation.headerNavItems : [],
+  footerNavGroups: Array.isArray(navigation?.footerNavGroups) ? navigation.footerNavGroups : []
+})
+
+const normalizeFooter = (footer: Partial<FooterGlobal> | null | undefined): FooterGlobal => ({
+  footerNavGroups: Array.isArray(footer?.footerNavGroups) ? footer.footerNavGroups : []
+})
+
 export const getHomepageData = async (behavior: FetchBehavior = {}): Promise<NormalizedHomepage> => {
-  const data = await fetchGlobal<HomepageGlobal>(GLOBALS.homepage, behavior)
-  return normalizeHomepage(data)
+  try {
+    const data = await fetchGlobal<HomepageGlobal>(GLOBALS.homepage, behavior)
+    return normalizeHomepage(data)
+  } catch {
+    return normalizeHomepage(null)
+  }
 }
 
 export const getSiteSettings = async (behavior: FetchBehavior = {}): Promise<SiteSettingsGlobal> => {
@@ -435,12 +445,22 @@ export const getSiteSettings = async (behavior: FetchBehavior = {}): Promise<Sit
   }
 }
 
-export const getNavigation = (behavior: FetchBehavior = {}): Promise<NavigationGlobal> => {
-  return fetchGlobal<NavigationGlobal>(GLOBALS.navigation, behavior)
+export const getNavigation = async (behavior: FetchBehavior = {}): Promise<NavigationGlobal> => {
+  try {
+    const data = await fetchGlobal<NavigationGlobal>(GLOBALS.navigation, behavior)
+    return normalizeNavigation(data)
+  } catch {
+    return normalizeNavigation(null)
+  }
 }
 
-export const getFooter = (behavior: FetchBehavior = {}): Promise<FooterGlobal> => {
-  return fetchGlobal<FooterGlobal>(GLOBALS.footer, behavior)
+export const getFooter = async (behavior: FetchBehavior = {}): Promise<FooterGlobal> => {
+  try {
+    const data = await fetchGlobal<FooterGlobal>(GLOBALS.footer, behavior)
+    return normalizeFooter(data)
+  } catch {
+    return normalizeFooter(null)
+  }
 }
 
 export const getCityBySlug = async (

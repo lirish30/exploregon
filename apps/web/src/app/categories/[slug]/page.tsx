@@ -37,7 +37,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }
@@ -47,31 +47,31 @@ const categoryEditorialCopy: Record<string, { planningNote: string; comparisonNo
     planningNote:
       'Use this hotels hub to compare oceanfront access, practical booking fit, and trip-base convenience across launch towns.',
     comparisonNote:
-      'Editorial placeholder: prioritize location and parking confidence first, then compare amenities and shoulder-season value.'
+      'Prioritize location and parking confidence, then compare amenities and shoulder-season value.'
   },
   campgrounds: {
     planningNote:
       'Use this campgrounds hub to compare tent, RV, and state-park style options with a city-by-city planning lens.',
     comparisonNote:
-      'Editorial placeholder: compare reservation windows and site style before optimizing for add-on amenities.'
+      'Compare reservation windows and site style before optimizing for add-on amenities.'
   },
   beaches: {
     planningNote:
       'Use this beaches hub to evaluate easy-access shore stops, scenic landmarks, and nearby dining or stay options.',
     comparisonNote:
-      'Editorial placeholder: compare beach access logistics and safety context before adding optional activity stops.'
+      'Compare beach access logistics and safety context before adding optional activity stops.'
   },
   'whale-watching': {
     planningNote:
       'Use this whale-watching hub to compare shoreline viewpoints, seasonal timing assumptions, and nearby city bases.',
     comparisonNote:
-      'Editorial placeholder: pair migration-season assumptions with weather and visibility checks before final routing.'
+      'Pair migration-season assumptions with weather and visibility checks before final routing.'
   },
   restaurants: {
     planningNote:
       'Use this restaurants hub to compare dining clusters by city and connect meal planning to nearby attractions.',
     comparisonNote:
-      'Editorial placeholder: prioritize location and opening-hour reliability before choosing by cuisine preference.'
+      'Prioritize location and opening-hour reliability before choosing by cuisine preference.'
   }
 }
 
@@ -101,7 +101,7 @@ const getRelatedCities = (listings: NormalizedListing[], cities: NormalizedCity[
     related.set(cityRef.slug, {
       slug: cityRef.slug,
       name: city?.name ?? cityRef.label,
-      summary: city?.summary ?? 'Editorial placeholder: publish city copy to show richer context.'
+      summary: city?.summary ?? 'City summary is not available yet.'
     })
   }
 
@@ -118,14 +118,14 @@ const buildFaq = (category: NormalizedCategory, listingCount: number, relatedCit
   return [
     {
       question: `What is included in the ${category.name} category?`,
-      answer: `Published listings tagged "${category.name}" in Payload appear here. Editorial placeholder: refine inclusion criteria as content QA evolves.`
+      answer: `Published listings tagged "${category.name}" in Payload appear here. Use category-tagged published listings to keep this section current.`
     },
     {
       question: `Which cities currently have ${category.name.toLowerCase()} listings?`,
       answer:
         relatedCities.length > 0
           ? `${relatedCities.length} city pages are currently connected, including ${topCities}.`
-          : 'No related cities are currently connected. Editorial placeholder: add city-linked listings in Payload.'
+          : 'No related cities are currently connected.'
     },
     {
       question: `How should I compare ${category.name.toLowerCase()} options on this page?`,
@@ -224,7 +224,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
             <SectionHeading kicker="Comparison Note" title="What to compare first" />
             <p className="city-copy-text">
               {editorialCopy?.comparisonNote ??
-                'Editorial placeholder: prioritize city fit and trip intent first, then compare listing-level details.'}
+                'Prioritize city fit and trip intent first, then compare listing-level details.'}
             </p>
           </article>
         </div>
@@ -274,7 +274,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
             ))}
           </div>
         ) : (
-          <p className="city-empty">Listing grid placeholder: publish listings tagged with this category in Payload.</p>
+          <p className="city-empty">No listings are currently tagged with this category.</p>
         )}
       </Section>
 
@@ -297,7 +297,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
             ))}
           </div>
         ) : (
-          <p className="city-empty">Related cities placeholder: add city-linked listings to this category.</p>
+          <p className="city-empty">No related cities are currently available.</p>
         )}
       </Section>
 
@@ -326,7 +326,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                 ))}
               </ul>
             ) : (
-              <p className="city-empty">Guide links placeholder: connect published guides to this category in Payload.</p>
+              <p className="city-empty">No related guides are currently available.</p>
             )}
           </div>
           <div>
@@ -342,7 +342,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                 ))}
               </ul>
             ) : (
-              <p className="city-empty">Category links placeholder: add additional categories in Payload.</p>
+              <p className="city-empty">No additional categories are currently available.</p>
             )}
           </div>
         </div>

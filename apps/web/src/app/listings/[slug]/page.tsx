@@ -29,7 +29,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }
@@ -281,11 +281,11 @@ export default async function ListingPage({ params }: ListingPageProps) {
               </div>
               <div>
                 <dt>Seasonality</dt>
-                <dd>{listing.seasonality ?? 'Seasonality placeholder: add seasonal guidance in Payload.'}</dd>
+                <dd>{listing.seasonality ?? 'Not set'}</dd>
               </div>
               <div>
                 <dt>Phone</dt>
-                <dd>{listing.phone ?? 'Phone placeholder: add contact number in Payload.'}</dd>
+                <dd>{listing.phone ?? 'Not set'}</dd>
               </div>
               <div>
                 <dt>Website</dt>
@@ -295,7 +295,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
                       Visit official site
                     </a>
                   ) : (
-                    'Website placeholder: add official URL in Payload.'
+                    'No website URL is available.'
                   )}
                 </dd>
               </div>
@@ -311,7 +311,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 ))}
               </ul>
             ) : (
-              <p>Attributes placeholder: add listing attributes in Payload.</p>
+              <p>No attributes are listed.</p>
             )}
           </article>
 
@@ -324,7 +324,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 ))}
               </ul>
             ) : (
-              <p>Amenities placeholder: add listing amenities in Payload.</p>
+              <p>No amenities are listed.</p>
             )}
           </article>
         </div>
@@ -344,7 +344,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 {listing.city.label}
               </Link>
             ) : (
-              'City placeholder'
+              'Not set'
             )}
           </p>
           <p>
@@ -354,7 +354,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 {listing.region.label}
               </Link>
             ) : (
-              'Region placeholder'
+              'Not set'
             )}
           </p>
           <p>
@@ -364,7 +364,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 {primaryCategory.label}
               </Link>
             ) : (
-              'Category placeholder'
+              'Not set'
             )}
           </p>
         </div>
@@ -418,7 +418,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Related listings placeholder: publish additional city/category listings.</p>
+          <p className="city-empty">No related listings are currently available.</p>
         )}
       </Section>
 
@@ -437,7 +437,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Nearby city placeholder: add additional cities in this listing's region.</p>
+          <p className="city-empty">No nearby cities are currently available.</p>
         )}
       </Section>
     </>

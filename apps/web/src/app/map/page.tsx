@@ -37,7 +37,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }
@@ -64,10 +64,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function MapPage() {
-  const [settings, cities] = await Promise.all([
-    getSettings(),
-    getCities({ status: 'published', limit: 50 }).catch(() => [])
-  ])
+  const cities = await getCities({ status: 'published', limit: 50 }).catch(() => [])
 
   const mapCities: MapCity[] = cities
     .filter((c) => c.latitude && c.longitude)

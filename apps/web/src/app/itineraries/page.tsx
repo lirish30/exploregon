@@ -20,7 +20,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }
@@ -92,7 +92,7 @@ export default async function ItinerariesIndexPage() {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Itinerary archive placeholder: publish at least one itinerary in Payload.</p>
+          <p className="city-empty">No published itineraries are available yet.</p>
         )}
       </Section>
     </>

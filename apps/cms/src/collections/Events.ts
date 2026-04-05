@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { contentCollectionAccess } from '../access/contentAccess.ts'
 import { createEditorialPublishRequirements } from '../hooks/enforceEditorialPublishRequirements.ts'
 import { createSlugField } from '../utilities/slug.ts'
 import { editorialStatusField } from '../utilities/status.ts'
@@ -23,6 +24,7 @@ const validateOptionalUrl = (value: unknown): true | string => {
 
 export const Events: CollectionConfig = {
   slug: 'events',
+  access: contentCollectionAccess,
   labels: {
     singular: 'Event',
     plural: 'Events'

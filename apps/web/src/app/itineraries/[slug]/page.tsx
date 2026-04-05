@@ -27,7 +27,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }
@@ -164,7 +164,7 @@ export default async function ItineraryPage({ params }: ItineraryPageProps) {
             ))}
           </ol>
         ) : (
-          <p className="city-empty">Stop list placeholder: add at least one listing relationship in Payload.</p>
+          <p className="city-empty">No stops are currently linked to this itinerary.</p>
         )}
       </Section>
 
@@ -174,7 +174,7 @@ export default async function ItineraryPage({ params }: ItineraryPageProps) {
           {bodyParagraphs.length ? (
             bodyParagraphs.map((paragraph) => <p key={paragraph.slice(0, 28)}>{paragraph}</p>)
           ) : (
-            <p>Body placeholder: add itinerary body content in Payload.</p>
+            <p>Itinerary body content is not available yet.</p>
           )}
         </article>
       </Section>
@@ -194,7 +194,7 @@ export default async function ItineraryPage({ params }: ItineraryPageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Related cities placeholder: connect city relationships in Payload.</p>
+          <p className="city-empty">No related cities are currently available.</p>
         )}
       </Section>
 
@@ -215,7 +215,7 @@ export default async function ItineraryPage({ params }: ItineraryPageProps) {
             ))}
           </ul>
         ) : (
-          <p className="city-empty">Related guide placeholder: add city-linked guides in Payload.</p>
+          <p className="city-empty">No related guides are currently available.</p>
         )}
       </Section>
     </>

@@ -28,7 +28,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }
@@ -156,7 +156,7 @@ export default async function RegionPage({ params }: RegionPageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Region cities placeholder: publish cities linked to this region in Payload.</p>
+          <p className="city-empty">No cities are currently linked to this region.</p>
         )}
       </Section>
 
@@ -180,7 +180,7 @@ export default async function RegionPage({ params }: RegionPageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Region listings placeholder: publish listings linked to this region in Payload.</p>
+          <p className="city-empty">No listings are currently linked to this region.</p>
         )}
       </Section>
 
@@ -188,7 +188,7 @@ export default async function RegionPage({ params }: RegionPageProps) {
         <SectionHeading
           kicker="Map"
           title={`${region.name} map module`}
-          lede="Route-level map placeholder for Leaflet + OpenStreetMap integration."
+          lede="Route-level map module for Leaflet + OpenStreetMap integration."
         />
         <MapPlaceholder
           title={`${region.name} map preview`}
@@ -212,7 +212,7 @@ export default async function RegionPage({ params }: RegionPageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Region events placeholder: publish events linked to this region in Payload.</p>
+          <p className="city-empty">No events are currently linked to this region.</p>
         )}
       </Section>
 
@@ -233,7 +233,7 @@ export default async function RegionPage({ params }: RegionPageProps) {
             ))}
           </ul>
         ) : (
-          <p className="city-empty">Region guide placeholder: add guide-city links for this region.</p>
+          <p className="city-empty">No related guides are currently available for this region.</p>
         )}
       </Section>
     </>

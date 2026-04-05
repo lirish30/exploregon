@@ -1,9 +1,11 @@
 import type { CollectionConfig } from 'payload'
 
+import { contentCollectionAccess } from '../access/contentAccess.ts'
 import { createSlugField } from '../utilities/slug.ts'
 
 export const ListingCategories: CollectionConfig = {
   slug: 'listingCategories',
+  access: contentCollectionAccess,
   labels: {
     singular: 'Listing Category',
     plural: 'Listing Categories'

@@ -109,55 +109,6 @@ type BuildHomepageViewModelArgs = {
   planningItinerary: NormalizedItinerary | null
 }
 
-const fallbackQuickLinks: HomepageHeroLink[] = [
-  { label: 'Hotels', href: '/categories/hotels' },
-  { label: 'Campgrounds', href: '/categories/campgrounds' },
-  { label: 'Beaches', href: '/categories/beaches' },
-  { label: 'Whale Watching', href: '/guides' },
-  { label: 'Map View', href: '/map' }
-]
-
-const fallbackTripFilters: HomepageFilterGroup[] = [
-  { label: 'Trip style', options: ['Quiet reset', 'Family basecamp', 'Adventure weekend'] },
-  { label: 'Stay type', options: ['Hotels', 'Vacation rentals', 'Campgrounds'] },
-  { label: 'Budget', options: ['Value', 'Mid-range', 'Premium'] },
-  { label: 'Coast zone', options: ['North Coast', 'Central Coast', 'South Coast'] }
-]
-
-const fallbackMetrics: HomepageMetricCard[] = [
-  {
-    label: 'Weather window',
-    value: 'Placeholder live feed',
-    detail: 'Wire Open-Meteo or NWS in the next milestone.'
-  },
-  {
-    label: 'Tide snapshot',
-    value: 'Placeholder low/high tide',
-    detail: 'NOAA integration is intentionally deferred.'
-  },
-  {
-    label: 'Seasonal pulse',
-    value: 'Whale migration + spring events',
-    detail: 'Editorial placeholder until utility data is live.'
-  }
-]
-
-const fallbackGuideCard: HomepageEditorialCard = {
-  eyebrow: 'Guide',
-  title: 'Placeholder editorial guide',
-  summary: 'Seed or publish a guide in Payload to replace this card.',
-  href: '/guides',
-  image: null
-}
-
-const fallbackEventCard: HomepageEditorialCard = {
-  eyebrow: 'Event',
-  title: 'Placeholder coast event',
-  summary: 'Seed or publish an event in Payload to replace this card.',
-  href: '/events',
-  image: null
-}
-
 const toTitleCase = (value: string): string =>
   value
     .split('-')
@@ -229,8 +180,7 @@ const buildEventCard = (event: NormalizedEvent): HomepageEditorialCard => ({
 })
 
 const buildTripFinderIntro = (homepage: NormalizedHomepage): string =>
-  homepage.utilityTeaserBlock?.body ??
-  'Placeholder trip finder copy: use seeded city and category data to steer travelers toward the right coast match.'
+  homepage.utilityTeaserBlock?.body ?? 'Use filters to narrow your route by city and category.'
 
 export const buildHomepageViewModel = ({
   settings,
@@ -261,7 +211,7 @@ export const buildHomepageViewModel = ({
         label: 'Browse the Coast Map',
         href: '/map'
       },
-      quickLinks: quickLinks.length > 0 ? quickLinks : fallbackQuickLinks
+      quickLinks
     },
     categoryHighlights:
       featuredCategories.length > 0
@@ -270,11 +220,7 @@ export const buildHomepageViewModel = ({
             description: category.description,
             href: `/categories/${category.slug}`
           }))
-        : fallbackQuickLinks.slice(0, 5).map((link) => ({
-            name: link.label,
-            description: `Placeholder category block for ${link.label.toLowerCase()}.`,
-            href: link.href
-          })),
+        : [],
     destinationStrip:
       featuredCities.length > 0
         ? featuredCities.slice(0, 4).map(buildDestinationCard)
@@ -282,7 +228,16 @@ export const buildHomepageViewModel = ({
     tripFinder: {
       title: homepage.utilityTeaserBlock?.headline ?? 'Find your ideal match',
       intro: buildTripFinderIntro(homepage),
-      filters: fallbackTripFilters
+      filters: [
+        {
+          label: 'City',
+          options: featuredCities.map((city) => city.name)
+        },
+        {
+          label: 'Category',
+          options: featuredCategories.map((category) => category.name)
+        }
+      ].filter((group) => group.options.length > 0)
     },
     utilitySnapshot: {
       title: 'Coast conditions and timing',
@@ -336,7 +291,7 @@ export const buildHomepageViewModel = ({
                   }
                 : null
             ])
-          : fallbackMetrics,
+          : [],
       primaryLink: {
         label: 'Weather + tides',
         href: '/weather-tides'
@@ -363,17 +318,13 @@ export const buildHomepageViewModel = ({
           ]),
     coastalPulse: {
       title: homepage.editorialIntroBlock?.headline ?? 'Coastal Pulse',
-      intro:
-        homepage.editorialIntroBlock?.body ??
-        'Seed guide and event records in Payload to replace these placeholders with launch content.',
-      guides: coastalPulseGuides.length > 0 ? coastalPulseGuides.slice(0, 2).map(buildGuideCard) : [fallbackGuideCard],
-      events: coastalPulseEvents.length > 0 ? coastalPulseEvents.slice(0, 2).map(buildEventCard) : [fallbackEventCard]
+      intro: homepage.editorialIntroBlock?.body ?? 'Latest published guides and events.',
+      guides: coastalPulseGuides.slice(0, 2).map(buildGuideCard),
+      events: coastalPulseEvents.slice(0, 2).map(buildEventCard)
     },
     planningBanner: {
       title: homepage.planningCtaBlock?.headline ?? 'Get local tide, event, and travel tips.',
-      body:
-        homepage.planningCtaBlock?.body ??
-        'Placeholder signup copy until the email system is wired. Keep this CTA visible for conversion intent.',
+      body: homepage.planningCtaBlock?.body ?? 'Subscribe for planning updates and coast highlights.',
       button: {
         label: homepage.planningCtaBlock?.buttonLabel ?? 'Browse itineraries',
         href: homepage.planningCtaBlock?.buttonUrl ?? '/itineraries'

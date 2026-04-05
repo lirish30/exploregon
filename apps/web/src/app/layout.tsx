@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Instrument_Sans, Instrument_Serif } from 'next/font/google'
 import Script from 'next/script'
 import type { ReactNode } from 'react'
 
@@ -7,6 +8,20 @@ import { SiteHeader } from '../components/shell/site-header'
 import { getFooter, getNavigation, getSiteSettings } from '../lib/api'
 import type { FooterGlobal, NavigationGlobal, SiteSettingsGlobal } from '../lib/types'
 import './styles.css'
+
+const instrumentSans = Instrument_Sans({
+  subsets: ['latin'],
+  variable: '--font-instrument-sans',
+  display: 'swap'
+})
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ['latin'],
+  variable: '--font-instrument-serif',
+  style: ['normal', 'italic'],
+  weight: '400',
+  display: 'swap'
+})
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '')
 const gaMeasurementId = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID?.trim()
@@ -35,34 +50,12 @@ const fallbackSiteSettings: SiteSettingsGlobal = {
 }
 
 const fallbackNavigation: NavigationGlobal = {
-  headerNavItems: [
-    { label: 'Cities', url: '/cities' },
-    { label: 'Categories', url: '/categories' },
-    { label: 'Guides', url: '/guides' },
-    { label: 'Map', url: '/map' }
-  ],
+  headerNavItems: [],
   footerNavGroups: []
 }
 
 const fallbackFooter: FooterGlobal = {
-  footerNavGroups: [
-    {
-      groupLabel: 'Explore',
-      links: [
-        { label: 'Cities', url: '/cities' },
-        { label: 'Categories', url: '/categories' },
-        { label: 'Guides', url: '/guides' }
-      ]
-    },
-    {
-      groupLabel: 'Plan',
-      links: [
-        { label: 'Weather & Tides', url: '/weather-tides' },
-        { label: 'Map', url: '/map' },
-        { label: 'Itineraries', url: '/itineraries' }
-      ]
-    }
-  ]
+  footerNavGroups: []
 }
 
 const loadShellData = async (): Promise<{
@@ -72,9 +65,9 @@ const loadShellData = async (): Promise<{
 }> => {
   try {
     const [siteSettings, navigation, footer] = await Promise.all([
-      getSiteSettings({ revalidate: 3600 }),
-      getNavigation({ revalidate: 3600 }),
-      getFooter({ revalidate: 3600 })
+      getSiteSettings({ revalidate: 30 }),
+      getNavigation({ revalidate: 30 }),
+      getFooter({ revalidate: 30 })
     ])
 
     return { siteSettings, navigation, footer }
@@ -93,7 +86,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
   return (
     <html lang="en">
-      <body>
+      <body className={`${instrumentSans.variable} ${instrumentSerif.variable}`}>
         {gaMeasurementId ? (
           <>
             <Script

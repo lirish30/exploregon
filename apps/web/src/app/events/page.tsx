@@ -20,7 +20,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }
@@ -37,7 +37,7 @@ const formatDate = (value: string): string => {
   const date = new Date(value)
 
   if (Number.isNaN(date.getTime())) {
-    return 'Date placeholder'
+    return 'Date unavailable'
   }
 
   return new Intl.DateTimeFormat('en-US', {
@@ -99,7 +99,7 @@ export default async function EventsIndexPage() {
                 <h2 className="city-listing-title">{event.title}</h2>
                 <p className="city-listing-summary">{event.summary}</p>
                 <p className="category-index-count">
-                  {event.city?.label ?? 'City placeholder'} · {event.venue}
+                  {event.city?.label ?? 'Not set'} · {event.venue}
                 </p>
                 <Link href={`/events/${event.slug}`} className="city-inline-link">
                   View event
@@ -108,7 +108,7 @@ export default async function EventsIndexPage() {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Event archive placeholder: publish at least one event in Payload.</p>
+          <p className="city-empty">No published events are available yet.</p>
         )}
       </Section>
     </>

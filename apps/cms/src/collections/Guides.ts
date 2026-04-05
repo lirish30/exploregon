@@ -1,11 +1,13 @@
 import type { CollectionConfig } from 'payload'
 
+import { contentCollectionAccess } from '../access/contentAccess.ts'
 import { createEditorialPublishRequirements } from '../hooks/enforceEditorialPublishRequirements.ts'
 import { createSlugField } from '../utilities/slug.ts'
 import { editorialStatusField } from '../utilities/status.ts'
 
 export const Guides: CollectionConfig = {
   slug: 'guides',
+  access: contentCollectionAccess,
   labels: {
     singular: 'Guide',
     plural: 'Guides'

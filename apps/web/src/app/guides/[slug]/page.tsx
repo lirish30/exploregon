@@ -27,7 +27,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }
@@ -137,7 +137,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
           {bodyParagraphs.length ? (
             bodyParagraphs.map((paragraph) => <p key={paragraph.slice(0, 28)}>{paragraph}</p>)
           ) : (
-            <p>Body placeholder: add guide body content in Payload.</p>
+            <p>Guide body content is not available yet.</p>
           )}
         </article>
       </Section>
@@ -157,7 +157,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Related cities placeholder: connect city references in Payload.</p>
+          <p className="city-empty">No related cities are currently available.</p>
         )}
       </Section>
 
@@ -176,7 +176,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Related categories placeholder: connect listing categories in Payload.</p>
+          <p className="city-empty">No related categories are currently available.</p>
         )}
       </Section>
 
@@ -216,7 +216,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
                 ))}
               </ul>
             ) : (
-              <p className="city-empty">Related itinerary placeholder: connect itinerary related cities in Payload.</p>
+              <p className="city-empty">No related itineraries are currently available.</p>
             )}
           </div>
         </div>

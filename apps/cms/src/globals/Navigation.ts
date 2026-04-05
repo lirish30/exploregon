@@ -1,7 +1,10 @@
 import type { GlobalConfig } from 'payload'
 
+import { contentGlobalAccess } from '../access/contentAccess.ts'
+
 export const Navigation: GlobalConfig = {
   slug: 'navigation',
+  access: contentGlobalAccess,
   label: 'Navigation',
   fields: [
     {

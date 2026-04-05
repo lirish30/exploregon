@@ -9,7 +9,6 @@ import { Section } from '../../../components/primitives/section'
 import { SectionHeading } from '../../../components/primitives/section-heading'
 import { getEventBySlug, getEventsByCity, getSiteSettings } from '../../../lib/api'
 import { buildEntityBreadcrumbs, createMetadata } from '../../../lib/seo'
-import type { SiteSettingsGlobal } from '../../../lib/types'
 
 export const revalidate = 300
 
@@ -17,20 +16,6 @@ type EventPageProps = {
   params: Promise<{
     slug: string
   }>
-}
-
-const fallbackSettings: SiteSettingsGlobal = {
-  siteName: 'ExplOregon Coast',
-  siteTagline: 'A practical Oregon Coast directory for planning where to stay, do, and go next.',
-  defaultSeo: {
-    title: 'ExplOregon Coast',
-    description: 'Structured Oregon Coast event templates with location context and outbound event links.'
-  },
-  socialLinks: [],
-  contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
-    phone: null
-  }
 }
 
 const toPayloadMediaUrl = (pathOrUrl: string | null | undefined): string | null => {
@@ -54,7 +39,7 @@ const formatDate = (value: string): string => {
   const date = new Date(value)
 
   if (Number.isNaN(date.getTime())) {
-    return 'Date placeholder'
+    return 'Date unavailable'
   }
 
   return new Intl.DateTimeFormat('en-US', {
@@ -73,17 +58,9 @@ const formatDateRange = (startDate: string, endDate: string | null): string => {
   return `${formatDate(startDate)} - ${formatDate(endDate)}`
 }
 
-const getSettings = async (): Promise<SiteSettingsGlobal> => {
-  try {
-    return await getSiteSettings()
-  } catch {
-    return fallbackSettings
-  }
-}
-
 export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
   const { slug } = await params
-  const [settings, event] = await Promise.all([getSettings(), getEventBySlug(slug)])
+  const [settings, event] = await Promise.all([getSiteSettings(), getEventBySlug(slug)])
 
   if (!event) {
     return createMetadata(
@@ -157,11 +134,11 @@ export default async function EventPage({ params }: EventPageProps) {
         <div className="listing-context-row">
           <p>
             <strong>City:</strong>{' '}
-            {event.city ? <Link href={`/cities/${event.city.slug}`}>{event.city.label}</Link> : 'City placeholder'}
+            {event.city ? <Link href={`/cities/${event.city.slug}`}>{event.city.label}</Link> : 'Not set'}
           </p>
           <p>
             <strong>Region:</strong>{' '}
-            {event.region ? <Link href={`/regions/${event.region.slug}`}>{event.region.label}</Link> : 'Region placeholder'}
+            {event.region ? <Link href={`/regions/${event.region.slug}`}>{event.region.label}</Link> : 'Not set'}
           </p>
           <p>
             <strong>Venue:</strong> {event.venue}
@@ -186,7 +163,7 @@ export default async function EventPage({ params }: EventPageProps) {
             buttonHref={event.eventUrl}
           />
         ) : (
-          <p className="city-empty">Event URL placeholder: add an official event URL in Payload.</p>
+          <p className="city-empty">No official event URL is set for this event.</p>
         )}
       </Section>
 
@@ -210,7 +187,7 @@ export default async function EventPage({ params }: EventPageProps) {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Related events placeholder: add more published events for this city.</p>
+          <p className="city-empty">No related events are currently available.</p>
         )}
       </Section>
     </>

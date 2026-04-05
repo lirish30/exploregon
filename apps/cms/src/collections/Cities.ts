@@ -1,10 +1,12 @@
 import type { CollectionConfig } from 'payload'
 
+import { contentCollectionAccess } from '../access/contentAccess.ts'
 import { createSlugField } from '../utilities/slug.ts'
 import { cityStatusField } from '../utilities/status.ts'
 
 export const Cities: CollectionConfig = {
   slug: 'cities',
+  access: contentCollectionAccess,
   labels: {
     singular: 'City',
     plural: 'Cities'

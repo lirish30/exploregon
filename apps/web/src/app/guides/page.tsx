@@ -20,7 +20,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }
@@ -91,7 +91,7 @@ export default async function GuidesIndexPage() {
             ))}
           </div>
         ) : (
-          <p className="city-empty">Guide archive placeholder: publish at least one guide in Payload.</p>
+          <p className="city-empty">No published guides are available yet.</p>
         )}
       </Section>
     </>

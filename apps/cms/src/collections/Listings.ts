@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { contentCollectionAccess } from '../access/contentAccess.ts'
 import { enforceListingPublishRequirements } from '../hooks/enforceListingPublishRequirements.ts'
 import { createSlugField } from '../utilities/slug.ts'
 import { listingStatusField } from '../utilities/status.ts'
@@ -23,6 +24,7 @@ const validateOptionalUrl = (value: unknown): true | string => {
 
 export const Listings: CollectionConfig = {
   slug: 'listings',
+  access: contentCollectionAccess,
   labels: {
     singular: 'Listing',
     plural: 'Listings'

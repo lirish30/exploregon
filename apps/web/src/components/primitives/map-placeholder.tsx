@@ -5,10 +5,10 @@ type MapPlaceholderProps = {
 
 export const MapPlaceholder = ({
   title = 'Interactive Coast Map',
-  note = 'Leaflet + OpenStreetMap module placeholder. Connect city and listing pins in the route template step.'
+  note = 'Leaflet + OpenStreetMap module for city and listing pins.'
 }: MapPlaceholderProps) => {
   return (
-    <section className="map-placeholder" aria-label="Map placeholder">
+    <section className="map-placeholder" aria-label="Map module">
       <div className="map-placeholder-inner">
         <p className="map-placeholder-label">Map Module</p>
         <h3 className="map-placeholder-title">{title}</h3>

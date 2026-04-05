@@ -20,7 +20,7 @@ const fallbackSettings: SiteSettingsGlobal = {
   },
   socialLinks: [],
   contact: {
-    email: 'editorial-placeholder@exploregoncoast.com',
+    email: 'editorial@exploregoncoast.com',
     phone: null
   }
 }
@@ -115,7 +115,7 @@ export default async function CitiesIndexPage() {
           </div>
         ) : (
           <p className="cities-index-empty">
-            City seed data placeholder: publish at least one city in Payload to populate this index.
+            No published cities are available yet.
           </p>
         )}
       </Section>
