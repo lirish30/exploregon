@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import type { HomepageViewModel } from './homepage-view-model'
 import { HomeMedia } from './home-media'
+import { PhosphorIcon } from './phosphor-icon'
 
 type ResolveMediaUrl = (pathOrUrl: string | null | undefined) => string | null
 
@@ -17,6 +18,11 @@ export const HomepageCategoryShortcuts = ({ model }: SharedProps) => {
         <div className="coast-home-shortcut-grid">
           {model.categoryHighlights.map((category) => (
             <Link key={category.href} href={category.href} className="coast-home-shortcut-card">
+              {category.icon && (
+                <span className="coast-home-shortcut-icon">
+                  <PhosphorIcon name={category.icon} />
+                </span>
+              )}
               <span className="coast-home-shortcut-name">{category.name}</span>
               <span className="coast-home-shortcut-copy">{category.description}</span>
             </Link>

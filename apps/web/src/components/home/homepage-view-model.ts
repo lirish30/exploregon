@@ -73,6 +73,7 @@ export type HomepageViewModel = {
     name: string
     description: string
     href: string
+    icon: string
   }>
   destinationStrip: HomepageDestinationCard[]
   tripFinder: {
@@ -218,7 +219,8 @@ export const buildHomepageViewModel = ({
         ? featuredCategories.slice(0, 5).map((category) => ({
             name: category.name,
             description: category.description,
-            href: `/categories/${category.slug}`
+            href: `/categories/${category.slug}`,
+            icon: category.icon
           }))
         : [],
     destinationStrip:
