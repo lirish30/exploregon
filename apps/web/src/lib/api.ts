@@ -87,10 +87,11 @@ const withQueryString = (path: string, params: Record<string, string | number | 
 const payloadFetch = async <T>(path: string, behavior: FetchBehavior = {}): Promise<T> => {
   const baseUrl = ensurePayloadBaseUrl()
   const { revalidate = DEFAULT_REVALIDATE, tags } = behavior
+  const resolvedRevalidate = process.env.NODE_ENV === 'production' ? revalidate : 0
 
   const response = await fetch(`${baseUrl}${path}`, {
     next: {
-      revalidate,
+      revalidate: resolvedRevalidate,
       tags
     }
   })

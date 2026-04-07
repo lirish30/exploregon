@@ -11,30 +11,73 @@ export const Media: CollectionConfig = {
   },
   timestamps: true,
   upload: {
+    adminThumbnail: 'card-sm',
+    formatOptions: {
+      format: 'webp',
+      options: {
+        quality: 82,
+        effort: 4
+      }
+    },
+    resizeOptions: {
+      width: 2560,
+      height: 2560,
+      fit: 'inside',
+      withoutEnlargement: true
+    },
+    withMetadata: false,
     imageSizes: [
       {
         name: 'hero-sm',
         width: 640,
         height: 360,
-        fit: 'cover'
+        fit: 'cover',
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 78,
+            effort: 4
+          }
+        }
       },
       {
         name: 'hero-md',
         width: 1280,
         height: 720,
-        fit: 'cover'
+        fit: 'cover',
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 80,
+            effort: 4
+          }
+        }
       },
       {
         name: 'hero-lg',
         width: 1920,
         height: 1080,
-        fit: 'cover'
+        fit: 'cover',
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 82,
+            effort: 4
+          }
+        }
       },
       {
         name: 'card-sm',
         width: 480,
         height: 320,
-        fit: 'cover'
+        fit: 'cover',
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 76,
+            effort: 4
+          }
+        }
       }
     ]
   },

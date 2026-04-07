@@ -6,17 +6,16 @@ import { PhosphorIcon } from './phosphor-icon'
 
 type ResolveMediaUrl = (pathOrUrl: string | null | undefined) => string | null
 
-type SharedProps = {
-  model: HomepageViewModel
-  resolveMediaUrl: ResolveMediaUrl
+type HomepageCategoryShortcutsProps = {
+  categoryHighlights: HomepageViewModel['categoryHighlights']
 }
 
-export const HomepageCategoryShortcuts = ({ model }: SharedProps) => {
+export const HomepageCategoryShortcuts = ({ categoryHighlights }: HomepageCategoryShortcutsProps) => {
   return (
     <section className="section coast-home-shortcuts">
       <div className="container">
         <div className="coast-home-shortcut-grid">
-          {model.categoryHighlights.map((category) => (
+          {categoryHighlights.map((category) => (
             <Link key={category.href} href={category.href} className="coast-home-shortcut-card">
               {category.icon && (
                 <span className="coast-home-shortcut-icon">
@@ -33,7 +32,12 @@ export const HomepageCategoryShortcuts = ({ model }: SharedProps) => {
   )
 }
 
-export const HomepageDestinations = ({ model, resolveMediaUrl }: SharedProps) => {
+type HomepageDestinationsProps = {
+  destinationStrip: HomepageViewModel['destinationStrip']
+  resolveMediaUrl: ResolveMediaUrl
+}
+
+export const HomepageDestinations = ({ destinationStrip, resolveMediaUrl }: HomepageDestinationsProps) => {
   return (
     <section className="section coast-home-panel">
       <div className="container">
@@ -49,7 +53,7 @@ export const HomepageDestinations = ({ model, resolveMediaUrl }: SharedProps) =>
           </Link>
         </div>
         <div className="coast-home-destination-grid">
-          {model.destinationStrip.map((city) => (
+          {destinationStrip.map((city) => (
             <article key={city.href} className="coast-home-destination-card">
               <div className="coast-home-destination-media">
                 <HomeMedia
@@ -93,14 +97,18 @@ export const HomepageDestinations = ({ model, resolveMediaUrl }: SharedProps) =>
   )
 }
 
-export const HomepageTripFinder = ({ model }: SharedProps) => {
+type HomepageTripFinderProps = {
+  tripFinder: HomepageViewModel['tripFinder']
+}
+
+export const HomepageTripFinder = ({ tripFinder }: HomepageTripFinderProps) => {
   return (
     <section className="section">
       <div className="container">
         <div className="coast-home-trip-finder">
           <div className="coast-home-trip-copy">
-            <h2 className="coast-home-section-title">{model.tripFinder.title}</h2>
-            <p className="coast-home-section-copy">{model.tripFinder.intro}</p>
+            <h2 className="coast-home-section-title">{tripFinder.title}</h2>
+            <p className="coast-home-section-copy">{tripFinder.intro}</p>
             <div className="coast-home-trip-actions">
               <Link href="/cities" className="button-primary">
                 Browse by city
@@ -111,7 +119,7 @@ export const HomepageTripFinder = ({ model }: SharedProps) => {
             </div>
           </div>
           <div className="coast-home-filter-panel">
-            {model.tripFinder.filters.map((group) => (
+            {tripFinder.filters.map((group) => (
               <div key={group.label} className="coast-home-filter-group">
                 <label>{group.label}</label>
                 <select defaultValue="">
@@ -134,24 +142,28 @@ export const HomepageTripFinder = ({ model }: SharedProps) => {
   )
 }
 
-export const HomepageUtilitySnapshot = ({ model }: SharedProps) => {
+type HomepageUtilitySnapshotProps = {
+  utilitySnapshot: HomepageViewModel['utilitySnapshot']
+}
+
+export const HomepageUtilitySnapshot = ({ utilitySnapshot }: HomepageUtilitySnapshotProps) => {
   return (
     <section className="section coast-home-utility-wrap">
       <div className="container coast-home-utility-grid">
         <div className="coast-home-utility-copy">
-          <h2 className="coast-home-section-title">{model.utilitySnapshot.title}</h2>
-          <p className="coast-home-section-copy">{model.utilitySnapshot.intro}</p>
+          <h2 className="coast-home-section-title">{utilitySnapshot.title}</h2>
+          <p className="coast-home-section-copy">{utilitySnapshot.intro}</p>
           <div className="coast-home-trip-actions">
-            <Link href={model.utilitySnapshot.primaryLink.href} className="button-primary">
-              {model.utilitySnapshot.primaryLink.label}
+            <Link href={utilitySnapshot.primaryLink.href} className="button-primary">
+              {utilitySnapshot.primaryLink.label}
             </Link>
-            <Link href={model.utilitySnapshot.secondaryLink.href} className="coast-home-outline-link coast-home-outline-link-dark">
-              {model.utilitySnapshot.secondaryLink.label}
+            <Link href={utilitySnapshot.secondaryLink.href} className="coast-home-outline-link coast-home-outline-link-dark">
+              {utilitySnapshot.secondaryLink.label}
             </Link>
           </div>
         </div>
         <aside className="coast-home-utility-panel">
-          {model.utilitySnapshot.metrics.map((metric) => (
+          {utilitySnapshot.metrics.map((metric) => (
             <article key={metric.label} className="coast-home-metric-card">
               <p>{metric.label}</p>
               <strong>{metric.value}</strong>
@@ -164,19 +176,24 @@ export const HomepageUtilitySnapshot = ({ model }: SharedProps) => {
   )
 }
 
-export const HomepageEditorial = ({ model, resolveMediaUrl }: SharedProps) => {
+type HomepageEditorialProps = {
+  coastalPulse: HomepageViewModel['coastalPulse']
+  resolveMediaUrl: ResolveMediaUrl
+}
+
+export const HomepageEditorial = ({ coastalPulse, resolveMediaUrl }: HomepageEditorialProps) => {
   return (
     <section className="section coast-home-editorial">
       <div className="container">
         <div className="coast-home-section-head coast-home-section-head-stack">
           <div>
-            <h2 className="coast-home-section-title">{model.coastalPulse.title}</h2>
-            <p className="coast-home-section-copy">{model.coastalPulse.intro}</p>
+            <h2 className="coast-home-section-title">{coastalPulse.title}</h2>
+            <p className="coast-home-section-copy">{coastalPulse.intro}</p>
           </div>
         </div>
         <div className="coast-home-editorial-grid">
           <div className="coast-home-editorial-column">
-            {model.coastalPulse.guides.map((guide) => (
+            {coastalPulse.guides.map((guide) => (
               <article key={guide.href} className="coast-home-story-card coast-home-story-card-large">
                 <div className="coast-home-story-media">
                   <HomeMedia
@@ -199,7 +216,7 @@ export const HomepageEditorial = ({ model, resolveMediaUrl }: SharedProps) => {
             ))}
           </div>
           <div className="coast-home-editorial-column">
-            {model.coastalPulse.events.map((event) => (
+            {coastalPulse.events.map((event) => (
               <article key={event.href} className="coast-home-story-card coast-home-story-card-compact">
                 <div className="coast-home-story-body">
                   <p className="coast-home-story-tag">{event.eyebrow}</p>
@@ -218,7 +235,12 @@ export const HomepageEditorial = ({ model, resolveMediaUrl }: SharedProps) => {
   )
 }
 
-export const HomepageListings = ({ model, resolveMediaUrl }: SharedProps) => {
+type HomepageListingsProps = {
+  editorsChoice: HomepageViewModel['editorsChoice']
+  resolveMediaUrl: ResolveMediaUrl
+}
+
+export const HomepageListings = ({ editorsChoice, resolveMediaUrl }: HomepageListingsProps) => {
   return (
     <section className="section">
       <div className="container">
@@ -228,7 +250,7 @@ export const HomepageListings = ({ model, resolveMediaUrl }: SharedProps) => {
           </div>
         </div>
         <div className="coast-home-listing-grid">
-          {model.editorsChoice.map((listing, index) => (
+          {editorsChoice.map((listing, index) => (
             <article
               key={listing.href}
               className={index === 0 ? 'coast-home-listing-card coast-home-listing-card-featured' : 'coast-home-listing-card'}
@@ -260,22 +282,26 @@ export const HomepageListings = ({ model, resolveMediaUrl }: SharedProps) => {
   )
 }
 
-export const HomepagePlanningBanner = ({ model }: SharedProps) => {
+type HomepagePlanningBannerProps = {
+  planningBanner: HomepageViewModel['planningBanner']
+}
+
+export const HomepagePlanningBanner = ({ planningBanner }: HomepagePlanningBannerProps) => {
   return (
     <section className="section">
       <div className="container">
         <div className="coast-home-signup" id="newsletter">
           <div className="coast-home-signup-copy">
-            <h2>{model.planningBanner.title}</h2>
-            <p>{model.planningBanner.body}</p>
+            <h2>{planningBanner.title}</h2>
+            <p>{planningBanner.body}</p>
           </div>
           <form className="coast-home-signup-form" action="#" method="post">
             <label htmlFor="coast-home-email" className="sr-only">
               Email address
             </label>
             <input id="coast-home-email" name="email" type="email" required placeholder="Your email address" />
-            <Link href={model.planningBanner.button.href} className="button-secondary coast-home-signup-submit">
-              {model.planningBanner.button.label}
+            <Link href={planningBanner.button.href} className="button-secondary coast-home-signup-submit">
+              {planningBanner.button.label}
             </Link>
           </form>
         </div>

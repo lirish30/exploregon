@@ -1953,6 +1953,7 @@ a:focus-visible {
 
 .coast-home-outline-link-dark {
   color: var(--accent-strong);
+  border-color: var(--accent-strong);
 }
 
 .coast-home-hero-actions .button-primary {
@@ -2187,6 +2188,16 @@ a:focus-visible {
   display: grid;
   gap: 1rem;
   align-content: start;
+}
+
+.coast-home-trip-copy .coast-home-section-copy,
+.coast-home-utility-copy .coast-home-section-copy {
+  margin: 0;
+}
+
+.coast-home-trip-copy .coast-home-trip-actions,
+.coast-home-utility-copy .coast-home-trip-actions {
+  justify-content: flex-start;
 }
 
 .coast-home-filter-panel {

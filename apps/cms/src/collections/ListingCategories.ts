@@ -34,11 +34,24 @@ export const ListingCategories: CollectionConfig = {
     {
       name: 'icon',
       label: 'Icon',
-      type: 'text',
+      type: 'select',
       required: true,
-      maxLength: 60,
+      defaultValue: 'hotel',
+      options: [
+        { label: 'Hotel', value: 'hotel' },
+        { label: 'Bed', value: 'bed' },
+        { label: 'Campground', value: 'campground' },
+        { label: 'RV', value: 'rv' },
+        { label: 'Home', value: 'home' },
+        { label: 'Restaurant', value: 'restaurant' },
+        { label: 'Beach', value: 'beach' },
+        { label: 'Whale Watching', value: 'whale' },
+        { label: 'Hiking', value: 'hiking' },
+        { label: 'Tidepool', value: 'tidepool' },
+        { label: 'Family', value: 'family' }
+      ],
       admin: {
-        description: 'Use a stable icon token, e.g., hotel, beach, hiking.'
+        description: 'Choose a stable icon token used by the web app icon renderer.'
       }
     },
     {

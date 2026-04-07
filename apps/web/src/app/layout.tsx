@@ -25,6 +25,7 @@ const instrumentSerif = Instrument_Serif({
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '')
 const gaMeasurementId = process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID?.trim()
+const shouldLoadAnalytics = process.env.NODE_ENV === 'production' && Boolean(gaMeasurementId)
 
 export const metadata: Metadata = {
   metadataBase: siteUrl ? new URL(siteUrl) : undefined,
@@ -87,7 +88,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en">
       <body className={`${instrumentSans.variable} ${instrumentSerif.variable}`}>
-        {gaMeasurementId ? (
+        {shouldLoadAnalytics ? (
           <>
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}

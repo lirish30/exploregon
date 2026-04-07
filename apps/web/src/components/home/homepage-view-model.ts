@@ -133,10 +133,6 @@ const buildDestinationCard = (city: NormalizedCity): HomepageDestinationCard => 
     {
       label: 'Base',
       value: city.region?.label ?? 'Oregon Coast'
-    },
-    {
-      label: 'Best for',
-      value: city.featuredHighlights[0] ?? 'Coastal planning'
     }
   ],
   image: city.heroImage
@@ -196,6 +192,29 @@ export const buildHomepageViewModel = ({
 }: BuildHomepageViewModelArgs): HomepageViewModel => {
   const quickLinks = categoryLinks(featuredCategories)
   const heroImage = homepage.heroImage ?? featuredCities[0]?.heroImage ?? editorsChoiceListings[0]?.heroImage ?? planningItinerary?.heroImage ?? null
+  const utilityMetrics = compact([
+    featuredCities[0]
+      ? {
+          label: 'Top basecamp',
+          value: featuredCities[0].name,
+          detail: featuredCities[0].summary
+        }
+      : null,
+    coastalPulseEvents[0]
+      ? {
+          label: 'Next event',
+          value: coastalPulseEvents[0].title,
+          detail: formatEventDate(coastalPulseEvents[0].startDate)
+        }
+      : null,
+    coastalPulseGuides[0]
+      ? {
+          label: 'Editor watch',
+          value: toTitleCase(coastalPulseGuides[0].travelSeason),
+          detail: coastalPulseGuides[0].title
+        }
+      : null
+  ])
 
   return {
     settings,
@@ -220,7 +239,7 @@ export const buildHomepageViewModel = ({
             name: category.name,
             description: category.description,
             href: `/categories/${category.slug}`,
-            icon: category.icon
+            icon: category.icon || category.slug || category.name
           }))
         : [],
     destinationStrip:
@@ -246,54 +265,7 @@ export const buildHomepageViewModel = ({
       intro:
         homepage.editorialIntroBlock?.headline ??
         'Practical planning signals anchored by weather, tides, and seasonal editorial guidance.',
-      metrics:
-        compact([
-          featuredCities[0]
-            ? {
-                label: 'Top basecamp',
-                value: featuredCities[0].name,
-                detail: featuredCities[0].summary
-              }
-            : null,
-          coastalPulseEvents[0]
-            ? {
-                label: 'Next event',
-                value: coastalPulseEvents[0].title,
-                detail: formatEventDate(coastalPulseEvents[0].startDate)
-              }
-            : null,
-          coastalPulseGuides[0]
-            ? {
-                label: 'Editor watch',
-                value: toTitleCase(coastalPulseGuides[0].travelSeason),
-                detail: coastalPulseGuides[0].title
-              }
-            : null
-        ]).length > 0
-          ? compact([
-              featuredCities[0]
-                ? {
-                    label: 'Top basecamp',
-                    value: featuredCities[0].name,
-                    detail: featuredCities[0].summary
-                  }
-                : null,
-              coastalPulseEvents[0]
-                ? {
-                    label: 'Next event',
-                    value: coastalPulseEvents[0].title,
-                    detail: formatEventDate(coastalPulseEvents[0].startDate)
-                  }
-                : null,
-              coastalPulseGuides[0]
-                ? {
-                    label: 'Editor watch',
-                    value: toTitleCase(coastalPulseGuides[0].travelSeason),
-                    detail: coastalPulseGuides[0].title
-                  }
-                : null
-            ])
-          : [],
+      metrics: utilityMetrics,
       primaryLink: {
         label: 'Weather + tides',
         href: '/weather-tides'

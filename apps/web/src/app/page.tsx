@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { cache } from 'react'
 
 import { HomepagePage } from '../components/home/homepage-page'
 import { buildHomepageViewModel } from '../components/home/homepage-view-model'
@@ -54,8 +53,8 @@ type HomepageRouteModel = {
 
 const loadHomepageRouteModelImpl = async (): Promise<HomepageRouteModel> => {
   const [settings, homepage] = await Promise.all([
-    getSiteSettings({ revalidate: 1800 }),
-    getHomepageData({ revalidate: 900 })
+    getSiteSettings({ revalidate: 300 }),
+    getHomepageData({ revalidate: 60 })
   ])
 
   const featuredCitySlugs = homepage.featuredCities.map((city) => city.slug)
@@ -75,14 +74,14 @@ const loadHomepageRouteModelImpl = async (): Promise<HomepageRouteModel> => {
     itineraryFromCta,
     fallbackItineraries
   ] = await Promise.all([
-    Promise.all(featuredCitySlugs.map((slug) => getCityBySlug(slug))),
-    Promise.all(featuredCategorySlugs.map((slug) => getCategoryBySlug(slug))),
-    getCities({ limit: 4 }),
-    getCategories({ limit: 6 }),
+    Promise.all(featuredCitySlugs.map((slug) => getCityBySlug(slug, { revalidate: 60 }))),
+    Promise.all(featuredCategorySlugs.map((slug) => getCategoryBySlug(slug, { revalidate: 60 }))),
+    getCities({ limit: 4, revalidate: 60 }),
+    getCategories({ limit: 6, revalidate: 60 }),
     getListings({ limit: 4, sort: '-updatedAt' }),
     getGuides({ limit: 2, sort: '-updatedAt' }),
     getUpcomingEvents({ limit: 2, sort: 'startDate' }),
-    itinerarySlugFromCta ? getItineraryBySlug(itinerarySlugFromCta) : Promise.resolve(null),
+    itinerarySlugFromCta ? getItineraryBySlug(itinerarySlugFromCta, { revalidate: 60 }) : Promise.resolve(null),
     getItineraries({ limit: 1, sort: '-updatedAt' })
   ])
 
@@ -102,7 +101,7 @@ const loadHomepageRouteModelImpl = async (): Promise<HomepageRouteModel> => {
   }
 }
 
-const loadHomepageRouteModel = cache(loadHomepageRouteModelImpl)
+const loadHomepageRouteModel = loadHomepageRouteModelImpl
 
 export async function generateMetadata(): Promise<Metadata> {
   const model = await loadHomepageRouteModel()

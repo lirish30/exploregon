@@ -261,9 +261,20 @@ export interface ListingCategory {
   slug: string;
   description: string;
   /**
-   * Use a stable icon token, e.g., hotel, beach, hiking.
+   * Choose a stable icon token used by the web app icon renderer.
    */
-  icon: string;
+  icon:
+    | 'hotel'
+    | 'bed'
+    | 'campground'
+    | 'rv'
+    | 'home'
+    | 'restaurant'
+    | 'beach'
+    | 'whale'
+    | 'hiking'
+    | 'tidepool'
+    | 'family';
   seoTitle: string;
   seoDescription: string;
   updatedAt: string;

@@ -19,13 +19,13 @@ export const HomepagePage = ({ model, resolveMediaUrl }: HomepagePageProps) => {
   return (
     <>
       <HomepageHero hero={model.hero} heroImageUrl={resolveMediaUrl(model.hero.image?.url)} />
-      <HomepageCategoryShortcuts model={model} resolveMediaUrl={resolveMediaUrl} />
-      <HomepageDestinations model={model} resolveMediaUrl={resolveMediaUrl} />
-      <HomepageTripFinder model={model} resolveMediaUrl={resolveMediaUrl} />
-      <HomepageUtilitySnapshot model={model} resolveMediaUrl={resolveMediaUrl} />
-      <HomepageEditorial model={model} resolveMediaUrl={resolveMediaUrl} />
-      <HomepageListings model={model} resolveMediaUrl={resolveMediaUrl} />
-      <HomepagePlanningBanner model={model} resolveMediaUrl={resolveMediaUrl} />
+      <HomepageCategoryShortcuts categoryHighlights={model.categoryHighlights} />
+      <HomepageDestinations destinationStrip={model.destinationStrip} resolveMediaUrl={resolveMediaUrl} />
+      <HomepageTripFinder tripFinder={model.tripFinder} />
+      <HomepageUtilitySnapshot utilitySnapshot={model.utilitySnapshot} />
+      <HomepageEditorial coastalPulse={model.coastalPulse} resolveMediaUrl={resolveMediaUrl} />
+      <HomepageListings editorsChoice={model.editorsChoice} resolveMediaUrl={resolveMediaUrl} />
+      <HomepagePlanningBanner planningBanner={model.planningBanner} />
     </>
   )
 }
