@@ -39,7 +39,6 @@ export const HomepageDestinations = ({ model, resolveMediaUrl }: SharedProps) =>
       <div className="container">
         <div className="coast-home-section-head">
           <div>
-            <p className="coast-home-eyebrow coast-home-eyebrow-dark">Coastal Basecamps</p>
             <h2 className="coast-home-section-title">Every town has a different rhythm.</h2>
             <p className="coast-home-section-copy">
               Compare launch cities by vibe, access, and what kind of coast weekend they support best.
@@ -64,8 +63,11 @@ export const HomepageDestinations = ({ model, resolveMediaUrl }: SharedProps) =>
               <div className="coast-home-destination-body">
                 <h3>{city.name}</h3>
                 <div className="coast-home-badge-row">
-                  {city.badges.map((badge) => (
-                    <span key={`${city.name}-${badge}`} className="coast-home-badge">
+                  {city.badges.map((badge, badgeIndex) => (
+                    <span
+                      key={`${city.name}-${badge}`}
+                      className={`coast-home-badge coast-home-badge-level-${(badgeIndex % 3) + 1}`}
+                    >
                       {badge}
                     </span>
                   ))}
@@ -97,7 +99,6 @@ export const HomepageTripFinder = ({ model }: SharedProps) => {
       <div className="container">
         <div className="coast-home-trip-finder">
           <div className="coast-home-trip-copy">
-            <p className="coast-home-eyebrow coast-home-eyebrow-dark">Find your ideal match</p>
             <h2 className="coast-home-section-title">{model.tripFinder.title}</h2>
             <p className="coast-home-section-copy">{model.tripFinder.intro}</p>
             <div className="coast-home-trip-actions">
@@ -138,7 +139,6 @@ export const HomepageUtilitySnapshot = ({ model }: SharedProps) => {
     <section className="section coast-home-utility-wrap">
       <div className="container coast-home-utility-grid">
         <div className="coast-home-utility-copy">
-          <p className="coast-home-eyebrow coast-home-eyebrow-dark">Coastal planning dashboard</p>
           <h2 className="coast-home-section-title">{model.utilitySnapshot.title}</h2>
           <p className="coast-home-section-copy">{model.utilitySnapshot.intro}</p>
           <div className="coast-home-trip-actions">
@@ -170,7 +170,6 @@ export const HomepageEditorial = ({ model, resolveMediaUrl }: SharedProps) => {
       <div className="container">
         <div className="coast-home-section-head coast-home-section-head-stack">
           <div>
-            <p className="coast-home-eyebrow coast-home-eyebrow-dark">Editor&apos;s Choice Weekly</p>
             <h2 className="coast-home-section-title">{model.coastalPulse.title}</h2>
             <p className="coast-home-section-copy">{model.coastalPulse.intro}</p>
           </div>
@@ -225,7 +224,6 @@ export const HomepageListings = ({ model, resolveMediaUrl }: SharedProps) => {
       <div className="container">
         <div className="coast-home-section-head coast-home-section-head-stack">
           <div>
-            <p className="coast-home-eyebrow coast-home-eyebrow-dark">Coastal Finds</p>
             <h2 className="coast-home-section-title">Practical directory picks for launch.</h2>
           </div>
         </div>
@@ -266,7 +264,7 @@ export const HomepagePlanningBanner = ({ model }: SharedProps) => {
   return (
     <section className="section">
       <div className="container">
-        <div className="coast-home-signup">
+        <div className="coast-home-signup" id="newsletter">
           <div className="coast-home-signup-copy">
             <h2>{model.planningBanner.title}</h2>
             <p>{model.planningBanner.body}</p>
@@ -275,8 +273,8 @@ export const HomepagePlanningBanner = ({ model }: SharedProps) => {
             <label htmlFor="coast-home-email" className="sr-only">
               Email address
             </label>
-            <input id="coast-home-email" name="email" type="email" required placeholder="Email Address" />
-            <Link href={model.planningBanner.button.href} className="button-primary">
+            <input id="coast-home-email" name="email" type="email" required placeholder="Your email address" />
+            <Link href={model.planningBanner.button.href} className="button-secondary coast-home-signup-submit">
               {model.planningBanner.button.label}
             </Link>
           </form>
