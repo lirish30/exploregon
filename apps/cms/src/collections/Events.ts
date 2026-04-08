@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { contentCollectionAccess } from '../access/contentAccess.ts'
 import { createEditorialPublishRequirements } from '../hooks/enforceEditorialPublishRequirements.ts'
+import { withCollectionCSV } from '../utilities/collectionCSV.ts'
 import { createSlugField } from '../utilities/slug.ts'
 import { editorialStatusField } from '../utilities/status.ts'
 
@@ -22,7 +23,7 @@ const validateOptionalUrl = (value: unknown): true | string => {
   }
 }
 
-export const Events: CollectionConfig = {
+export const Events: CollectionConfig = withCollectionCSV({
   slug: 'events',
   access: contentCollectionAccess,
   labels: {
@@ -122,4 +123,4 @@ export const Events: CollectionConfig = {
       maxLength: 160
     }
   ]
-}
+})

@@ -2,10 +2,11 @@ import type { CollectionConfig } from 'payload'
 
 import { contentCollectionAccess } from '../access/contentAccess.ts'
 import { createEditorialPublishRequirements } from '../hooks/enforceEditorialPublishRequirements.ts'
+import { withCollectionCSV } from '../utilities/collectionCSV.ts'
 import { createSlugField } from '../utilities/slug.ts'
 import { editorialStatusField } from '../utilities/status.ts'
 
-export const Guides: CollectionConfig = {
+export const Guides: CollectionConfig = withCollectionCSV({
   slug: 'guides',
   access: contentCollectionAccess,
   labels: {
@@ -88,4 +89,4 @@ export const Guides: CollectionConfig = {
     },
     editorialStatusField()
   ]
-}
+})

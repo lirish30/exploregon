@@ -2,10 +2,11 @@ import type { CollectionConfig } from 'payload'
 
 import { contentCollectionAccess } from '../access/contentAccess.ts'
 import { createEditorialPublishRequirements } from '../hooks/enforceEditorialPublishRequirements.ts'
+import { withCollectionCSV } from '../utilities/collectionCSV.ts'
 import { createSlugField } from '../utilities/slug.ts'
 import { editorialStatusField } from '../utilities/status.ts'
 
-export const Itineraries: CollectionConfig = {
+export const Itineraries: CollectionConfig = withCollectionCSV({
   slug: 'itineraries',
   access: contentCollectionAccess,
   labels: {
@@ -90,4 +91,4 @@ export const Itineraries: CollectionConfig = {
       maxLength: 160
     }
   ]
-}
+})

@@ -1,10 +1,11 @@
 import type { CollectionConfig } from 'payload'
 
 import { contentCollectionAccess } from '../access/contentAccess.ts'
+import { withCollectionCSV } from '../utilities/collectionCSV.ts'
 import { createSlugField } from '../utilities/slug.ts'
 import { cityStatusField } from '../utilities/status.ts'
 
-export const Cities: CollectionConfig = {
+export const Cities: CollectionConfig = withCollectionCSV({
   slug: 'cities',
   access: contentCollectionAccess,
   labels: {
@@ -132,4 +133,4 @@ export const Cities: CollectionConfig = {
     },
     cityStatusField()
   ]
-}
+})
