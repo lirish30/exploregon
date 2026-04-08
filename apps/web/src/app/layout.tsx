@@ -52,6 +52,7 @@ const fallbackSiteSettings: SiteSettingsGlobal = {
 
 const fallbackNavigation: NavigationGlobal = {
   headerNavItems: [],
+  headerActionButtons: [],
   footerNavGroups: []
 }
 
@@ -108,8 +109,9 @@ gtag('config', '${gaMeasurementId}', { anonymize_ip: true });`}
         <div className="site-shell">
           <SiteHeader
             siteName={siteSettings.siteName}
-            siteTagline={siteSettings.siteTagline}
+            logo={navigation.logo ?? null}
             navItems={navigation.headerNavItems ?? fallbackNavigation.headerNavItems ?? []}
+            actionButtons={navigation.headerActionButtons ?? []}
           />
           <main id="content" className="shell-main">
             {children}

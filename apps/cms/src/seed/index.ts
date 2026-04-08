@@ -1426,6 +1426,10 @@ export async function seed(): Promise<void> {
           { label: 'Events', url: '/events', openInNewTab: false },
           { label: 'Map', url: '/map', openInNewTab: false }
         ],
+        headerActionButtons: [
+          { label: 'Coast Conditions', url: '/weather-tides', openInNewTab: false },
+          { label: 'Build a Trip', url: '/itineraries', openInNewTab: false }
+        ],
         footerNavGroups: [
           {
             groupLabel: 'Explore',

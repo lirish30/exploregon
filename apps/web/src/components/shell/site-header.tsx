@@ -1,15 +1,21 @@
 import Link from 'next/link'
 
-import type { LinkItem } from '../../lib/types'
+import { toPayloadMediaUrl } from '../../lib/schema'
+import type { HeaderActionButton, LinkItem, NormalizedMedia } from '../../lib/types'
 import { Container } from '../primitives/container'
 
 type SiteHeaderProps = {
   siteName: string
-  siteTagline: string
+  logo: NormalizedMedia | null
   navItems: LinkItem[]
+  actionButtons: HeaderActionButton[]
 }
 
-export const SiteHeader = ({ siteName, siteTagline, navItems }: SiteHeaderProps) => {
+export const SiteHeader = ({ siteName, logo, navItems, actionButtons }: SiteHeaderProps) => {
+  const logoUrl = toPayloadMediaUrl(logo?.url)
+  const logoAlt = logo?.alt?.trim() || `${siteName} logo`
+  const rightButtons = actionButtons.slice(0, 2)
+
   return (
     <header className="site-header">
       <Container>
@@ -17,9 +23,12 @@ export const SiteHeader = ({ siteName, siteTagline, navItems }: SiteHeaderProps)
           {/* Brand */}
           <div className="brand-block">
             <Link href="/" className="brand-name">
-              {siteName}
+              {logoUrl ? (
+                <img src={logoUrl} alt={logoAlt} className="brand-logo" />
+              ) : (
+                siteName
+              )}
             </Link>
-            <p className="brand-tagline">{siteTagline}</p>
           </div>
           {/*
            * Nav uses a <details>/<summary> approach so it is:
@@ -30,8 +39,21 @@ export const SiteHeader = ({ siteName, siteTagline, navItems }: SiteHeaderProps)
            * On desktop: .nav-toggle is display:none and .header-nav is always flex.
            * On mobile:  .nav-toggle shows the hamburger/close icon; .header-nav is
            *             hidden until details[open], then slides in as a dropdown.
-           */}
-          <div className="header-actions">
+          */}
+          <nav aria-label="Primary" className="header-nav header-nav-desktop">
+            {navItems.map((item) => (
+              <Link
+                key={`${item.label}-${item.url}`}
+                href={item.url}
+                className="header-nav-link"
+                target={item.openInNewTab ? '_blank' : undefined}
+                rel={item.openInNewTab ? 'noreferrer' : undefined}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="header-right">
             <details className="nav-details">
               <summary className="nav-toggle" aria-label="Toggle navigation">
                 {/* Hamburger bars — shown when menu is closed */}
@@ -45,7 +67,7 @@ export const SiteHeader = ({ siteName, siteTagline, navItems }: SiteHeaderProps)
                   ✕
                 </span>
               </summary>
-              <nav aria-label="Primary" className="header-nav">
+              <nav aria-label="Primary" className="header-nav header-nav-mobile">
                 {navItems.map((item) => (
                   <Link
                     key={`${item.label}-${item.url}`}
@@ -59,14 +81,21 @@ export const SiteHeader = ({ siteName, siteTagline, navItems }: SiteHeaderProps)
                 ))}
               </nav>
             </details>
-            <div className="header-utility-links">
-              <Link href="/weather-tides" className="header-utility-link">
-                Coast Conditions
-              </Link>
-              <Link href="/itineraries" className="button-primary header-cta">
-                Build a Trip
-              </Link>
-            </div>
+            {rightButtons.length > 0 ? (
+              <div className="header-utility-links">
+                {rightButtons.map((button, index) => (
+                  <Link
+                    key={`${button.label}-${button.url}-${index}`}
+                    href={button.url}
+                    className={index === 0 ? 'header-utility-link' : 'button-primary header-cta'}
+                    target={button.openInNewTab ? '_blank' : undefined}
+                    rel={button.openInNewTab ? 'noreferrer' : undefined}
+                  >
+                    {button.label}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
       </Container>

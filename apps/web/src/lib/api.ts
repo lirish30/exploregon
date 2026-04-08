@@ -3,6 +3,7 @@ import type {
   CityDoc,
   FooterGlobal,
   GuideDoc,
+  HeaderActionButton,
   HomepageGlobal,
   ID,
   ItineraryDoc,
@@ -432,7 +433,29 @@ const normalizeSiteSettings = (settings: Partial<SiteSettingsGlobal> | null | un
 })
 
 const normalizeNavigation = (navigation: Partial<NavigationGlobal> | null | undefined): NavigationGlobal => ({
+  logo: normalizeMedia((navigation as { logo?: PayloadRelationship<PayloadMedia> } | null | undefined)?.logo),
   headerNavItems: Array.isArray(navigation?.headerNavItems) ? navigation.headerNavItems : [],
+  headerActionButtons: Array.isArray(navigation?.headerActionButtons)
+    ? navigation.headerActionButtons
+        .map((button): HeaderActionButton | null => {
+          if (!button || typeof button.label !== 'string' || typeof button.url !== 'string') {
+            return null
+          }
+
+          const label = button.label.trim()
+          const url = button.url.trim()
+          if (!label || !url) {
+            return null
+          }
+
+          return {
+            label,
+            url,
+            openInNewTab: button.openInNewTab === true
+          }
+        })
+        .filter((button): button is HeaderActionButton => button !== null)
+    : [],
   footerNavGroups: Array.isArray(navigation?.footerNavGroups) ? navigation.footerNavGroups : []
 })
 

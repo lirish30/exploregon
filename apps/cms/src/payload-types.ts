@@ -911,7 +911,16 @@ export interface Homepage {
  */
 export interface Navigation {
   id: number;
+  logo?: (number | null) | Media;
   headerNavItems?:
+    | {
+        label: string;
+        url: string;
+        openInNewTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  headerActionButtons?:
     | {
         label: string;
         url: string;
@@ -1030,7 +1039,16 @@ export interface HomepageSelect<T extends boolean = true> {
  * via the `definition` "navigation_select".
  */
 export interface NavigationSelect<T extends boolean = true> {
+  logo?: T;
   headerNavItems?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        openInNewTab?: T;
+        id?: T;
+      };
+  headerActionButtons?:
     | T
     | {
         label?: T;

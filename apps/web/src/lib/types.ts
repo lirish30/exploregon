@@ -182,8 +182,16 @@ export type LinkItem = {
   openInNewTab?: boolean
 }
 
+export type HeaderActionButton = {
+  label: string
+  url: string
+  openInNewTab?: boolean
+}
+
 export type NavigationGlobal = {
+  logo?: NormalizedMedia | null
   headerNavItems?: LinkItem[]
+  headerActionButtons?: HeaderActionButton[]
   footerNavGroups?: Array<{
     groupLabel: string
     links: LinkItem[]

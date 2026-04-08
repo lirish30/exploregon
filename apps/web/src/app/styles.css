@@ -145,25 +145,28 @@ a:focus-visible {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(244, 250, 254, 0.9);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--line-soft);
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom: none;
 }
 
 .site-header-inner {
   min-height: 4.2rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 1.25rem;
 }
 
 .brand-block {
-  display: grid;
-  gap: 0.05rem;
+  display: flex;
+  align-items: center;
+  justify-self: start;
 }
 
 .brand-name {
+  display: inline-flex;
+  align-items: center;
   margin: 0;
   font-family: var(--font-heading);
   font-size: 1.35rem;
@@ -172,14 +175,15 @@ a:focus-visible {
   text-decoration: none;
 }
 
-.brand-tagline {
-  margin: 0;
-  color: var(--ink-muted);
-  font-size: 0.78rem;
+.brand-logo {
+  display: block;
+  height: clamp(1.75rem, 2.2vw, 2.2rem);
+  width: auto;
+  max-width: min(15.5rem, 38vw);
 }
 
 .nav-details {
-  /* On desktop, acts as a transparent wrapper — summary is hidden */
+  display: none;
 }
 
 /* Hide the toggle summary on desktop */
@@ -212,13 +216,26 @@ a:focus-visible {
 .header-nav {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 0.25rem;
 }
 
-.header-actions {
+.header-nav-desktop {
+  background: rgba(244, 250, 254, 0.9);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  padding: 0.3rem 32px;
+}
+
+.header-nav-mobile {
+  display: none;
+}
+
+.header-right {
   display: flex;
   align-items: center;
+  justify-self: end;
   gap: 1rem;
 }
 
@@ -1645,6 +1662,8 @@ a:focus-visible {
   .site-header-inner {
     min-height: auto;
     padding: 0.75rem 0;
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem;
   }
 
   /* Show the hamburger toggle on mobile */
@@ -1688,16 +1707,21 @@ a:focus-visible {
 
   /* Position nav-details relatively so dropdown anchors to it */
   .nav-details {
+    display: block;
     position: relative;
   }
 
+  .header-nav-desktop {
+    display: none;
+  }
+
   /* Hide nav when details is closed */
-  .nav-details:not([open]) .header-nav {
+  .nav-details:not([open]) .header-nav-mobile {
     display: none;
   }
 
   /* Dropdown nav when open */
-  .nav-details[open] .header-nav {
+  .nav-details[open] .header-nav-mobile {
     display: grid;
     grid-template-columns: 1fr;
     position: absolute;
@@ -1713,21 +1737,21 @@ a:focus-visible {
     z-index: 50;
   }
 
-  .nav-details[open] .header-nav-link {
+  .nav-details[open] .header-nav-mobile .header-nav-link {
     justify-content: flex-start;
     padding: 0.6rem 0.75rem;
     font-size: 0.95rem;
     border-radius: var(--radius-sm);
   }
 
-  .nav-details[open] .header-nav-link:hover {
+  .nav-details[open] .header-nav-mobile .header-nav-link:hover {
     background: var(--surface-low);
   }
 
-  .header-actions {
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
+  .header-right {
+    justify-self: end;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .header-utility-links {
@@ -1759,6 +1783,8 @@ a:focus-visible {
 .coast-home-hero {
   position: relative;
   min-height: min(88vh, 58rem);
+  margin-top: -4.2rem;
+  padding-top: 4.2rem;
   overflow: clip;
   background: #102d34;
   color: #f7f3eb;
