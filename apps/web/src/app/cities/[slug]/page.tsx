@@ -20,11 +20,11 @@ import {
 import { toPayloadMediaUrl } from '../../../lib/schema'
 import { buildEntityBreadcrumbs, createMetadata } from '../../../lib/seo'
 import type {
-  NormalizedCategory,
   NormalizedCity,
   NormalizedEvent,
   NormalizedGuide,
   NormalizedListing,
+  NormalizedReference,
   SiteSettingsGlobal
 } from '../../../lib/types'
 
@@ -64,8 +64,8 @@ const formatDate = (value: string): string => {
   }).format(date)
 }
 
-const topCategoriesFromListings = (listings: NormalizedListing[]): NormalizedCategory[] => {
-  const map = new Map<string, NormalizedCategory & { count: number }>()
+const topCategoriesFromListings = (listings: NormalizedListing[]): NormalizedReference[] => {
+  const map = new Map<string, NormalizedReference & { count: number }>()
 
   for (const listing of listings) {
     for (const category of listing.categories) {
@@ -78,13 +78,7 @@ const topCategoriesFromListings = (listings: NormalizedListing[]): NormalizedCat
         map.set(category.slug, {
           id: category.id,
           slug: category.slug,
-          name: category.label,
-          description: '',
-          icon: '',
-          seo: {
-            title: category.label,
-            description: ''
-          },
+          label: category.label,
           count: 1
         })
       }
@@ -92,8 +86,30 @@ const topCategoriesFromListings = (listings: NormalizedListing[]): NormalizedCat
   }
 
   return [...map.values()]
-    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
+    .map((category) => ({
+      id: category.id,
+      slug: category.slug,
+      label: category.label
+    }))
     .slice(0, 6)
+}
+
+const listingsForCategories = (listings: NormalizedListing[], categorySlugs: string[]): NormalizedListing[] => {
+  if (!categorySlugs.length) {
+    return []
+  }
+
+  const slugSet = new Set(categorySlugs)
+  return listings.filter((listing) => listing.categories.some((category) => slugSet.has(category.slug)))
+}
+
+const selectedCategorySlugs = (
+  categories: NormalizedCity['listingSections']['hotels']['categories'],
+  fallbackSlugs: string[]
+): string[] => {
+  const slugs = categories.map((category) => category.slug)
+  return slugs.length ? slugs : fallbackSlugs
 }
 
 const relatedGuidesForCity = (guides: NormalizedGuide[], citySlug: string): NormalizedGuide[] => {
@@ -158,11 +174,49 @@ export default async function CityPage({ params }: CityPageProps) {
     city.region ? getCitiesByRegion(city.region.id, { sort: 'name', limit: 24 }) : Promise.resolve([])
   ])
 
-  const featuredListings = listings.slice(0, 6)
-  const topCategories = topCategoriesFromListings(listings)
+  const inferredTopCategories = topCategoriesFromListings(listings)
+  const topCategories = city.topCategories.categories.length ? city.topCategories.categories : inferredTopCategories
+  const topCategoryListings = listingsForCategories(
+    listings,
+    topCategories.map((category) => category.slug)
+  )
   const relatedGuides = relatedGuidesForCity(guides, city.slug)
   const nearbyCities = nearbyCitiesForRegion(nearbyRegionCities, city)
   const breadcrumbs = buildEntityBreadcrumbs('cities', city.name, city.slug)
+  const fallbackCategorySlugs = {
+    hotels: ['hotels', 'campgrounds', 'rv-parks', 'vacation-rentals'],
+    dining: ['restaurants'],
+    attractions: ['beaches', 'family-activities', 'hiking', 'tide-pools', 'whale-watching']
+  }
+  const listingSections = [
+    {
+      id: 'hotels',
+      section: city.listingSections.hotels,
+      listings: listingsForCategories(
+        listings,
+        selectedCategorySlugs(city.listingSections.hotels.categories, fallbackCategorySlugs.hotels)
+      ).slice(0, 6),
+      emptyMessage: 'No hotel listings are available for this city yet.'
+    },
+    {
+      id: 'dining',
+      section: city.listingSections.dining,
+      listings: listingsForCategories(
+        listings,
+        selectedCategorySlugs(city.listingSections.dining.categories, fallbackCategorySlugs.dining)
+      ).slice(0, 6),
+      emptyMessage: 'No dining listings are available for this city yet.'
+    },
+    {
+      id: 'attractions',
+      section: city.listingSections.attractions,
+      listings: listingsForCategories(
+        listings,
+        selectedCategorySlugs(city.listingSections.attractions.categories, fallbackCategorySlugs.attractions)
+      ).slice(0, 6),
+      emptyMessage: 'No attraction listings are available for this city yet.'
+    }
+  ] as const
 
   const heroBackgroundImage = toPayloadMediaUrl(city.heroImage?.url)
 
@@ -205,48 +259,60 @@ export default async function CityPage({ params }: CityPageProps) {
         </div>
       </Section>
 
-      <Section>
-        <SectionHeading
-          kicker="Featured Listings"
-          title={`Where to stay, eat, and explore in ${city.name}`}
-          lede="Curated published listings connected to this city in Payload."
-        />
-        {featuredListings.length ? (
+      {listingSections.map((listingSection) => (
+        <Section key={listingSection.id}>
+          <SectionHeading
+            kicker={listingSection.section.kicker}
+            title={`${listingSection.section.title} in ${city.name}`}
+            lede={listingSection.section.lede}
+          />
+          {listingSection.section.categories.length ? (
+            <div className="city-link-row">
+              {listingSection.section.categories.map((category) => (
+                <Link key={`${listingSection.id}-${category.slug}`} href={`/categories/${category.slug}`} className="city-link-chip">
+                  {category.label}
+                </Link>
+              ))}
+            </div>
+          ) : null}
+          {listingSection.listings.length ? (
+            <div className="city-card-grid">
+              {listingSection.listings.map((listing) => (
+                <article key={listing.slug} className="city-listing-card">
+                  <p className="city-listing-kicker">{listing.categories[0]?.label ?? 'Featured Listing'}</p>
+                  <h3 className="city-listing-title">{listing.name}</h3>
+                  <p className="city-listing-summary">{listing.summary}</p>
+                  <div className="city-listing-links">
+                    <Link href={`/listings/${listing.slug}`} className="city-inline-link">
+                      View listing
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="city-empty">{listingSection.emptyMessage}</p>
+          )}
+        </Section>
+      ))}
+
+      <Section surface="muted">
+        <SectionHeading kicker={city.topCategories.kicker} title={city.topCategories.title} lede={city.topCategories.lede} />
+        {topCategoryListings.length ? (
           <div className="city-card-grid">
-            {featuredListings.map((listing) => (
-              <article key={listing.slug} className="city-listing-card">
-                <p className="city-listing-kicker">{listing.categories[0]?.label ?? 'Featured Listing'}</p>
-                <h3 className="city-listing-title">{listing.name}</h3>
-                <p className="city-listing-summary">{listing.summary}</p>
-                <div className="city-listing-links">
-                  <Link href={`/listings/${listing.slug}`} className="city-inline-link">
-                    View listing
-                  </Link>
-                </div>
+            {topCategoryListings.map((listing) => (
+              <article key={listing.slug} className="city-top-category-card">
+                <p className="city-top-category-kicker">{city.name}</p>
+                <h3 className="city-top-category-title">{listing.name}</h3>
+                <p className="city-top-category-summary">{listing.summary}</p>
+                <Link href={`/listings/${listing.slug}`} className="city-inline-link">
+                  View listing
+                </Link>
               </article>
             ))}
           </div>
         ) : (
-          <p className="city-empty">No featured listings are available for this city yet.</p>
-        )}
-      </Section>
-
-      <Section surface="muted">
-        <SectionHeading
-          kicker="Top Categories"
-          title="Most useful category paths"
-          lede="These categories are inferred from currently published city listings."
-        />
-        {topCategories.length ? (
-          <div className="city-link-row">
-            {topCategories.map((category) => (
-              <Link key={category.slug} href={`/categories/${category.slug}`} className="city-link-chip">
-                {category.name}
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <p className="city-empty">No listing categories are available for this city yet.</p>
+          <p className="city-empty">No listings are available for the selected categories in this city yet.</p>
         )}
       </Section>
 
@@ -340,7 +406,7 @@ export default async function CityPage({ params }: CityPageProps) {
                 {topCategories.map((category) => (
                   <li key={category.slug}>
                     <Link href={`/categories/${category.slug}`} className="city-inline-link">
-                      {category.name}
+                      {category.label}
                     </Link>
                   </li>
                 ))}

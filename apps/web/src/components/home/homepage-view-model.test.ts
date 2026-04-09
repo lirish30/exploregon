@@ -66,6 +66,32 @@ const makeCity = (overrides: Partial<NormalizedCity>): NormalizedCity => ({
   intro: 'Intro',
   whyVisit: 'Why visit',
   whenToGo: 'When to go',
+  listingSections: {
+    hotels: {
+      kicker: 'Hotels',
+      title: 'Where to stay',
+      lede: 'Curated places to stay.',
+      categories: []
+    },
+    dining: {
+      kicker: 'Dining',
+      title: 'Where to eat',
+      lede: 'Curated dining spots.',
+      categories: []
+    },
+    attractions: {
+      kicker: 'Attractions',
+      title: 'Where to explore',
+      lede: 'Curated attractions and experiences.',
+      categories: []
+    }
+  },
+  topCategories: {
+    kicker: 'Top Categories',
+    title: 'Most useful category paths',
+    lede: 'Seeded top category pathways.',
+    categories: []
+  },
   featuredHighlights: ['Immediate beach access', 'Luxury resorts', 'Walkable galleries'],
   latitude: 45.8918,
   longitude: -123.9615,

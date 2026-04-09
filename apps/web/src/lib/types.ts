@@ -41,6 +41,32 @@ export type CityDoc = SeoFields & {
   intro: string
   whyVisit: string
   whenToGo: string
+  listingSections?: {
+    hotels?: {
+      kicker: string
+      title: string
+      lede: string
+      categories?: Array<PayloadRelationship<ListingCategoryDoc>>
+    }
+    dining?: {
+      kicker: string
+      title: string
+      lede: string
+      categories?: Array<PayloadRelationship<ListingCategoryDoc>>
+    }
+    attractions?: {
+      kicker: string
+      title: string
+      lede: string
+      categories?: Array<PayloadRelationship<ListingCategoryDoc>>
+    }
+  }
+  topCategories?: {
+    kicker: string
+    title: string
+    lede: string
+    categories?: Array<PayloadRelationship<ListingCategoryDoc>>
+  }
   featuredHighlights?: Array<{ highlight: string }>
   latitude: number
   longitude: number
@@ -243,6 +269,32 @@ export type NormalizedCity = {
   intro: string
   whyVisit: string
   whenToGo: string
+  listingSections: {
+    hotels: {
+      kicker: string
+      title: string
+      lede: string
+      categories: NormalizedReference[]
+    }
+    dining: {
+      kicker: string
+      title: string
+      lede: string
+      categories: NormalizedReference[]
+    }
+    attractions: {
+      kicker: string
+      title: string
+      lede: string
+      categories: NormalizedReference[]
+    }
+  }
+  topCategories: {
+    kicker: string
+    title: string
+    lede: string
+    categories: NormalizedReference[]
+  }
   featuredHighlights: string[]
   latitude: number
   longitude: number

@@ -243,7 +243,18 @@ const normalizeRegion = (doc: RegionDoc): NormalizedRegion => ({
   }
 })
 
-const normalizeCity = (doc: CityDoc): NormalizedCity => ({
+const normalizeCity = (doc: CityDoc): NormalizedCity => {
+  const defaultSection = (
+    section: { kicker?: string; title?: string; lede?: string; categories?: Array<PayloadRelationship<Record<string, unknown>>> } | undefined,
+    fallback: { kicker: string; title: string; lede: string }
+  ) => ({
+    kicker: asNonEmptyString(section?.kicker, fallback.kicker),
+    title: asNonEmptyString(section?.title, fallback.title),
+    lede: asNonEmptyString(section?.lede, fallback.lede),
+    categories: normalizeReferences(section?.categories, ['name', 'title'])
+  })
+
+  return {
   id: doc.id,
   name: doc.name,
   slug: doc.slug,
@@ -252,6 +263,32 @@ const normalizeCity = (doc: CityDoc): NormalizedCity => ({
   intro: doc.intro,
   whyVisit: doc.whyVisit,
   whenToGo: doc.whenToGo,
+  listingSections: {
+    hotels: defaultSection(doc.listingSections?.hotels, {
+      kicker: 'Hotels',
+      title: 'Where to stay',
+      lede: 'Curated places to stay connected to this city in Payload.'
+    }),
+    dining: defaultSection(doc.listingSections?.dining, {
+      kicker: 'Dining',
+      title: 'Where to eat',
+      lede: 'Curated dining spots connected to this city in Payload.'
+    }),
+    attractions: defaultSection(doc.listingSections?.attractions, {
+      kicker: 'Attractions',
+      title: 'Where to explore',
+      lede: 'Curated attractions and experiences connected to this city in Payload.'
+    })
+  },
+  topCategories: {
+    kicker: asNonEmptyString(doc.topCategories?.kicker, 'Top Categories'),
+    title: asNonEmptyString(doc.topCategories?.title, 'Most useful category paths'),
+    lede: asNonEmptyString(
+      doc.topCategories?.lede,
+      'These categories are inferred from currently published city listings.'
+    ),
+    categories: normalizeReferences(doc.topCategories?.categories, ['name', 'title'])
+  },
   featuredHighlights: (doc.featuredHighlights ?? []).map((item) => item.highlight),
   latitude: doc.latitude,
   longitude: doc.longitude,
@@ -264,7 +301,8 @@ const normalizeCity = (doc: CityDoc): NormalizedCity => ({
     title: doc.seoTitle,
     description: doc.seoDescription
   }
-})
+  }
+}
 
 const normalizeCategory = (doc: ListingCategoryDoc): NormalizedCategory => ({
   id: doc.id,

@@ -226,6 +226,32 @@ export interface City {
   intro: string;
   whyVisit: string;
   whenToGo: string;
+  listingSections: {
+    hotels: {
+      kicker: string;
+      title: string;
+      lede: string;
+      categories?: (number | ListingCategory)[] | null;
+    };
+    dining: {
+      kicker: string;
+      title: string;
+      lede: string;
+      categories?: (number | ListingCategory)[] | null;
+    };
+    attractions: {
+      kicker: string;
+      title: string;
+      lede: string;
+      categories?: (number | ListingCategory)[] | null;
+    };
+  };
+  topCategories: {
+    kicker: string;
+    title: string;
+    lede: string;
+    categories?: (number | ListingCategory)[] | null;
+  };
   featuredHighlights: {
     highlight: string;
     id?: string | null;
@@ -580,6 +606,42 @@ export interface CitiesSelect<T extends boolean = true> {
   intro?: T;
   whyVisit?: T;
   whenToGo?: T;
+  listingSections?:
+    | T
+    | {
+        hotels?:
+          | T
+          | {
+              kicker?: T;
+              title?: T;
+              lede?: T;
+              categories?: T;
+            };
+        dining?:
+          | T
+          | {
+              kicker?: T;
+              title?: T;
+              lede?: T;
+              categories?: T;
+            };
+        attractions?:
+          | T
+          | {
+              kicker?: T;
+              title?: T;
+              lede?: T;
+              categories?: T;
+            };
+      };
+  topCategories?:
+    | T
+    | {
+        kicker?: T;
+        title?: T;
+        lede?: T;
+        categories?: T;
+      };
   featuredHighlights?:
     | T
     | {

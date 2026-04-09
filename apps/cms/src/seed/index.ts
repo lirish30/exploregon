@@ -1209,6 +1209,20 @@ export async function seed(): Promise<void> {
     const cityBySlug = new Map<string, SluggedDoc>()
     const categoryBySlug = new Map<string, SluggedDoc>()
     const listingBySlug = new Map<string, SluggedDoc>()
+    const categorySlugsBySection = {
+      hotels: ['hotels', 'campgrounds', 'rv-parks', 'vacation-rentals'],
+      dining: ['restaurants'],
+      attractions: ['beaches', 'family-activities', 'hiking', 'tide-pools', 'whale-watching']
+    } as const
+
+    const resolveCategoryIds = (sectionName: string, categorySlugs: readonly string[]) =>
+      categorySlugs.map((categorySlug) => {
+        const categoryDoc = categoryBySlug.get(categorySlug)
+        if (!categoryDoc) {
+          throw new Error(`Missing category ${categorySlug} for ${sectionName}`)
+        }
+        return categoryDoc.id
+      })
 
     for (const region of regions) {
       const regionDoc = await upsertBySlug(payload, 'regions', region.slug, {
@@ -1218,11 +1232,23 @@ export async function seed(): Promise<void> {
       regionBySlug.set(region.slug, regionDoc)
     }
 
+    for (const category of categories) {
+      const categoryDoc = await upsertBySlug(payload, 'listingCategories', category.slug, category)
+      categoryBySlug.set(category.slug, categoryDoc)
+    }
+
     for (const city of cities) {
       const regionDoc = regionBySlug.get(city.regionSlug)
       if (!regionDoc) {
         throw new Error(`Missing region for city ${city.slug}`)
       }
+
+      const hotelCategoryIds = resolveCategoryIds(`city ${city.slug} hotels section`, categorySlugsBySection.hotels)
+      const diningCategoryIds = resolveCategoryIds(`city ${city.slug} dining section`, categorySlugsBySection.dining)
+      const attractionCategoryIds = resolveCategoryIds(
+        `city ${city.slug} attractions section`,
+        categorySlugsBySection.attractions
+      )
 
       const cityDoc = await upsertBySlug(payload, 'cities', city.slug, {
         name: city.name,
@@ -1233,6 +1259,26 @@ export async function seed(): Promise<void> {
         intro: city.intro,
         whyVisit: city.whyVisit,
         whenToGo: city.whenToGo,
+        listingSections: {
+          hotels: {
+            kicker: 'Hotels',
+            title: 'Where to stay',
+            lede: `Find curated places to stay in and around ${city.name}.`,
+            categories: hotelCategoryIds
+          },
+          dining: {
+            kicker: 'Dining',
+            title: 'Where to eat',
+            lede: `Find curated dining options in and around ${city.name}.`,
+            categories: diningCategoryIds
+          },
+          attractions: {
+            kicker: 'Attractions',
+            title: 'Where to explore',
+            lede: `Find curated attractions and activities in and around ${city.name}.`,
+            categories: attractionCategoryIds
+          }
+        },
         featuredHighlights: city.featuredHighlights.map((highlight) => ({ highlight })),
         latitude: city.latitude,
         longitude: city.longitude,
@@ -1243,11 +1289,6 @@ export async function seed(): Promise<void> {
       })
 
       cityBySlug.set(city.slug, cityDoc)
-    }
-
-    for (const category of categories) {
-      const categoryDoc = await upsertBySlug(payload, 'listingCategories', category.slug, category)
-      categoryBySlug.set(category.slug, categoryDoc)
     }
 
     for (const listing of listings) {

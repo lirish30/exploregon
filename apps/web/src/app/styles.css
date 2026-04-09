@@ -17,6 +17,7 @@
   --radius-lg: 0.625rem;
   --shadow-soft: 0 12px 32px rgba(22, 29, 31, 0.06);
   --shell-max: 1180px;
+  --site-header-height: 4.2rem;
   --font-body: var(--font-instrument-sans, 'Instrument Sans'), 'Instrument Sans', 'Segoe UI', 'Helvetica Neue',
     sans-serif;
   --font-heading: var(--font-instrument-serif, 'Instrument Serif'), 'Instrument Serif', 'Times New Roman', serif;
@@ -373,6 +374,18 @@ a:focus-visible {
     radial-gradient(circle at 12% 24%, rgba(184, 214, 223, 0.22), transparent 40%),
     #173f49;
   color: #ecf5f9;
+}
+
+.page-hero,
+.city-hero,
+.category-hero,
+.listing-hero,
+.guide-hero,
+.event-hero,
+.itinerary-hero,
+.coast-home-hero {
+  margin-top: calc(var(--site-header-height) * -1);
+  padding-top: var(--site-header-height);
 }
 
 .page-hero::after {
@@ -1252,6 +1265,37 @@ a:focus-visible {
   margin-top: 0.15rem;
 }
 
+.city-top-category-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: #edf2f5;
+  box-shadow: var(--shadow-soft);
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.city-top-category-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.city-top-category-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.3rem, 2.2vw, 2rem);
+  line-height: 1.06;
+}
+
+.city-top-category-summary {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
 .city-inline-link {
   color: var(--accent-strong);
   font-weight: 700;
@@ -1783,8 +1827,6 @@ a:focus-visible {
 .coast-home-hero {
   position: relative;
   min-height: min(88vh, 58rem);
-  margin-top: -4.2rem;
-  padding-top: 4.2rem;
   overflow: clip;
   background: #102d34;
   color: #f7f3eb;
