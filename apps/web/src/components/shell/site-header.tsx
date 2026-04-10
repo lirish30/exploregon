@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { useEffect, useRef } from 'react'
 
 import { toPayloadMediaUrl } from '../../lib/schema'
 import type { HeaderActionButton, LinkItem, NormalizedMedia } from '../../lib/types'
@@ -15,9 +18,31 @@ export const SiteHeader = ({ siteName, logo, navItems, actionButtons }: SiteHead
   const logoUrl = toPayloadMediaUrl(logo?.url)
   const logoAlt = logo?.alt?.trim() || `${siteName} logo`
   const rightButtons = actionButtons.slice(0, 2)
+  const headerRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY
+
+    const onScroll = () => {
+      const currentScrollY = window.scrollY
+      const header = headerRef.current
+      if (!header) return
+
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        header.classList.add('nav-hidden')
+      } else {
+        header.classList.remove('nav-hidden')
+      }
+
+      lastScrollY = currentScrollY
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
-    <header className="site-header">
+    <header className="site-header" ref={headerRef}>
       <Container>
         <div className="site-header-inner">
           {/* Brand */}
