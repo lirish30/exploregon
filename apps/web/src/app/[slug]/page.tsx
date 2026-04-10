@@ -15,8 +15,8 @@ const fallbackSettings: SiteSettingsGlobal = {
   siteName: 'ExplOregon Coast',
   siteTagline: 'A practical Oregon Coast directory for planning where to stay, do, and go next.',
   defaultSeo: {
-    title: 'Oregon Coast Map | ExplOregon Coast',
-    description: 'Interactive Oregon Coast map utility for city and listing planning.'
+    title: 'ExplOregon Coast',
+    description: 'Structured Oregon Coast travel and planning resources.'
   },
   socialLinks: [],
   contact: {
@@ -33,16 +33,16 @@ const getSettings = async (): Promise<SiteSettingsGlobal> => {
   }
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSettings()
-  const page = await getPageBySlug('map')
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const [{ slug }, settings] = await Promise.all([params, getSettings()])
+  const page = await getPageBySlug(slug)
 
   if (!page) {
     return createMetadata(
       {
-        title: 'Map Page Not Found',
-        description: 'Publish a Page with slug "map" in Payload to render this route.',
-        path: '/map',
+        title: 'Page Not Found',
+        description: 'The requested page could not be found on ExplOregon Coast.',
+        path: `/${slug}`,
         noIndex: true
       },
       settings
@@ -53,14 +53,15 @@ export async function generateMetadata(): Promise<Metadata> {
     {
       title: page.seo.title,
       description: page.seo.description,
-      path: '/map'
+      path: `/${page.slug}`
     },
     settings
   )
 }
 
-export default async function MapPage() {
-  const page = await getPageBySlug('map')
+export default async function CmsPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const page = await getPageBySlug(slug)
 
   if (!page) {
     notFound()
@@ -69,13 +70,10 @@ export default async function MapPage() {
   return (
     <>
       <PageHero
-        kicker="Utility"
+        kicker="Page"
         title={page.title}
         description={page.seo.description}
-        actions={[
-          { label: 'Browse Cities', href: '/cities', variant: 'secondary' },
-          { label: 'Browse Categories', href: '/categories', variant: 'secondary' }
-        ]}
+        actions={[{ label: 'Back Home', href: '/', variant: 'secondary' }]}
       />
 
       <Section>
@@ -83,7 +81,7 @@ export default async function MapPage() {
           <Breadcrumbs
             items={[
               { label: 'Home', href: '/' },
-              { label: page.title, href: '/map' }
+              { label: page.title, href: `/${page.slug}` }
             ]}
           />
         </div>

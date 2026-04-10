@@ -7,6 +7,7 @@ import type {
   HomepageGlobal,
   ID,
   ItineraryDoc,
+  LexicalRichText,
   ListingCategoryDoc,
   ListingDoc,
   NavigationGlobal,
@@ -18,8 +19,10 @@ import type {
   NormalizedItinerary,
   NormalizedListing,
   NormalizedMedia,
+  NormalizedPage,
   NormalizedReference,
   NormalizedRegion,
+  PageDoc,
   PayloadFindResponse,
   PayloadMedia,
   PayloadRelationship,
@@ -413,6 +416,19 @@ const normalizeItinerary = (doc: ItineraryDoc): NormalizedItinerary => ({
   }
 })
 
+const normalizePage = (doc: PageDoc): NormalizedPage => ({
+  id: doc.id,
+  title: doc.title,
+  slug: doc.slug,
+  body: doc.body as LexicalRichText,
+  seo: {
+    title: doc.seoTitle,
+    description: doc.seoDescription
+  },
+  createdAt: typeof doc.createdAt === 'string' ? doc.createdAt : null,
+  updatedAt: typeof doc.updatedAt === 'string' ? doc.updatedAt : null
+})
+
 const normalizeHomepage = (global: Partial<HomepageGlobal> | null | undefined): NormalizedHomepage => ({
   heroImage: normalizeMedia(global?.heroImage as PayloadRelationship<PayloadMedia> | undefined),
   heroHeadline: asNonEmptyString(global?.heroHeadline, 'Explore the Oregon Coast'),
@@ -674,6 +690,34 @@ export const getGuideBySlug = async (
   })
 
   return doc ? normalizeGuide(doc) : null
+}
+
+export const getPageBySlug = async (
+  routeSlug: string | string[] | undefined,
+  options: FetchBehavior = {}
+): Promise<NormalizedPage | null> => {
+  const slug = normalizeRouteSlug(routeSlug)
+  if (!slug) {
+    return null
+  }
+
+  const doc = await fetchBySlug<PageDoc>(COLLECTIONS.pages, slug, {
+    ...options,
+    status: 'published'
+  })
+
+  return doc ? normalizePage(doc) : null
+}
+
+export const getPages = async (options: CollectionQuery = {}): Promise<NormalizedPage[]> => {
+  const docs = await fetchCollection<PageDoc>(COLLECTIONS.pages, {
+    status: 'published',
+    sort: 'title',
+    limit: 250,
+    ...options
+  })
+
+  return docs.map((doc) => normalizePage(doc))
 }
 
 export const getGuides = async (options: CollectionQuery = {}): Promise<NormalizedGuide[]> => {

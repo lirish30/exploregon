@@ -7,6 +7,7 @@ import { Itineraries } from './Itineraries'
 import { ListingCategories } from './ListingCategories'
 import { Listings } from './Listings'
 import { Media } from './Media'
+import { Pages } from './Pages'
 import { Regions } from './Regions'
 import { Users } from './Users'
 
@@ -16,6 +17,7 @@ export const collections: CollectionConfig[] = [
   ListingCategories,
   Listings,
   Guides,
+  Pages,
   Events,
   Itineraries,
   Media,

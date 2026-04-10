@@ -52,7 +52,8 @@ pnpm format
 
 ## Notes
 
-- This scaffold is Phase 0 foundation only (no feature pages built).
-- Payload schema files are placeholders for the required PRD collections/globals and will be implemented in schema-lock phase.
-- Route-family placeholders exist for required dynamic paths, but page implementations are intentionally deferred.
+- The frontend renders from published Payload documents.
+- One-off CMS pages are managed in the `pages` collection and served at `/<slug>` (for example a published page with slug `about` renders `/about`).
+- The `/map` route is CMS-driven from the `pages` collection using slug `map`.
+- Reserved top-level paths (`/cities`, `/categories`, `/listings`, `/guides`, `/events`, `/itineraries`, `/regions`, `/weather-tides`) remain app routes, not CMS page slugs.
 - Sitewide typography rule: use `Instrument Serif` for headings/headlines and `Instrument Sans` for body/UI text. Do not override this mapping.

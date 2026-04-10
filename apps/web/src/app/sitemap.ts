@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-import { getCategories, getCities, getEvents, getGuides, getItineraries, getListings, getRegions } from '../lib/api'
+import { getCategories, getCities, getEvents, getGuides, getItineraries, getListings, getPages, getRegions } from '../lib/api'
 import { getSiteUrl } from '../lib/seo'
 
 type Entry = MetadataRoute.Sitemap[number]
@@ -66,14 +66,27 @@ const staticEntries: Entry[] = [
 const byUrl = (a: Entry, b: Entry): number => a.url.localeCompare(b.url)
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [cities, categories, listings, guides, events, itineraries, regions] = await Promise.all([
+  const [cities, categories, listings, guides, events, itineraries, regions, pages] = await Promise.all([
     getCities({ limit: 250 }),
     getCategories({ limit: 250 }),
     getListings({ limit: 500 }),
     getGuides({ limit: 250 }),
     getEvents({ limit: 250 }),
     getItineraries({ limit: 250 }),
-    getRegions({ limit: 60 })
+    getRegions({ limit: 60 }),
+    getPages({ limit: 250 })
+  ])
+
+  const reservedTopLevelSlugs = new Set([
+    'cities',
+    'categories',
+    'listings',
+    'guides',
+    'events',
+    'itineraries',
+    'regions',
+    'map',
+    'weather-tides'
   ])
 
   const dynamicEntries: Entry[] = [
@@ -118,6 +131,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.8
+    })),
+    ...pages
+      .filter((page) => !reservedTopLevelSlugs.has(page.slug))
+      .map((page) => ({
+        url: toUrl(`/${page.slug}`),
+        lastModified: page.updatedAt ? new Date(page.updatedAt) : now,
+        changeFrequency: 'monthly' as const,
+        priority: 0.7
     }))
   ]
 

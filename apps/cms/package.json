@@ -16,10 +16,11 @@
     "import": "tsx src/import/runner.ts"
   },
   "dependencies": {
-    "@payloadcms/next": "3.30.0",
-    "@payloadcms/ui": "3.30.0",
     "@payloadcms/db-postgres": "3.30.0",
     "@payloadcms/db-sqlite": "3.30.0",
+    "@payloadcms/next": "3.30.0",
+    "@payloadcms/richtext-lexical": "3.30.0",
+    "@payloadcms/ui": "3.30.0",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "graphql": "^16.8.1",

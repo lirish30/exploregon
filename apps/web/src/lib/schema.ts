@@ -6,6 +6,7 @@ export const COLLECTIONS = {
   listingCategories: 'listingCategories',
   listings: 'listings',
   guides: 'guides',
+  pages: 'pages',
   events: 'events',
   itineraries: 'itineraries'
 } as const

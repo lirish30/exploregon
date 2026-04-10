@@ -161,6 +161,28 @@ export type ItineraryDoc = SeoFields & {
   updatedAt?: string
 }
 
+export type LexicalRichText = {
+  root: {
+    type: string
+    children: Array<Record<string, unknown>>
+    direction: 'ltr' | 'rtl' | null
+    format: string
+    indent: number
+    version: number
+  }
+  [k: string]: unknown
+}
+
+export type PageDoc = SeoFields & {
+  id: ID
+  title: string
+  slug: string
+  body: LexicalRichText
+  status: EditorialStatus
+  createdAt?: string
+  updatedAt?: string
+}
+
 export type HomepageGlobal = {
   heroImage?: PayloadRelationship<PayloadMedia>
   heroHeadline: string
@@ -378,6 +400,16 @@ export type NormalizedItinerary = {
   stops: NormalizedReference[]
   relatedCities: NormalizedReference[]
   seo: NormalizedSeo
+}
+
+export type NormalizedPage = {
+  id: ID
+  title: string
+  slug: string
+  body: LexicalRichText
+  seo: NormalizedSeo
+  createdAt: string | null
+  updatedAt: string | null
 }
 
 export type NormalizedHomepage = {

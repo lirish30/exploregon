@@ -72,6 +72,7 @@ export interface Config {
     listingCategories: ListingCategory;
     listings: Listing;
     guides: Guide;
+    pages: Page;
     events: Event;
     itineraries: Itinerary;
     media: Media;
@@ -87,6 +88,7 @@ export interface Config {
     listingCategories: ListingCategoriesSelect<false> | ListingCategoriesSelect<true>;
     listings: ListingsSelect<false> | ListingsSelect<true>;
     guides: GuidesSelect<false> | GuidesSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     itineraries: ItinerariesSelect<false> | ItinerariesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -421,6 +423,41 @@ export interface Guide {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  /**
+   * Auto-generated from the title/name if left blank.
+   */
+  slug: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  seoTitle: string;
+  seoDescription: string;
+  /**
+   * Workflow: Draft -> Review -> Published (or Archived).
+   */
+  status: 'draft' | 'review' | 'published' | 'archived';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
@@ -519,6 +556,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'guides';
         value: number | Guide;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
       } | null)
     | ({
         relationTo: 'events';
@@ -748,6 +789,20 @@ export interface GuidesSelect<T extends boolean = true> {
   relatedCities?: T;
   relatedCategories?: T;
   travelSeason?: T;
+  seoTitle?: T;
+  seoDescription?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  body?: T;
   seoTitle?: T;
   seoDescription?: T;
   status?: T;
