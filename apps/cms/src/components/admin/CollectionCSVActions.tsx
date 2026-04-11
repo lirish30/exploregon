@@ -7,8 +7,10 @@ import { useRef, useState } from 'react'
 type ImportResponse = {
   created?: number
   failed?: number
+  partiallyImported?: number
   totalRows?: number
   updated?: number
+  warnings?: Array<{ ignoredFields?: string[]; row?: number }>
 }
 
 const buttonStyle: CSSProperties = {
@@ -89,8 +91,11 @@ export function CollectionCSVActions({ collectionSlug }: BeforeListClientProps) 
       const created = payload.created ?? 0
       const updated = payload.updated ?? 0
       const failed = payload.failed ?? 0
+      const partiallyImported = payload.partiallyImported ?? 0
+      const partialSuffix =
+        partiallyImported > 0 ? ` ${partiallyImported} row(s) were partially imported (invalid fields were ignored).` : ''
 
-      setMessage(`Import complete: ${created} created, ${updated} updated, ${failed} failed (${total} rows).`)
+      setMessage(`Import complete: ${created} created, ${updated} updated, ${failed} failed (${total} rows).${partialSuffix}`)
       window.location.reload()
     } catch {
       setMessage('CSV import failed due to a network error.')

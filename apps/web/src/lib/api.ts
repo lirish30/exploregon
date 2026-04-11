@@ -49,6 +49,101 @@ type CollectionQuery = FetchBehavior & {
   where?: Record<string, string | number | undefined>
 }
 
+type TemplateCategoryDoc = {
+  id: ID
+  title: string
+  slug: string
+  icon?: string
+  meta?: {
+    title?: string
+    description?: string
+  }
+}
+
+type TemplatePageDoc = {
+  id: ID
+  title: string
+  slug: string
+  pageType?: 'home' | 'city' | 'region' | 'listing' | 'generic'
+  hero?: {
+    media?: PayloadRelationship<PayloadMedia>
+  }
+  location?: {
+    city?: PayloadRelationship<Record<string, unknown>>
+    region?: PayloadRelationship<Record<string, unknown>>
+    latitude?: number
+    longitude?: number
+  }
+  cityDetails?: {
+    summary?: string
+    intro?: string
+    whyVisit?: string
+    whenToGo?: string
+    featuredHighlights?: Array<{ highlight: string }>
+    faq?: Array<{ question: string; answer: string }>
+  }
+  regionDetails?: {
+    summary?: string
+    intro?: string
+  }
+  listingDetails?: {
+    summary?: string
+    description?: string
+    address?: string
+    phone?: string
+    websiteUrl?: string
+    priceRange?: string
+    seasonality?: string
+    attributes?: Array<{ attribute: string }>
+    amenities?: Array<{ amenity: string }>
+    categories?: Array<PayloadRelationship<Record<string, unknown>>>
+    gallery?: Array<PayloadRelationship<PayloadMedia>>
+    sourceType?: 'manual' | 'imported' | 'partner'
+  }
+  meta?: {
+    title?: string
+    description?: string
+  }
+  createdAt?: string
+  updatedAt?: string
+}
+
+type TemplatePostDoc = {
+  id: ID
+  title: string
+  slug: string
+  postType?: 'guide' | 'event' | 'itinerary' | 'article'
+  heroImage?: PayloadRelationship<PayloadMedia>
+  categories?: Array<PayloadRelationship<Record<string, unknown>>>
+  guideDetails?: {
+    excerpt?: string
+    body?: string
+    travelSeason?: string
+    relatedCities?: Array<PayloadRelationship<Record<string, unknown>>>
+  }
+  eventDetails?: {
+    venue?: string
+    startDate?: string
+    endDate?: string | null
+    eventUrl?: string | null
+    city?: PayloadRelationship<Record<string, unknown>>
+    region?: PayloadRelationship<Record<string, unknown>>
+    summary?: string
+    description?: string
+  }
+  itineraryDetails?: {
+    summary?: string
+    tripLength?: string
+    body?: string
+    stops?: Array<PayloadRelationship<Record<string, unknown>>>
+    relatedCities?: Array<PayloadRelationship<Record<string, unknown>>>
+  }
+  meta?: {
+    title?: string
+    description?: string
+  }
+}
+
 const DEFAULT_DEPTH = 1
 const DEFAULT_REVALIDATE = 1800
 
@@ -123,7 +218,31 @@ const fetchBySlug = async <T>(
       depth,
       limit: 1,
       'where[slug][equals]': slug,
-      'where[status][equals]': status
+      'where[or][0][status][equals]': status,
+      'where[or][1][_status][equals]': status
+    })
+
+    const result = await payloadFetch<PayloadFindResponse<T>>(path, behavior)
+    return result.docs[0] ?? null
+  } catch {
+    return null
+  }
+}
+
+const fetchBySlugWithWhere = async <T>(
+  collection: string,
+  slug: string,
+  where: Record<string, string | number | undefined>,
+  { depth = DEFAULT_DEPTH, status, ...behavior }: SlugQuery = {}
+): Promise<T | null> => {
+  try {
+    const path = withQueryString(`/api/${collection}`, {
+      depth,
+      limit: 1,
+      'where[slug][equals]': slug,
+      'where[or][0][status][equals]': status,
+      'where[or][1][_status][equals]': status,
+      ...where
     })
 
     const result = await payloadFetch<PayloadFindResponse<T>>(path, behavior)
@@ -143,7 +262,31 @@ const fetchCollection = async <T>(
       limit,
       page,
       sort,
-      'where[status][equals]': status,
+      'where[or][0][status][equals]': status,
+      'where[or][1][_status][equals]': status,
+      ...where
+    })
+
+    const result = await payloadFetch<PayloadFindResponse<T>>(path, behavior)
+    return result.docs
+  } catch {
+    return []
+  }
+}
+
+const fetchCollectionWithWhere = async <T>(
+  collection: string,
+  where: Record<string, string | number | undefined>,
+  { depth = DEFAULT_DEPTH, status, limit = 24, page = 1, sort, ...behavior }: CollectionQuery = {}
+): Promise<T[]> => {
+  try {
+    const path = withQueryString(`/api/${collection}`, {
+      depth,
+      limit,
+      page,
+      sort,
+      'where[or][0][status][equals]': status,
+      'where[or][1][_status][equals]': status,
       ...where
     })
 
@@ -233,12 +376,46 @@ const asNonEmptyString = (value: unknown, fallback: string): string => {
   return normalized.length > 0 ? normalized : fallback
 }
 
+const asOptionalString = (value: unknown, fallback: string): string => {
+  if (typeof value !== 'string') {
+    return fallback
+  }
+
+  return value.trim()
+}
+
 const normalizeRegion = (doc: RegionDoc): NormalizedRegion => ({
   id: doc.id,
   name: doc.name,
   slug: doc.slug,
   summary: doc.summary,
   intro: doc.intro,
+  sectionHeadings: {
+    intro: {
+      kicker: asOptionalString(doc.sectionHeadings?.intro?.kicker, 'Region Intro'),
+      headline: asNonEmptyString(doc.sectionHeadings?.intro?.headline, `${doc.name} planning context`)
+    },
+    cities: {
+      kicker: asOptionalString(doc.sectionHeadings?.cities?.kicker, 'Cities'),
+      headline: asNonEmptyString(doc.sectionHeadings?.cities?.headline, 'Core city pages in this region')
+    },
+    listings: {
+      kicker: asOptionalString(doc.sectionHeadings?.listings?.kicker, 'Listings'),
+      headline: asNonEmptyString(doc.sectionHeadings?.listings?.headline, 'Featured listings in this region')
+    },
+    map: {
+      kicker: asOptionalString(doc.sectionHeadings?.map?.kicker, 'Map'),
+      headline: asNonEmptyString(doc.sectionHeadings?.map?.headline, `${doc.name} map module`)
+    },
+    events: {
+      kicker: asOptionalString(doc.sectionHeadings?.events?.kicker, 'Events'),
+      headline: asNonEmptyString(doc.sectionHeadings?.events?.headline, `Upcoming events in ${doc.name}`)
+    },
+    guides: {
+      kicker: asOptionalString(doc.sectionHeadings?.guides?.kicker, 'Guides'),
+      headline: asNonEmptyString(doc.sectionHeadings?.guides?.headline, 'Related editorial guides')
+    }
+  },
   heroImage: normalizeMedia(doc.heroImage),
   seo: {
     title: doc.seoTitle,
@@ -316,6 +493,18 @@ const normalizeCategory = (doc: ListingCategoryDoc): NormalizedCategory => ({
   seo: {
     title: doc.seoTitle,
     description: doc.seoDescription
+  }
+})
+
+const normalizeTemplateCategory = (doc: TemplateCategoryDoc): NormalizedCategory => ({
+  id: doc.id,
+  name: doc.title,
+  slug: doc.slug,
+  description: doc.meta?.description || '',
+  icon: doc.icon || 'beach',
+  seo: {
+    title: doc.meta?.title || doc.title,
+    description: doc.meta?.description || ''
   }
 })
 
@@ -420,13 +609,220 @@ const normalizePage = (doc: PageDoc): NormalizedPage => ({
   id: doc.id,
   title: doc.title,
   slug: doc.slug,
-  body: doc.body as LexicalRichText,
+  body:
+    (doc.body as LexicalRichText) ||
+    ({
+      root: {
+        type: 'root',
+        children: [],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        version: 1
+      }
+    } as LexicalRichText),
+  header: {
+    kicker: typeof doc.header?.kicker === 'string' && doc.header.kicker.trim() ? doc.header.kicker.trim() : null,
+    title: asNonEmptyString(doc.header?.title, doc.title),
+    description: asNonEmptyString(doc.header?.description, doc.seoDescription ?? ''),
+    actions: Array.isArray(doc.header?.actions)
+      ? doc.header.actions
+          .map((action): HeaderActionButton | null => {
+            if (!action || typeof action.label !== 'string' || typeof action.url !== 'string') {
+              return null
+            }
+
+            const label = action.label.trim()
+            const url = action.url.trim()
+            if (!label || !url) {
+              return null
+            }
+
+            return {
+              label,
+              url,
+              openInNewTab: action.openInNewTab === true
+            }
+          })
+          .filter((action): action is HeaderActionButton => action !== null)
+      : []
+  },
   seo: {
-    title: doc.seoTitle,
-    description: doc.seoDescription
+    title: doc.seoTitle ?? doc.title,
+    description: doc.seoDescription ?? ''
   },
   createdAt: typeof doc.createdAt === 'string' ? doc.createdAt : null,
   updatedAt: typeof doc.updatedAt === 'string' ? doc.updatedAt : null
+})
+
+const normalizeTemplateRegion = (doc: TemplatePageDoc): NormalizedRegion => ({
+  id: doc.id,
+  name: doc.title,
+  slug: doc.slug,
+  summary: doc.regionDetails?.summary || '',
+  intro: doc.regionDetails?.intro || '',
+  sectionHeadings: {
+    intro: {
+      kicker: 'Region Intro',
+      headline: `${doc.title} planning context`
+    },
+    cities: {
+      kicker: 'Cities',
+      headline: 'Core city pages in this region'
+    },
+    listings: {
+      kicker: 'Listings',
+      headline: 'Featured listings in this region'
+    },
+    map: {
+      kicker: 'Map',
+      headline: `${doc.title} map module`
+    },
+    events: {
+      kicker: 'Events',
+      headline: `Upcoming events in ${doc.title}`
+    },
+    guides: {
+      kicker: 'Guides',
+      headline: 'Related editorial guides'
+    }
+  },
+  heroImage: normalizeMedia(doc.hero?.media),
+  seo: {
+    title: doc.meta?.title || doc.title,
+    description: doc.meta?.description || ''
+  }
+})
+
+const normalizeTemplateCity = (doc: TemplatePageDoc): NormalizedCity => ({
+  id: doc.id,
+  name: doc.title,
+  slug: doc.slug,
+  region: normalizeReference(doc.location?.region as PayloadRelationship<Record<string, unknown>>, ['name', 'title']),
+  summary: doc.cityDetails?.summary || '',
+  intro: doc.cityDetails?.intro || '',
+  whyVisit: doc.cityDetails?.whyVisit || '',
+  whenToGo: doc.cityDetails?.whenToGo || '',
+  listingSections: {
+    hotels: {
+      kicker: 'Hotels',
+      title: 'Where to stay',
+      lede: 'Curated places to stay connected to this city in Payload.',
+      categories: []
+    },
+    dining: {
+      kicker: 'Dining',
+      title: 'Where to eat',
+      lede: 'Curated dining spots connected to this city in Payload.',
+      categories: []
+    },
+    attractions: {
+      kicker: 'Attractions',
+      title: 'Where to explore',
+      lede: 'Curated attractions and experiences connected to this city in Payload.',
+      categories: []
+    }
+  },
+  topCategories: {
+    kicker: 'Top Categories',
+    title: 'Most useful category paths',
+    lede: 'These categories are inferred from currently published city listings.',
+    categories: []
+  },
+  featuredHighlights: (doc.cityDetails?.featuredHighlights || []).map((row) => row.highlight),
+  latitude: doc.location?.latitude || 0,
+  longitude: doc.location?.longitude || 0,
+  faq: (doc.cityDetails?.faq || []).map((row) => ({ question: row.question, answer: row.answer })),
+  heroImage: normalizeMedia(doc.hero?.media),
+  seo: {
+    title: doc.meta?.title || doc.title,
+    description: doc.meta?.description || ''
+  }
+})
+
+const normalizeTemplateListing = (doc: TemplatePageDoc): NormalizedListing => ({
+  id: doc.id,
+  name: doc.title,
+  slug: doc.slug,
+  status: 'published',
+  sourceType: doc.listingDetails?.sourceType || 'manual',
+  city: normalizeReference(doc.location?.city as PayloadRelationship<Record<string, unknown>>, ['name', 'title']),
+  region: normalizeReference(doc.location?.region as PayloadRelationship<Record<string, unknown>>, ['name', 'title']),
+  categories: normalizeReferences(doc.listingDetails?.categories, ['name', 'title']),
+  summary: doc.listingDetails?.summary || '',
+  description: doc.listingDetails?.description || '',
+  address: doc.listingDetails?.address || '',
+  latitude: doc.location?.latitude || 0,
+  longitude: doc.location?.longitude || 0,
+  websiteUrl: doc.listingDetails?.websiteUrl || null,
+  phone: doc.listingDetails?.phone || null,
+  attributes: (doc.listingDetails?.attributes || []).map((row) => row.attribute),
+  amenities: (doc.listingDetails?.amenities || []).map((row) => row.amenity),
+  priceRange: doc.listingDetails?.priceRange || null,
+  seasonality: doc.listingDetails?.seasonality || null,
+  editorNotes: null,
+  heroImage: normalizeMedia(doc.hero?.media),
+  gallery: (doc.listingDetails?.gallery || [])
+    .map((item) => normalizeMedia(item))
+    .filter((item): item is NormalizedMedia => item !== null),
+  seo: {
+    title: doc.meta?.title || doc.title,
+    description: doc.meta?.description || ''
+  }
+})
+
+const normalizeTemplateGuide = (doc: TemplatePostDoc): NormalizedGuide => ({
+  id: doc.id,
+  title: doc.title,
+  slug: doc.slug,
+  excerpt: doc.guideDetails?.excerpt || '',
+  body: doc.guideDetails?.body || '',
+  travelSeason: doc.guideDetails?.travelSeason || '',
+  heroImage: normalizeMedia(doc.heroImage),
+  relatedCities: normalizeReferences(doc.guideDetails?.relatedCities, ['name', 'title']),
+  relatedCategories: normalizeReferences(doc.categories, ['name', 'title']),
+  seo: {
+    title: doc.meta?.title || doc.title,
+    description: doc.meta?.description || ''
+  }
+})
+
+const normalizeTemplateEvent = (doc: TemplatePostDoc): NormalizedEvent => ({
+  id: doc.id,
+  title: doc.title,
+  slug: doc.slug,
+  city: normalizeReference(doc.eventDetails?.city as PayloadRelationship<Record<string, unknown>>, ['name', 'title']),
+  region: normalizeReference(
+    doc.eventDetails?.region as PayloadRelationship<Record<string, unknown>>,
+    ['name', 'title']
+  ),
+  startDate: doc.eventDetails?.startDate || '',
+  endDate: doc.eventDetails?.endDate || null,
+  venue: doc.eventDetails?.venue || '',
+  summary: doc.eventDetails?.summary || '',
+  description: doc.eventDetails?.description || '',
+  heroImage: normalizeMedia(doc.heroImage),
+  eventUrl: doc.eventDetails?.eventUrl || null,
+  seo: {
+    title: doc.meta?.title || doc.title,
+    description: doc.meta?.description || ''
+  }
+})
+
+const normalizeTemplateItinerary = (doc: TemplatePostDoc): NormalizedItinerary => ({
+  id: doc.id,
+  title: doc.title,
+  slug: doc.slug,
+  summary: doc.itineraryDetails?.summary || '',
+  tripLength: doc.itineraryDetails?.tripLength || '',
+  body: doc.itineraryDetails?.body || '',
+  heroImage: normalizeMedia(doc.heroImage),
+  stops: normalizeReferences(doc.itineraryDetails?.stops, ['name', 'title']),
+  relatedCities: normalizeReferences(doc.itineraryDetails?.relatedCities, ['name', 'title']),
+  seo: {
+    title: doc.meta?.title || doc.title,
+    description: doc.meta?.description || ''
+  }
 })
 
 const normalizeHomepage = (global: Partial<HomepageGlobal> | null | undefined): NormalizedHomepage => ({
@@ -567,7 +963,21 @@ export const getCityBySlug = async (
     status: 'published'
   })
 
-  return doc ? normalizeCity(doc) : null
+  if (doc) {
+    return normalizeCity(doc)
+  }
+
+  const templateDoc = await fetchBySlugWithWhere<TemplatePageDoc>(
+    COLLECTIONS.pages,
+    slug,
+    { 'where[pageType][equals]': 'city' },
+    {
+      ...options,
+      status: 'published'
+    }
+  )
+
+  return templateDoc ? normalizeTemplateCity(templateDoc) : null
 }
 
 export const getCities = async (options: CollectionQuery = {}): Promise<NormalizedCity[]> => {
@@ -578,7 +988,22 @@ export const getCities = async (options: CollectionQuery = {}): Promise<Normaliz
     ...options
   })
 
-  return docs.map((doc) => normalizeCity(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeCity(doc))
+  }
+
+  const templateDocs = await fetchCollectionWithWhere<TemplatePageDoc>(
+    COLLECTIONS.pages,
+    { 'where[pageType][equals]': 'city' },
+    {
+      status: 'published',
+      sort: 'title',
+      limit: 250,
+      ...options
+    }
+  )
+
+  return templateDocs.map((doc) => normalizeTemplateCity(doc))
 }
 
 export const getCategoryBySlug = async (
@@ -591,7 +1016,12 @@ export const getCategoryBySlug = async (
   }
 
   const doc = await fetchBySlug<ListingCategoryDoc>(COLLECTIONS.listingCategories, slug, options)
-  return doc ? normalizeCategory(doc) : null
+  if (doc) {
+    return normalizeCategory(doc)
+  }
+
+  const templateDoc = await fetchBySlug<TemplateCategoryDoc>('categories', slug, options)
+  return templateDoc ? normalizeTemplateCategory(templateDoc) : null
 }
 
 export const getCategories = async (options: CollectionQuery = {}): Promise<NormalizedCategory[]> => {
@@ -601,7 +1031,17 @@ export const getCategories = async (options: CollectionQuery = {}): Promise<Norm
     ...options
   })
 
-  return docs.map((doc) => normalizeCategory(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeCategory(doc))
+  }
+
+  const templateDocs = await fetchCollection<TemplateCategoryDoc>('categories', {
+    sort: 'title',
+    limit: 250,
+    ...options
+  })
+
+  return templateDocs.map((doc) => normalizeTemplateCategory(doc))
 }
 
 export const getListingBySlug = async (
@@ -618,7 +1058,21 @@ export const getListingBySlug = async (
     status: 'published'
   })
 
-  return doc ? normalizeListing(doc) : null
+  if (doc) {
+    return normalizeListing(doc)
+  }
+
+  const templateDoc = await fetchBySlugWithWhere<TemplatePageDoc>(
+    COLLECTIONS.pages,
+    slug,
+    { 'where[pageType][equals]': 'listing' },
+    {
+      ...options,
+      status: 'published'
+    }
+  )
+
+  return templateDoc ? normalizeTemplateListing(templateDoc) : null
 }
 
 export const getListingRecordBySlug = async (
@@ -631,7 +1085,18 @@ export const getListingRecordBySlug = async (
   }
 
   const doc = await fetchBySlug<ListingDoc>(COLLECTIONS.listings, slug, options)
-  return doc ? normalizeListing(doc) : null
+  if (doc) {
+    return normalizeListing(doc)
+  }
+
+  const templateDoc = await fetchBySlugWithWhere<TemplatePageDoc>(
+    COLLECTIONS.pages,
+    slug,
+    { 'where[pageType][equals]': 'listing' },
+    options
+  )
+
+  return templateDoc ? normalizeTemplateListing(templateDoc) : null
 }
 
 export const getListings = async (options: CollectionQuery = {}): Promise<NormalizedListing[]> => {
@@ -642,7 +1107,22 @@ export const getListings = async (options: CollectionQuery = {}): Promise<Normal
     ...options
   })
 
-  return docs.map((doc) => normalizeListing(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeListing(doc))
+  }
+
+  const templateDocs = await fetchCollectionWithWhere<TemplatePageDoc>(
+    COLLECTIONS.pages,
+    { 'where[pageType][equals]': 'listing' },
+    {
+      status: 'published',
+      sort: 'title',
+      limit: 250,
+      ...options
+    }
+  )
+
+  return templateDocs.map((doc) => normalizeTemplateListing(doc))
 }
 
 export const getListingsByCity = async (
@@ -659,7 +1139,25 @@ export const getListingsByCity = async (
     ...options
   })
 
-  return docs.map((doc) => normalizeListing(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeListing(doc))
+  }
+
+  const templateDocs = await fetchCollectionWithWhere<TemplatePageDoc>(
+    COLLECTIONS.pages,
+    {
+      'where[pageType][equals]': 'listing',
+      'where[location.city][equals]': cityId
+    },
+    {
+      status: 'published',
+      sort: 'title',
+      limit: 48,
+      ...options
+    }
+  )
+
+  return templateDocs.map((doc) => normalizeTemplateListing(doc))
 }
 
 export const getRegionBySlug = async (
@@ -672,7 +1170,18 @@ export const getRegionBySlug = async (
   }
 
   const doc = await fetchBySlug<RegionDoc>(COLLECTIONS.regions, slug, options)
-  return doc ? normalizeRegion(doc) : null
+  if (doc) {
+    return normalizeRegion(doc)
+  }
+
+  const templateDoc = await fetchBySlugWithWhere<TemplatePageDoc>(
+    COLLECTIONS.pages,
+    slug,
+    { 'where[pageType][equals]': 'region' },
+    options
+  )
+
+  return templateDoc ? normalizeTemplateRegion(templateDoc) : null
 }
 
 export const getGuideBySlug = async (
@@ -689,7 +1198,21 @@ export const getGuideBySlug = async (
     status: 'published'
   })
 
-  return doc ? normalizeGuide(doc) : null
+  if (doc) {
+    return normalizeGuide(doc)
+  }
+
+  const templateDoc = await fetchBySlugWithWhere<TemplatePostDoc>(
+    'posts',
+    slug,
+    { 'where[postType][equals]': 'guide' },
+    {
+      ...options,
+      status: 'published'
+    }
+  )
+
+  return templateDoc ? normalizeTemplateGuide(templateDoc) : null
 }
 
 export const getPageBySlug = async (
@@ -728,7 +1251,22 @@ export const getGuides = async (options: CollectionQuery = {}): Promise<Normaliz
     ...options
   })
 
-  return docs.map((doc) => normalizeGuide(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeGuide(doc))
+  }
+
+  const templateDocs = await fetchCollectionWithWhere<TemplatePostDoc>(
+    'posts',
+    { 'where[postType][equals]': 'guide' },
+    {
+      status: 'published',
+      sort: '-createdAt',
+      limit: 120,
+      ...options
+    }
+  )
+
+  return templateDocs.map((doc) => normalizeTemplateGuide(doc))
 }
 
 export const getEventBySlug = async (
@@ -745,7 +1283,21 @@ export const getEventBySlug = async (
     status: 'published'
   })
 
-  return doc ? normalizeEvent(doc) : null
+  if (doc) {
+    return normalizeEvent(doc)
+  }
+
+  const templateDoc = await fetchBySlugWithWhere<TemplatePostDoc>(
+    'posts',
+    slug,
+    { 'where[postType][equals]': 'event' },
+    {
+      ...options,
+      status: 'published'
+    }
+  )
+
+  return templateDoc ? normalizeTemplateEvent(templateDoc) : null
 }
 
 export const getEventsByCity = async (
@@ -762,7 +1314,25 @@ export const getEventsByCity = async (
     ...options
   })
 
-  return docs.map((doc) => normalizeEvent(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeEvent(doc))
+  }
+
+  const templateDocs = await fetchCollectionWithWhere<TemplatePostDoc>(
+    'posts',
+    {
+      'where[postType][equals]': 'event',
+      'where[eventDetails.city][equals]': cityId
+    },
+    {
+      status: 'published',
+      sort: 'createdAt',
+      limit: 24,
+      ...options
+    }
+  )
+
+  return templateDocs.map((doc) => normalizeTemplateEvent(doc))
 }
 
 export const getEventsByRegion = async (
@@ -779,7 +1349,25 @@ export const getEventsByRegion = async (
     ...options
   })
 
-  return docs.map((doc) => normalizeEvent(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeEvent(doc))
+  }
+
+  const templateDocs = await fetchCollectionWithWhere<TemplatePostDoc>(
+    'posts',
+    {
+      'where[postType][equals]': 'event',
+      'where[eventDetails.region][equals]': regionId
+    },
+    {
+      status: 'published',
+      sort: 'createdAt',
+      limit: 24,
+      ...options
+    }
+  )
+
+  return templateDocs.map((doc) => normalizeTemplateEvent(doc))
 }
 
 export const getEvents = async (options: CollectionQuery = {}): Promise<NormalizedEvent[]> => {
@@ -790,7 +1378,22 @@ export const getEvents = async (options: CollectionQuery = {}): Promise<Normaliz
     ...options
   })
 
-  return docs.map((doc) => normalizeEvent(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeEvent(doc))
+  }
+
+  const templateDocs = await fetchCollectionWithWhere<TemplatePostDoc>(
+    'posts',
+    { 'where[postType][equals]': 'event' },
+    {
+      status: 'published',
+      sort: 'createdAt',
+      limit: 120,
+      ...options
+    }
+  )
+
+  return templateDocs.map((doc) => normalizeTemplateEvent(doc))
 }
 
 export const getItineraryBySlug = async (
@@ -807,7 +1410,21 @@ export const getItineraryBySlug = async (
     status: 'published'
   })
 
-  return doc ? normalizeItinerary(doc) : null
+  if (doc) {
+    return normalizeItinerary(doc)
+  }
+
+  const templateDoc = await fetchBySlugWithWhere<TemplatePostDoc>(
+    'posts',
+    slug,
+    { 'where[postType][equals]': 'itinerary' },
+    {
+      ...options,
+      status: 'published'
+    }
+  )
+
+  return templateDoc ? normalizeTemplateItinerary(templateDoc) : null
 }
 
 export const getItineraries = async (options: CollectionQuery = {}): Promise<NormalizedItinerary[]> => {
@@ -818,7 +1435,22 @@ export const getItineraries = async (options: CollectionQuery = {}): Promise<Nor
     ...options
   })
 
-  return docs.map((doc) => normalizeItinerary(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeItinerary(doc))
+  }
+
+  const templateDocs = await fetchCollectionWithWhere<TemplatePostDoc>(
+    'posts',
+    { 'where[postType][equals]': 'itinerary' },
+    {
+      status: 'published',
+      sort: '-createdAt',
+      limit: 120,
+      ...options
+    }
+  )
+
+  return templateDocs.map((doc) => normalizeTemplateItinerary(doc))
 }
 
 // ─── Additional query helpers ─────────────────────────────────────────────────
@@ -834,7 +1466,22 @@ export const getRegions = async (options: CollectionQuery = {}): Promise<Normali
     ...options
   })
 
-  return docs.map((doc) => normalizeRegion(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeRegion(doc))
+  }
+
+  const templateDocs = await fetchCollectionWithWhere<TemplatePageDoc>(
+    COLLECTIONS.pages,
+    { 'where[pageType][equals]': 'region' },
+    {
+      sort: 'title',
+      limit: 50,
+      revalidate: 3600,
+      ...options
+    }
+  )
+
+  return templateDocs.map((doc) => normalizeTemplateRegion(doc))
 }
 
 /**
@@ -854,7 +1501,25 @@ export const getCitiesByRegion = async (
     ...options
   })
 
-  return docs.map((doc) => normalizeCity(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeCity(doc))
+  }
+
+  const templateDocs = await fetchCollectionWithWhere<TemplatePageDoc>(
+    COLLECTIONS.pages,
+    {
+      'where[pageType][equals]': 'city',
+      'where[location.region][equals]': regionId
+    },
+    {
+      status: 'published',
+      sort: 'title',
+      limit: 50,
+      ...options
+    }
+  )
+
+  return templateDocs.map((doc) => normalizeTemplateCity(doc))
 }
 
 /**
@@ -875,7 +1540,25 @@ export const getListingsByCategory = async (
     ...options
   })
 
-  return docs.map((doc) => normalizeListing(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeListing(doc))
+  }
+
+  const templateDocs = await fetchCollectionWithWhere<TemplatePageDoc>(
+    COLLECTIONS.pages,
+    {
+      'where[pageType][equals]': 'listing',
+      'where[listingDetails.categories][in][0]': categoryId
+    },
+    {
+      status: 'published',
+      sort: 'title',
+      limit: 48,
+      ...options
+    }
+  )
+
+  return templateDocs.map((doc) => normalizeTemplateListing(doc))
 }
 
 export const getListingsByRegion = async (
@@ -892,7 +1575,25 @@ export const getListingsByRegion = async (
     ...options
   })
 
-  return docs.map((doc) => normalizeListing(doc))
+  if (docs.length > 0) {
+    return docs.map((doc) => normalizeListing(doc))
+  }
+
+  const templateDocs = await fetchCollectionWithWhere<TemplatePageDoc>(
+    COLLECTIONS.pages,
+    {
+      'where[pageType][equals]': 'listing',
+      'where[location.region][equals]': regionId
+    },
+    {
+      status: 'published',
+      sort: 'title',
+      limit: 48,
+      ...options
+    }
+  )
+
+  return templateDocs.map((doc) => normalizeTemplateListing(doc))
 }
 
 /**

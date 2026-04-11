@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 
 import { Breadcrumbs } from '../../../components/primitives/breadcrumbs'
 import { Container } from '../../../components/primitives/container'
+import { CityDestinationCard } from '../../../components/primitives/city-destination-card'
 import { FaqAccordion } from '../../../components/primitives/faq-accordion'
 import { HeroBackground } from '../../../components/primitives/hero-background'
 import { MapPlaceholder } from '../../../components/primitives/map-placeholder'
@@ -243,7 +244,29 @@ export default async function CityPage({ params }: CityPageProps) {
       </section>
 
       <Section>
-        <SectionHeading kicker="Intro" title={`Welcome to ${city.name}`} lede={city.intro} />
+        <div className="city-intro-layout">
+          <div>
+            <SectionHeading kicker="Intro" title={`Welcome to ${city.name}`} lede={city.intro} />
+          </div>
+          <aside className="city-events-compact" aria-label={`Upcoming events near ${city.name}`}>
+            <h2 className="city-events-compact-title">Events</h2>
+            {events.length ? (
+              <div className="city-events-compact-list">
+                {events.slice(0, 4).map((event: NormalizedEvent) => (
+                  <article key={`intro-event-${event.slug}`} className="city-events-compact-card">
+                    <p className="city-events-compact-kicker">{formatDate(event.startDate)}</p>
+                    <h3 className="city-events-compact-event-title">{event.title}</h3>
+                    <Link href={`/events/${event.slug}`} className="city-inline-link city-inline-link--compact">
+                      View event
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p className="city-empty">No events are available for this city yet.</p>
+            )}
+          </aside>
+        </div>
       </Section>
 
       <Section surface="muted">
@@ -328,26 +351,6 @@ export default async function CityPage({ params }: CityPageProps) {
         />
       </Section>
 
-      <Section surface="muted">
-        <SectionHeading kicker="Events" title={`Upcoming events near ${city.name}`} />
-        {events.length ? (
-          <div className="city-card-grid">
-            {events.slice(0, 4).map((event: NormalizedEvent) => (
-              <article key={event.slug} className="city-listing-card">
-                <p className="city-listing-kicker">{formatDate(event.startDate)}</p>
-                <h3 className="city-listing-title">{event.title}</h3>
-                <p className="city-listing-summary">{event.summary}</p>
-                <Link href={`/events/${event.slug}`} className="city-inline-link">
-                  View event
-                </Link>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <p className="city-empty">No events are available for this city yet.</p>
-        )}
-      </Section>
-
       <Section>
         <SectionHeading kicker="FAQ" title={`${city.name} quick answers`} />
         {city.faq.length ? (
@@ -364,11 +367,19 @@ export default async function CityPage({ params }: CityPageProps) {
           lede="Nearby city links are generated from the same region relationship."
         />
         {nearbyCities.length ? (
-          <div className="city-link-row">
+          <div className="coast-home-destination-grid">
             {nearbyCities.map((nearbyCity) => (
-              <Link key={nearbyCity.slug} href={`/cities/${nearbyCity.slug}`} className="city-link-chip">
-                {nearbyCity.name}
-              </Link>
+              <CityDestinationCard
+                key={nearbyCity.slug}
+                name={nearbyCity.name}
+                summary={nearbyCity.summary}
+                image={nearbyCity.heroImage}
+                href={`/cities/${nearbyCity.slug}`}
+                badges={nearbyCity.region?.label ? [nearbyCity.region.label] : []}
+                meta={[{ label: 'Base', value: nearbyCity.region?.label ?? 'Oregon Coast' }]}
+                resolveMediaUrl={toPayloadMediaUrl}
+                linkLabel={`Explore ${nearbyCity.name}`}
+              />
             ))}
           </div>
         ) : (

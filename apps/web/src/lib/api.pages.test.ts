@@ -54,6 +54,15 @@ test('getPageBySlug fetches published page records and normalizes response', asy
                 version: 1
               }
             },
+            header: {
+              kicker: 'Utility',
+              title: 'Weather and tides planning',
+              description: 'Validate weather and tide assumptions before route planning.',
+              actions: [
+                { label: 'Open Coast Map', url: '/map', openInNewTab: false },
+                { label: 'Browse Cities', url: '/cities', openInNewTab: false }
+              ]
+            },
             seoTitle: 'Map Title',
             seoDescription: 'Map Description',
             status: 'published',
@@ -70,11 +79,17 @@ test('getPageBySlug fetches published page records and normalizes response', asy
 
   assert.equal(page?.slug, 'map')
   assert.equal(page?.title, 'Map')
+  assert.equal(page?.header.kicker, 'Utility')
+  assert.equal(page?.header.title, 'Weather and tides planning')
+  assert.equal(page?.header.description, 'Validate weather and tide assumptions before route planning.')
+  assert.equal(page?.header.actions.length, 2)
+  assert.equal(page?.header.actions[0]?.label, 'Open Coast Map')
   assert.equal(page?.seo.title, 'Map Title')
   assert.equal(page?.seo.description, 'Map Description')
   assert.match(requestedUrl, /\/api\/pages\?/)
   assert.match(requestedUrl, /where%5Bslug%5D%5Bequals%5D=map/)
-  assert.match(requestedUrl, /where%5Bstatus%5D%5Bequals%5D=published/)
+  assert.match(requestedUrl, /where%5Bor%5D%5B0%5D%5Bstatus%5D%5Bequals%5D=published/)
+  assert.match(requestedUrl, /where%5Bor%5D%5B1%5D%5B_status%5D%5Bequals%5D=published/)
 })
 
 test('getPageBySlug returns null for invalid slug input and skips fetch', async () => {

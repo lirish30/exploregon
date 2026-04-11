@@ -11,6 +11,19 @@ type CSVImportFailure = {
   row: number
 }
 
+type CSVImportWarning = {
+  ignoredFields: string[]
+  row: number
+}
+
+type PayloadValidationError = {
+  data?: {
+    errors?: Array<{
+      path?: string
+    }>
+  }
+}
+
 const CSV_ACTION_COMPONENT = './components/admin/CollectionCSVActions.tsx#CollectionCSVActions'
 const CSV_EXPORT_PATH = '/csv/export'
 const CSV_IMPORT_PATH = '/csv/import'
@@ -165,6 +178,19 @@ const tryParseJSONCell = (value: string): unknown => {
   return value
 }
 
+const parseStructuredCell = (value: string): unknown => {
+  const trimmed = value.trim()
+  if (!trimmed) {
+    return undefined
+  }
+
+  try {
+    return JSON.parse(trimmed)
+  } catch {
+    return undefined
+  }
+}
+
 const parseRelationshipCell = (value: string, hasMany: boolean): number | string | Array<number | string> | undefined => {
   const parsed = tryParseJSONCell(value)
 
@@ -221,7 +247,7 @@ const parseCellValue = (value: string, fieldDefinition?: CSVFieldDefinition): un
     case 'blocks':
     case 'group':
     case 'json':
-      return tryParseJSONCell(trimmed)
+      return parseStructuredCell(trimmed)
     case 'checkbox':
       return parseBooleanCell(trimmed)
     case 'number':
@@ -231,6 +257,60 @@ const parseCellValue = (value: string, fieldDefinition?: CSVFieldDefinition): un
       return parseRelationshipCell(trimmed, fieldDefinition.hasMany)
     default:
       return trimmed
+  }
+}
+
+const normalizeErrorPathToField = (path: string): string => {
+  const [topLevel] = path.replace(/\[\d+\]/g, '').split('.')
+  return topLevel ?? path
+}
+
+const extractInvalidFieldNames = (error: unknown): string[] => {
+  const validationError = error as PayloadValidationError
+  const entries = validationError.data?.errors
+  if (!Array.isArray(entries)) {
+    return []
+  }
+
+  const uniqueFields = new Set<string>()
+  for (const entry of entries) {
+    if (!entry || typeof entry.path !== 'string') {
+      continue
+    }
+
+    const fieldName = normalizeErrorPathToField(entry.path).trim()
+    if (!fieldName || RESERVED_COLUMNS.has(fieldName)) {
+      continue
+    }
+
+    uniqueFields.add(fieldName)
+  }
+
+  return [...uniqueFields]
+}
+
+const executeWithInvalidFieldFallback = async (
+  originalData: Record<string, unknown>,
+  execute: (data: Record<string, unknown>) => Promise<void>
+): Promise<string[]> => {
+  const workingData: Record<string, unknown> = { ...originalData }
+  const ignoredFields = new Set<string>()
+
+  while (true) {
+    try {
+      await execute(workingData)
+      return [...ignoredFields]
+    } catch (error) {
+      const invalidFields = extractInvalidFieldNames(error).filter((field) => Object.hasOwn(workingData, field))
+      if (invalidFields.length === 0) {
+        throw error
+      }
+
+      for (const field of invalidFields) {
+        delete workingData[field]
+        ignoredFields.add(field)
+      }
+    }
   }
 }
 
@@ -342,7 +422,9 @@ const collectionCSVImportHandler = async (req: PayloadRequest): Promise<Response
   }
 
   const failures: CSVImportFailure[] = []
+  const warnings: CSVImportWarning[] = []
   let created = 0
+  let partiallyImported = 0
   let updated = 0
 
   for (let rowIndex = 0; rowIndex < dataRows.length; rowIndex += 1) {
@@ -377,11 +459,21 @@ const collectionCSVImportHandler = async (req: PayloadRequest): Promise<Response
     try {
       if (rawId) {
         const id = parseNumericCell(rawId)
-        await payload.update({
-          collection: collectionSlug,
-          data,
-          id: id as number | string
+        const ignoredFields = await executeWithInvalidFieldFallback(data, async (nextData) => {
+          await payload.update({
+            collection: collectionSlug,
+            data: nextData,
+            id: id as number | string
+          })
         })
+
+        if (ignoredFields.length > 0) {
+          warnings.push({
+            row: rowIndex + 2,
+            ignoredFields
+          })
+          partiallyImported += 1
+        }
 
         updated += 1
         continue
@@ -400,21 +492,42 @@ const collectionCSVImportHandler = async (req: PayloadRequest): Promise<Response
         })
 
         if (existing.docs.length > 0) {
-          await payload.update({
-            collection: collectionSlug,
-            data,
-            id: existing.docs[0]?.id as number | string
+          const ignoredFields = await executeWithInvalidFieldFallback(data, async (nextData) => {
+            await payload.update({
+              collection: collectionSlug,
+              data: nextData,
+              id: existing.docs[0]?.id as number | string
+            })
           })
+
+          if (ignoredFields.length > 0) {
+            warnings.push({
+              row: rowIndex + 2,
+              ignoredFields
+            })
+            partiallyImported += 1
+          }
 
           updated += 1
           continue
         }
       }
 
-      await payload.create({
-        collection: collectionSlug,
-        data
+      const ignoredFields = await executeWithInvalidFieldFallback(data, async (nextData) => {
+        await payload.create({
+          collection: collectionSlug,
+          data: nextData
+        })
       })
+
+      if (ignoredFields.length > 0) {
+        warnings.push({
+          row: rowIndex + 2,
+          ignoredFields
+        })
+        partiallyImported += 1
+      }
+
       created += 1
     } catch (error) {
       failures.push({
@@ -430,8 +543,10 @@ const collectionCSVImportHandler = async (req: PayloadRequest): Promise<Response
       created,
       failed: failures.length,
       failures,
+      partiallyImported,
       totalRows: dataRows.length,
-      updated
+      updated,
+      warnings
     },
     { status: failures.length > 0 ? 207 : 200 }
   )

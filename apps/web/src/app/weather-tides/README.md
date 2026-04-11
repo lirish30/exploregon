@@ -1,1 +1,1 @@
-Placeholder for weather/tides utility page/module (Phase 7).
+`/weather-tides` is sourced from Payload `pages` collection (`slug: weather-tides`).

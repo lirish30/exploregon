@@ -1,73 +1,288 @@
-import {
-  FixedToolbarFeature,
-  HeadingFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-  UploadFeature
-} from '@payloadcms/richtext-lexical'
 import type { CollectionConfig } from 'payload'
+import {
+  MetaDescriptionField,
+  MetaImageField,
+  MetaTitleField,
+  OverviewField,
+  PreviewField
+} from '@payloadcms/plugin-seo/fields'
 
-import { contentCollectionAccess } from '../access/contentAccess.ts'
-import { createEditorialPublishRequirements } from '../hooks/enforceEditorialPublishRequirements.ts'
-import { createSlugField } from '../utilities/slug.ts'
-import { editorialStatusField } from '../utilities/status.ts'
+import { authenticated } from '@/access/authenticated'
+import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
+import { Archive } from '@/blocks/ArchiveBlock/config'
+import { CallToAction } from '@/blocks/CallToAction/config'
+import { Content } from '@/blocks/Content/config'
+import { FormBlock } from '@/blocks/Form/config'
+import { MediaBlock } from '@/blocks/MediaBlock/config'
+import { hero } from '@/heros/config'
+import { populatePublishedAt } from '@/hooks/populatePublishedAt'
+import { createSlugField } from '@/utilities/slug'
+import { generatePreviewPath } from '@/utilities/generatePreviewPath'
+import { revalidateDelete, revalidatePage } from './Pages/hooks/revalidatePage'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
-  access: contentCollectionAccess,
-  labels: {
-    singular: 'Page',
-    plural: 'Pages'
+  access: {
+    create: authenticated,
+    delete: authenticated,
+    read: authenticatedOrPublished,
+    update: authenticated
+  },
+  defaultPopulate: {
+    title: true,
+    slug: true
   },
   admin: {
-    useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', 'status', 'updatedAt']
-  },
-  timestamps: true,
-  hooks: {
-    beforeChange: [createEditorialPublishRequirements('page')]
+    defaultColumns: ['title', 'pageType', 'slug', 'updatedAt'],
+    livePreview: {
+      url: ({ data }) =>
+        generatePreviewPath({
+          slug: data?.slug || '',
+          collection: 'pages'
+        }) || ''
+    },
+    preview: (data) =>
+      generatePreviewPath({
+        slug: (data?.slug as string) || '',
+        collection: 'pages'
+      }) || '',
+    useAsTitle: 'title'
   },
   fields: [
     {
       name: 'title',
-      label: 'Page Name',
       type: 'text',
-      required: true,
-      minLength: 2,
-      maxLength: 140
-    },
-    createSlugField('title'),
-    {
-      name: 'body',
-      label: 'Body',
-      type: 'richText',
-      required: true,
-      editor: lexicalEditor({
-        features: ({ defaultFeatures }) => [
-          ...defaultFeatures,
-          HeadingFeature({
-            enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4']
-          }),
-          UploadFeature(),
-          FixedToolbarFeature(),
-          InlineToolbarFeature()
-        ]
-      })
+      required: true
     },
     {
-      name: 'seoTitle',
-      label: 'SEO Title',
-      type: 'text',
+      name: 'pageType',
+      type: 'select',
       required: true,
-      maxLength: 70
+      defaultValue: 'generic',
+      options: [
+        { label: 'Homepage', value: 'home' },
+        { label: 'City Page', value: 'city' },
+        { label: 'Region Page', value: 'region' },
+        { label: 'Listing Page', value: 'listing' },
+        { label: 'Generic Page', value: 'generic' }
+      ]
     },
     {
-      name: 'seoDescription',
-      label: 'SEO Description',
-      type: 'textarea',
-      required: true,
-      maxLength: 160
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Hero',
+          fields: [hero]
+        },
+        {
+          label: 'Content',
+          fields: [
+            {
+              name: 'layout',
+              type: 'blocks',
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              required: true,
+              admin: {
+                initCollapsed: true
+              }
+            }
+          ]
+        },
+        {
+          label: 'Travel',
+          fields: [
+            {
+              name: 'route',
+              type: 'group',
+              fields: [
+                {
+                  name: 'legacyType',
+                  type: 'select',
+                  options: [
+                    { label: 'Home', value: 'home' },
+                    { label: 'City', value: 'city' },
+                    { label: 'Region', value: 'region' },
+                    { label: 'Listing', value: 'listing' },
+                    { label: 'Generic', value: 'generic' }
+                  ]
+                },
+                {
+                  name: 'pathPattern',
+                  type: 'text'
+                }
+              ]
+            },
+            {
+              name: 'location',
+              type: 'group',
+              fields: [
+                {
+                  name: 'region',
+                  type: 'relationship',
+                  relationTo: 'pages',
+                  filterOptions: {
+                    pageType: {
+                      equals: 'region'
+                    }
+                  }
+                },
+                {
+                  name: 'city',
+                  type: 'relationship',
+                  relationTo: 'pages',
+                  filterOptions: {
+                    pageType: {
+                      equals: 'city'
+                    }
+                  }
+                },
+                {
+                  name: 'latitude',
+                  type: 'number',
+                  min: -90,
+                  max: 90
+                },
+                {
+                  name: 'longitude',
+                  type: 'number',
+                  min: -180,
+                  max: 180
+                }
+              ]
+            },
+            {
+              name: 'cityDetails',
+              type: 'group',
+              admin: {
+                condition: (_data, siblingData) => siblingData?.pageType === 'city'
+              },
+              fields: [
+                { name: 'summary', type: 'textarea' },
+                { name: 'intro', type: 'textarea' },
+                { name: 'whyVisit', type: 'textarea' },
+                { name: 'whenToGo', type: 'textarea' },
+                {
+                  name: 'featuredHighlights',
+                  type: 'array',
+                  fields: [{ name: 'highlight', type: 'text', required: true }]
+                },
+                {
+                  name: 'faq',
+                  type: 'array',
+                  fields: [
+                    { name: 'question', type: 'text', required: true },
+                    { name: 'answer', type: 'textarea', required: true }
+                  ]
+                }
+              ]
+            },
+            {
+              name: 'regionDetails',
+              type: 'group',
+              admin: {
+                condition: (_data, siblingData) => siblingData?.pageType === 'region'
+              },
+              fields: [
+                { name: 'summary', type: 'textarea' },
+                { name: 'intro', type: 'textarea' }
+              ]
+            },
+            {
+              name: 'listingDetails',
+              type: 'group',
+              admin: {
+                condition: (_data, siblingData) => siblingData?.pageType === 'listing'
+              },
+              fields: [
+                { name: 'summary', type: 'textarea' },
+                { name: 'description', type: 'textarea' },
+                { name: 'address', type: 'text' },
+                { name: 'phone', type: 'text' },
+                { name: 'websiteUrl', type: 'text' },
+                { name: 'priceRange', type: 'text' },
+                { name: 'seasonality', type: 'textarea' },
+                {
+                  name: 'attributes',
+                  type: 'array',
+                  fields: [{ name: 'attribute', type: 'text', required: true }]
+                },
+                {
+                  name: 'amenities',
+                  type: 'array',
+                  fields: [{ name: 'amenity', type: 'text', required: true }]
+                },
+                {
+                  name: 'gallery',
+                  type: 'upload',
+                  relationTo: 'media',
+                  hasMany: true
+                },
+                {
+                  name: 'categories',
+                  type: 'relationship',
+                  relationTo: 'categories',
+                  hasMany: true
+                },
+                {
+                  name: 'sourceType',
+                  type: 'select',
+                  defaultValue: 'manual',
+                  options: [
+                    { label: 'Manual', value: 'manual' },
+                    { label: 'Imported', value: 'imported' },
+                    { label: 'Partner', value: 'partner' }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: 'meta',
+          label: 'SEO',
+          fields: [
+            OverviewField({
+              titlePath: 'meta.title',
+              descriptionPath: 'meta.description',
+              imagePath: 'meta.image'
+            }),
+            MetaTitleField({
+              hasGenerateFn: true
+            }),
+            MetaImageField({
+              relationTo: 'media'
+            }),
+            MetaDescriptionField({}),
+            PreviewField({
+              hasGenerateFn: true,
+              titlePath: 'meta.title',
+              descriptionPath: 'meta.description'
+            })
+          ]
+        }
+      ]
     },
-    editorialStatusField()
-  ]
+    {
+      name: 'publishedAt',
+      type: 'date',
+      admin: {
+        position: 'sidebar'
+      }
+    },
+    createSlugField('title')
+  ],
+  hooks: {
+    afterChange: [revalidatePage],
+    beforeChange: [populatePublishedAt],
+    afterDelete: [revalidateDelete]
+  },
+  versions: {
+    drafts: {
+      autosave: {
+        interval: 100
+      },
+      schedulePublish: true
+    },
+    maxPerDoc: 50
+  }
 }

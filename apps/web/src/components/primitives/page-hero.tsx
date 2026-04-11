@@ -6,6 +6,7 @@ type HeroAction = {
   label: string
   href: string
   variant?: 'primary' | 'secondary'
+  openInNewTab?: boolean
 }
 
 type PageHeroProps = {
@@ -30,6 +31,8 @@ export const PageHero = ({ kicker, title, description, actions = [] }: PageHeroP
                   key={`${action.href}-${action.label}`}
                   href={action.href}
                   className={action.variant === 'secondary' ? 'button-secondary' : 'button-primary'}
+                  target={action.openInNewTab ? '_blank' : undefined}
+                  rel={action.openInNewTab ? 'noopener noreferrer' : undefined}
                 >
                   {action.label}
                 </Link>

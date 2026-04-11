@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react'
 
-type RootLayoutProps = {
+type SiteLayoutProps = {
   children: ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function SiteLayout({ children }: SiteLayoutProps) {
   return (
     <html lang="en">
       <body>{children}</body>

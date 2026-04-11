@@ -7,10 +7,12 @@
 - Publish requirement: page `status` must be `published`
 - Rich text body is rendered from Payload Lexical JSON
 
-## Special case: `/map`
+## Special case: utility routes
 
 - `/map` is also sourced from the `pages` collection (slug must be `map`)
+- `/weather-tides` is also sourced from the `pages` collection (slug must be `weather-tides`)
 - If no published `map` page exists in Payload, the route returns `notFound()`
+- If no published `weather-tides` page exists in Payload, the route returns `notFound()`
 
 ## Reserved top-level slugs
 
@@ -23,4 +25,3 @@ These are owned by app routes and should not be used as `pages.slug` values:
 - `events`
 - `itineraries`
 - `regions`
-- `weather-tides`

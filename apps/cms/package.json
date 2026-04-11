@@ -13,12 +13,18 @@
     "importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap --config src/payload.config.ts",
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate --config src/payload.config.ts",
     "seed": "tsx src/seed/index.ts",
-    "import": "tsx src/import/runner.ts"
+    "import": "tsx src/import/runner.ts",
+    "migrate:website-template": "tsx src/migrate/websiteTemplateIntegration.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.30.0",
     "@payloadcms/db-sqlite": "3.30.0",
     "@payloadcms/next": "3.30.0",
+    "@payloadcms/plugin-form-builder": "3.30.0",
+    "@payloadcms/plugin-nested-docs": "3.30.0",
+    "@payloadcms/plugin-redirects": "3.30.0",
+    "@payloadcms/plugin-search": "3.30.0",
+    "@payloadcms/plugin-seo": "3.30.0",
     "@payloadcms/richtext-lexical": "3.30.0",
     "@payloadcms/ui": "3.30.0",
     "cross-env": "^7.0.3",

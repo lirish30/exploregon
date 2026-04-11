@@ -34,6 +34,18 @@ If port `3001` is already used on your machine, run CMS on another port:
 PAYLOAD_PORT=3002 pnpm dev:cms
 ```
 
+If `/admin` hangs while terminal shows a Drizzle rename prompt, keep schema push disabled during normal dev:
+
+```bash
+PAYLOAD_PUSH_SCHEMA=false
+```
+
+Then only opt in when you intentionally want to reconcile schema drift:
+
+```bash
+PAYLOAD_PUSH_SCHEMA=true pnpm dev:cms
+```
+
 SQLite is the default local CMS DB (`apps/cms/payload.db`), so Docker is not required for local login/publishing.
 If you want Postgres instead, set `DATABASE_URI`/`DATABASE_URL` in `apps/cms/.env`, then run:
 
@@ -57,3 +69,20 @@ pnpm format
 - The `/map` route is CMS-driven from the `pages` collection using slug `map`.
 - Reserved top-level paths (`/cities`, `/categories`, `/listings`, `/guides`, `/events`, `/itineraries`, `/regions`, `/weather-tides`) remain app routes, not CMS page slugs.
 - Sitewide typography rule: use `Instrument Serif` for headings/headlines and `Instrument Sans` for body/UI text. Do not override this mapping.
+
+## Website Template Migration
+
+The CMS now includes the Payload Website Template plugin stack and template-first collections (`pages`, `posts`, `categories`) while legacy collections are still present for compatibility and source migration.
+
+One-time migration runner:
+
+```bash
+pnpm --filter @exploregon/cms migrate:website-template --dry-run
+pnpm --filter @exploregon/cms migrate:website-template --apply
+```
+
+Recommended preflight:
+
+1. Back up DB + media before `--apply`.
+2. Pause content edits during migration.
+3. Run `pnpm --filter @exploregon/cms typegen` and `pnpm --filter @exploregon/cms typecheck` after migration.

@@ -26,6 +26,32 @@ export type RegionDoc = SeoFields & {
   slug: string
   summary: string
   intro: string
+  sectionHeadings?: {
+    intro?: {
+      kicker?: string
+      headline?: string
+    }
+    cities?: {
+      kicker?: string
+      headline?: string
+    }
+    listings?: {
+      kicker?: string
+      headline?: string
+    }
+    map?: {
+      kicker?: string
+      headline?: string
+    }
+    events?: {
+      kicker?: string
+      headline?: string
+    }
+    guides?: {
+      kicker?: string
+      headline?: string
+    }
+  }
   heroImage: PayloadRelationship<PayloadMedia>
   createdAt?: string
   updatedAt?: string
@@ -178,6 +204,16 @@ export type PageDoc = SeoFields & {
   title: string
   slug: string
   body: LexicalRichText
+  header?: {
+    kicker?: string
+    title?: string
+    description?: string
+    actions?: Array<{
+      label: string
+      url: string
+      openInNewTab?: boolean
+    }>
+  }
   status: EditorialStatus
   createdAt?: string
   updatedAt?: string
@@ -278,6 +314,32 @@ export type NormalizedRegion = {
   slug: string
   summary: string
   intro: string
+  sectionHeadings: {
+    intro: {
+      kicker: string
+      headline: string
+    }
+    cities: {
+      kicker: string
+      headline: string
+    }
+    listings: {
+      kicker: string
+      headline: string
+    }
+    map: {
+      kicker: string
+      headline: string
+    }
+    events: {
+      kicker: string
+      headline: string
+    }
+    guides: {
+      kicker: string
+      headline: string
+    }
+  }
   heroImage: NormalizedMedia | null
   seo: NormalizedSeo
 }
@@ -407,6 +469,12 @@ export type NormalizedPage = {
   title: string
   slug: string
   body: LexicalRichText
+  header: {
+    kicker: string | null
+    title: string
+    description: string
+    actions: HeaderActionButton[]
+  }
   seo: NormalizedSeo
   createdAt: string | null
   updatedAt: string | null

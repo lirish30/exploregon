@@ -70,10 +70,19 @@ export default async function CmsPage({ params }: { params: Promise<{ slug: stri
   return (
     <>
       <PageHero
-        kicker="Page"
-        title={page.title}
-        description={page.seo.description}
-        actions={[{ label: 'Back Home', href: '/', variant: 'secondary' }]}
+        kicker={page.header.kicker ?? 'Page'}
+        title={page.header.title}
+        description={page.header.description}
+        actions={
+          page.header.actions.length
+            ? page.header.actions.map((action) => ({
+                label: action.label,
+                href: action.url,
+                openInNewTab: action.openInNewTab,
+                variant: 'secondary' as const
+              }))
+            : [{ label: 'Back Home', href: '/', variant: 'secondary' }]
+        }
       />
 
       <Section>

@@ -50,6 +50,20 @@ const getSettings = async (): Promise<SiteSettingsGlobal> => {
   }
 }
 
+const formatDate = (value: string): string => {
+  const date = new Date(value)
+
+  if (Number.isNaN(date.getTime())) {
+    return 'Date unavailable'
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  }).format(date)
+}
+
 export async function generateMetadata({ params }: RegionPageProps): Promise<Metadata> {
   const { slug } = await params
   const [settings, region] = await Promise.all([getSettings(), getRegionBySlug(slug)])
@@ -124,13 +138,43 @@ export default async function RegionPage({ params }: RegionPageProps) {
       </section>
 
       <Section>
-        <SectionHeading kicker="Region Intro" title={`${region.name} planning context`} lede={region.intro} />
+        <div className="city-intro-layout">
+          <div>
+            <SectionHeading
+              kicker={region.sectionHeadings.intro.kicker}
+              title={region.sectionHeadings.intro.headline}
+              lede={region.intro}
+            />
+          </div>
+          <aside className="city-events-compact" aria-label={`Upcoming events near ${region.name}`}>
+            <h2 className="city-events-compact-title">
+              {region.sectionHeadings.events.kicker
+                ? `${region.sectionHeadings.events.kicker}: ${region.sectionHeadings.events.headline}`
+                : region.sectionHeadings.events.headline}
+            </h2>
+            {featuredRegionEvents.length ? (
+              <div className="city-events-compact-list">
+                {featuredRegionEvents.slice(0, 4).map((event) => (
+                  <article key={`intro-event-${event.slug}`} className="city-events-compact-card">
+                    <p className="city-events-compact-kicker">{formatDate(event.startDate)}</p>
+                    <h3 className="city-events-compact-event-title">{event.title}</h3>
+                    <Link href={`/events/${event.slug}`} className="city-inline-link city-inline-link--compact">
+                      View event
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p className="city-empty">No events are currently linked to this region.</p>
+            )}
+          </aside>
+        </div>
       </Section>
 
       <Section surface="muted">
         <SectionHeading
-          kicker="Cities"
-          title="Core city pages in this region"
+          kicker={region.sectionHeadings.cities.kicker}
+          title={region.sectionHeadings.cities.headline}
           lede="Published city records assigned to this region."
         />
         {featuredRegionCities.length ? (
@@ -152,8 +196,8 @@ export default async function RegionPage({ params }: RegionPageProps) {
 
       <Section>
         <SectionHeading
-          kicker="Listings"
-          title="Featured listings in this region"
+          kicker={region.sectionHeadings.listings.kicker}
+          title={region.sectionHeadings.listings.headline}
           lede="Published listing records assigned to this region."
         />
         {featuredRegionListings.length ? (
@@ -176,8 +220,8 @@ export default async function RegionPage({ params }: RegionPageProps) {
 
       <Section surface="muted">
         <SectionHeading
-          kicker="Map"
-          title={`${region.name} map module`}
+          kicker={region.sectionHeadings.map.kicker}
+          title={region.sectionHeadings.map.headline}
           lede="Route-level map module for Leaflet + OpenStreetMap integration."
         />
         <MapPlaceholder
@@ -186,30 +230,10 @@ export default async function RegionPage({ params }: RegionPageProps) {
         />
       </Section>
 
-      <Section>
-        <SectionHeading kicker="Events" title={`Upcoming events in ${region.name}`} />
-        {featuredRegionEvents.length ? (
-          <div className="city-card-grid">
-            {featuredRegionEvents.map((event) => (
-              <article key={event.slug} className="city-listing-card">
-                <p className="city-listing-kicker">{event.city?.label ?? 'Region Event'}</p>
-                <h2 className="city-listing-title">{event.title}</h2>
-                <p className="city-listing-summary">{event.summary}</p>
-                <Link href={`/events/${event.slug}`} className="city-inline-link">
-                  View event
-                </Link>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <p className="city-empty">No events are currently linked to this region.</p>
-        )}
-      </Section>
-
       <Section surface="muted">
         <SectionHeading
-          kicker="Guides"
-          title="Related editorial guides"
+          kicker={region.sectionHeadings.guides.kicker}
+          title={region.sectionHeadings.guides.headline}
           lede="Guides are included when they relate to city records in this region."
         />
         {regionGuides.length ? (

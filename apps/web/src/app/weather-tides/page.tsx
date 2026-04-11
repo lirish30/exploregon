@@ -1,14 +1,15 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 
 import { Breadcrumbs } from '../../components/primitives/breadcrumbs'
+import { LexicalRichTextRenderer } from '../../components/primitives/lexical-rich-text'
 import { PageHero } from '../../components/primitives/page-hero'
 import { Section } from '../../components/primitives/section'
-import { SectionHeading } from '../../components/primitives/section-heading'
-import { getSiteSettings } from '../../lib/api'
+import { getPageBySlug, getSiteSettings } from '../../lib/api'
 import { createMetadata } from '../../lib/seo'
 import type { SiteSettingsGlobal } from '../../lib/types'
 
-export const revalidate = 900
+export const revalidate = 300
 
 const fallbackSettings: SiteSettingsGlobal = {
   siteName: 'ExplOregon Coast',
@@ -34,28 +35,56 @@ const getSettings = async (): Promise<SiteSettingsGlobal> => {
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings()
+  const page = await getPageBySlug('weather-tides')
+
+  if (!page) {
+    return createMetadata(
+      {
+        title: 'Weather & Tides Page Not Found',
+        description: 'Publish a Page with slug "weather-tides" in Payload to render this route.',
+        path: '/weather-tides',
+        noIndex: true
+      },
+      settings
+    )
+  }
 
   return createMetadata(
     {
-      title: 'Weather and Tides',
-      description: 'Utility route for Open-Meteo weather and NOAA tide planning context.',
+      title: page.seo.title,
+      description: page.seo.description,
       path: '/weather-tides'
     },
     settings
   )
 }
 
-export default function WeatherTidesPage() {
+export default async function WeatherTidesPage() {
+  const page = await getPageBySlug('weather-tides')
+
+  if (!page) {
+    notFound()
+  }
+
   return (
     <>
       <PageHero
-        kicker="Utility"
-        title="Weather and tides planning"
-        description="MVP utility route reserved for Open-Meteo weather and NOAA tides. Use this page to validate coastal timing assumptions before route planning."
-        actions={[
-          { label: 'Open Coast Map', href: '/map', variant: 'secondary' },
-          { label: 'Browse Cities', href: '/cities', variant: 'secondary' }
-        ]}
+        kicker={page.header.kicker ?? 'Utility'}
+        title={page.header.title}
+        description={page.header.description}
+        actions={
+          page.header.actions.length
+            ? page.header.actions.map((action) => ({
+                label: action.label,
+                href: action.url,
+                openInNewTab: action.openInNewTab,
+                variant: 'secondary' as const
+              }))
+            : [
+                { label: 'Open Coast Map', href: '/map', variant: 'secondary' as const },
+                { label: 'Browse Cities', href: '/cities', variant: 'secondary' as const }
+              ]
+        }
       />
 
       <Section>
@@ -63,36 +92,11 @@ export default function WeatherTidesPage() {
           <Breadcrumbs
             items={[
               { label: 'Home', href: '/' },
-              { label: 'Weather & Tides', href: '/weather-tides' }
+              { label: page.title, href: '/weather-tides' }
             ]}
           />
         </div>
-
-        <div className="utility-grid">
-          <article id="weather" className="utility-card">
-            <p className="utility-kicker">Open-Meteo / NWS</p>
-            <h2 className="utility-title">Weather snapshot</h2>
-            <p className="utility-copy">
-              Placeholder assumption: integrate forecast summaries and basic marine conditions by city coordinates.
-            </p>
-          </article>
-
-          <article id="tides" className="utility-card">
-            <p className="utility-kicker">NOAA</p>
-            <h2 className="utility-title">Tide snapshot</h2>
-            <p className="utility-copy">
-              Placeholder assumption: integrate next high/low tide windows for key Oregon Coast tide stations.
-            </p>
-          </article>
-        </div>
-      </Section>
-
-      <Section surface="muted">
-        <SectionHeading
-          kicker="MVP Scope"
-          title="Utility route is intentionally minimal"
-          lede="This page satisfies the required utility route family while preserving phase-one scope. API wiring is a follow-on step."
-        />
+        <LexicalRichTextRenderer value={page.body} />
       </Section>
     </>
   )

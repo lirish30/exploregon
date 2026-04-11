@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { HomepageViewModel } from './homepage-view-model'
 import { HomeMedia } from './home-media'
 import { PhosphorIcon } from './phosphor-icon'
+import { CityDestinationCard } from '../primitives/city-destination-card'
 
 type ResolveMediaUrl = (pathOrUrl: string | null | undefined) => string | null
 
@@ -54,42 +55,17 @@ export const HomepageDestinations = ({ destinationStrip, resolveMediaUrl }: Home
         </div>
         <div className="coast-home-destination-grid">
           {destinationStrip.map((city) => (
-            <article key={city.href} className="coast-home-destination-card">
-              <div className="coast-home-destination-media">
-                <HomeMedia
-                  media={city.image}
-                  src={resolveMediaUrl(city.image?.url)}
-                  altFallback={city.name}
-                  className="coast-home-card-image"
-                  sizes="(max-width: 900px) 100vw, 25vw"
-                />
-              </div>
-              <div className="coast-home-destination-body">
-                <h3>{city.name}</h3>
-                <div className="coast-home-badge-row">
-                  {city.badges.map((badge, badgeIndex) => (
-                    <span
-                      key={`${city.name}-${badge}`}
-                      className={`coast-home-badge coast-home-badge-level-${(badgeIndex % 3) + 1}`}
-                    >
-                      {badge}
-                    </span>
-                  ))}
-                </div>
-                <p>{city.summary}</p>
-                <dl className="coast-home-meta-list">
-                  {city.meta.map((item) => (
-                    <div key={`${city.name}-${item.label}`}>
-                      <dt>{item.label}</dt>
-                      <dd>{item.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-                <Link href={city.href} className="coast-home-inline-link">
-                  Explore {city.name}
-                </Link>
-              </div>
-            </article>
+            <CityDestinationCard
+              key={city.href}
+              name={city.name}
+              summary={city.summary}
+              image={city.image}
+              href={city.href}
+              badges={city.badges}
+              meta={city.meta}
+              resolveMediaUrl={resolveMediaUrl}
+              linkLabel={`Explore ${city.name}`}
+            />
           ))}
         </div>
       </div>

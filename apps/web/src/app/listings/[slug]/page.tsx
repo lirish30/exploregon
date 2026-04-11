@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 
 import { Breadcrumbs } from '../../../components/primitives/breadcrumbs'
 import { Container } from '../../../components/primitives/container'
+import { CityDestinationCard } from '../../../components/primitives/city-destination-card'
 import { CtaBlock } from '../../../components/primitives/cta-block'
 import { HeroBackground } from '../../../components/primitives/hero-background'
 import { MapPlaceholder } from '../../../components/primitives/map-placeholder'
@@ -424,11 +425,19 @@ export default async function ListingPage({ params }: ListingPageProps) {
           lede="Nearby city links are based on this listing's region relationship."
         />
         {nearbyCities.length ? (
-          <div className="city-link-row">
+          <div className="coast-home-destination-grid">
             {nearbyCities.map((city) => (
-              <Link key={city.slug} href={`/cities/${city.slug}`} className="city-link-chip">
-                {city.name}
-              </Link>
+              <CityDestinationCard
+                key={city.slug}
+                name={city.name}
+                summary={city.summary}
+                image={city.heroImage}
+                href={`/cities/${city.slug}`}
+                badges={city.region?.label ? [city.region.label] : []}
+                meta={[{ label: 'Base', value: city.region?.label ?? 'Oregon Coast' }]}
+                resolveMediaUrl={toPayloadMediaUrl}
+                linkLabel={`Explore ${city.name}`}
+              />
             ))}
           </div>
         ) : (

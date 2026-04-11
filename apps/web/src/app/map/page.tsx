@@ -69,13 +69,22 @@ export default async function MapPage() {
   return (
     <>
       <PageHero
-        kicker="Utility"
-        title={page.title}
-        description={page.seo.description}
-        actions={[
-          { label: 'Browse Cities', href: '/cities', variant: 'secondary' },
-          { label: 'Browse Categories', href: '/categories', variant: 'secondary' }
-        ]}
+        kicker={page.header.kicker ?? 'Utility'}
+        title={page.header.title}
+        description={page.header.description}
+        actions={
+          page.header.actions.length
+            ? page.header.actions.map((action) => ({
+                label: action.label,
+                href: action.url,
+                openInNewTab: action.openInNewTab,
+                variant: 'secondary' as const
+              }))
+            : [
+                { label: 'Browse Cities', href: '/cities', variant: 'secondary' as const },
+                { label: 'Browse Categories', href: '/categories', variant: 'secondary' as const }
+              ]
+        }
       />
 
       <Section>
