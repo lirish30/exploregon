@@ -2,9 +2,10 @@ import type { CollectionConfig } from 'payload'
 
 import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
+import { withCollectionCSV } from '@/utilities/collectionCSV'
 import { createSlugField } from '@/utilities/slug'
 
-export const Categories: CollectionConfig = {
+export const Categories: CollectionConfig = withCollectionCSV({
   slug: 'categories',
   access: {
     create: authenticated,
@@ -31,4 +32,4 @@ export const Categories: CollectionConfig = {
     },
     createSlugField('title')
   ]
-}
+})

@@ -146,6 +146,23 @@ type TemplatePostDoc = {
 
 const DEFAULT_DEPTH = 1
 const DEFAULT_REVALIDATE = 1800
+const DRAFT_STATUS_COLLECTIONS = new Set(['pages', 'posts'])
+
+const buildStatusWhere = (collection: string, status: string | undefined): Record<string, string> => {
+  if (!status) {
+    return {}
+  }
+
+  if (DRAFT_STATUS_COLLECTIONS.has(collection)) {
+    return {
+      'where[_status][equals]': status
+    }
+  }
+
+  return {
+    'where[status][equals]': status
+  }
+}
 
 const ensurePayloadBaseUrl = (): string => {
   const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL?.trim()
@@ -214,12 +231,12 @@ const fetchBySlug = async <T>(
   { depth = DEFAULT_DEPTH, status, ...behavior }: SlugQuery = {}
 ): Promise<T | null> => {
   try {
+    const statusWhere = buildStatusWhere(collection, status)
     const path = withQueryString(`/api/${collection}`, {
       depth,
       limit: 1,
       'where[slug][equals]': slug,
-      'where[or][0][status][equals]': status,
-      'where[or][1][_status][equals]': status
+      ...statusWhere
     })
 
     const result = await payloadFetch<PayloadFindResponse<T>>(path, behavior)
@@ -236,12 +253,12 @@ const fetchBySlugWithWhere = async <T>(
   { depth = DEFAULT_DEPTH, status, ...behavior }: SlugQuery = {}
 ): Promise<T | null> => {
   try {
+    const statusWhere = buildStatusWhere(collection, status)
     const path = withQueryString(`/api/${collection}`, {
       depth,
       limit: 1,
       'where[slug][equals]': slug,
-      'where[or][0][status][equals]': status,
-      'where[or][1][_status][equals]': status,
+      ...statusWhere,
       ...where
     })
 
@@ -257,13 +274,13 @@ const fetchCollection = async <T>(
   { depth = DEFAULT_DEPTH, status, limit = 24, page = 1, sort, where = {}, ...behavior }: CollectionQuery = {}
 ): Promise<T[]> => {
   try {
+    const statusWhere = buildStatusWhere(collection, status)
     const path = withQueryString(`/api/${collection}`, {
       depth,
       limit,
       page,
       sort,
-      'where[or][0][status][equals]': status,
-      'where[or][1][_status][equals]': status,
+      ...statusWhere,
       ...where
     })
 
@@ -280,13 +297,13 @@ const fetchCollectionWithWhere = async <T>(
   { depth = DEFAULT_DEPTH, status, limit = 24, page = 1, sort, ...behavior }: CollectionQuery = {}
 ): Promise<T[]> => {
   try {
+    const statusWhere = buildStatusWhere(collection, status)
     const path = withQueryString(`/api/${collection}`, {
       depth,
       limit,
       page,
       sort,
-      'where[or][0][status][equals]': status,
-      'where[or][1][_status][equals]': status,
+      ...statusWhere,
       ...where
     })
 
@@ -851,8 +868,14 @@ const normalizeHomepage = (global: Partial<HomepageGlobal> | null | undefined): 
     : null,
   utilityTeaserBlock: global?.utilityTeaserBlock
     ? {
-        headline: global.utilityTeaserBlock.headline,
-        body: global.utilityTeaserBlock.body
+        headline: asNonEmptyString(global.utilityTeaserBlock.headline, 'Find your ideal match'),
+        body: asNonEmptyString(global.utilityTeaserBlock.body, 'Use filters to narrow your route by city and category.'),
+        primaryButtonLabel: asNonEmptyString(global.utilityTeaserBlock.primaryButtonLabel, 'Browse by city'),
+        primaryButtonUrl: asNonEmptyString(global.utilityTeaserBlock.primaryButtonUrl, '/cities'),
+        secondaryButtonLabel: asNonEmptyString(global.utilityTeaserBlock.secondaryButtonLabel, 'Compare categories'),
+        secondaryButtonUrl: asNonEmptyString(global.utilityTeaserBlock.secondaryButtonUrl, '/categories'),
+        resultsButtonLabel: asNonEmptyString(global.utilityTeaserBlock.resultsButtonLabel, 'Explore results'),
+        resultsBaseUrl: asNonEmptyString(global.utilityTeaserBlock.resultsBaseUrl, '/listings')
       }
     : null,
   planningCtaBlock: global?.planningCtaBlock

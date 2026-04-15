@@ -227,7 +227,16 @@ export type HomepageGlobal = {
   featuredCities?: Array<PayloadRelationship<CityDoc>>
   featuredCategories?: Array<PayloadRelationship<ListingCategoryDoc>>
   editorialIntroBlock?: { headline: string; body: string }
-  utilityTeaserBlock?: { headline: string; body: string }
+  utilityTeaserBlock?: {
+    headline: string
+    body: string
+    primaryButtonLabel: string
+    primaryButtonUrl: string
+    secondaryButtonLabel: string
+    secondaryButtonUrl: string
+    resultsButtonLabel: string
+    resultsBaseUrl: string
+  }
   planningCtaBlock?: {
     headline: string
     body: string
@@ -488,7 +497,16 @@ export type NormalizedHomepage = {
   featuredCities: NormalizedReference[]
   featuredCategories: NormalizedReference[]
   editorialIntroBlock: { headline: string; body: string } | null
-  utilityTeaserBlock: { headline: string; body: string } | null
+  utilityTeaserBlock: {
+    headline: string
+    body: string
+    primaryButtonLabel: string
+    primaryButtonUrl: string
+    secondaryButtonLabel: string
+    secondaryButtonUrl: string
+    resultsButtonLabel: string
+    resultsBaseUrl: string
+  } | null
   planningCtaBlock: {
     headline: string
     body: string

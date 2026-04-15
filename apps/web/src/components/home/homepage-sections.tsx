@@ -3,7 +3,7 @@ import Link from 'next/link'
 import type { HomepageViewModel } from './homepage-view-model'
 import { HomeMedia } from './home-media'
 import { PhosphorIcon } from './phosphor-icon'
-import { CityDestinationCard } from '../primitives/city-destination-card'
+import { HomeDestinationCarousel } from './home-destination-carousel'
 
 type ResolveMediaUrl = (pathOrUrl: string | null | undefined) => string | null
 
@@ -20,7 +20,7 @@ export const HomepageCategoryShortcuts = ({ categoryHighlights }: HomepageCatego
             <Link key={category.href} href={category.href} className="coast-home-shortcut-card">
               {category.icon && (
                 <span className="coast-home-shortcut-icon">
-                  <PhosphorIcon name={category.icon} />
+                  <PhosphorIcon name={category.icon} size={32} />
                 </span>
               )}
               <span className="coast-home-shortcut-name">{category.name}</span>
@@ -39,6 +39,11 @@ type HomepageDestinationsProps = {
 }
 
 export const HomepageDestinations = ({ destinationStrip, resolveMediaUrl }: HomepageDestinationsProps) => {
+  const destinationCards = destinationStrip.map((city) => ({
+    ...city,
+    imageUrl: resolveMediaUrl(city.image?.url)
+  }))
+
   return (
     <section className="section coast-home-panel">
       <div className="container">
@@ -53,21 +58,7 @@ export const HomepageDestinations = ({ destinationStrip, resolveMediaUrl }: Home
             View all towns
           </Link>
         </div>
-        <div className="coast-home-destination-grid">
-          {destinationStrip.map((city) => (
-            <CityDestinationCard
-              key={city.href}
-              name={city.name}
-              summary={city.summary}
-              image={city.image}
-              href={city.href}
-              badges={city.badges}
-              meta={city.meta}
-              resolveMediaUrl={resolveMediaUrl}
-              linkLabel={`Explore ${city.name}`}
-            />
-          ))}
-        </div>
+        <HomeDestinationCarousel cards={destinationCards} />
       </div>
     </section>
   )
@@ -86,32 +77,32 @@ export const HomepageTripFinder = ({ tripFinder }: HomepageTripFinderProps) => {
             <h2 className="coast-home-section-title">{tripFinder.title}</h2>
             <p className="coast-home-section-copy">{tripFinder.intro}</p>
             <div className="coast-home-trip-actions">
-              <Link href="/cities" className="button-primary">
-                Browse by city
+              <Link href={tripFinder.primaryCta.href} className="button-primary">
+                {tripFinder.primaryCta.label}
               </Link>
-              <Link href="/categories" className="coast-home-outline-link coast-home-outline-link-dark">
-                Compare categories
+              <Link href={tripFinder.secondaryCta.href} className="coast-home-outline-link coast-home-outline-link-dark">
+                {tripFinder.secondaryCta.label}
               </Link>
             </div>
           </div>
-          <div className="coast-home-filter-panel">
+          <form action={tripFinder.resultsBaseUrl} method="get" className="coast-home-filter-panel">
             {tripFinder.filters.map((group) => (
               <div key={group.label} className="coast-home-filter-group">
                 <label>{group.label}</label>
-                <select defaultValue="">
+                <select name={group.name} defaultValue="">
                   <option value="">{group.label}</option>
                   {group.options.map((option) => (
-                    <option key={`${group.label}-${option}`} value={option}>
-                      {option}
+                    <option key={`${group.label}-${option.value}`} value={option.value}>
+                      {option.label}
                     </option>
                   ))}
                 </select>
               </div>
             ))}
-            <Link href="/listings" className="button-primary coast-home-filter-submit">
-              Explore results
-            </Link>
-          </div>
+            <button type="submit" className="button-primary coast-home-filter-submit">
+              {tripFinder.resultsButtonLabel}
+            </button>
+          </form>
         </div>
       </div>
     </section>

@@ -1,8 +1,9 @@
 import type { CollectionConfig } from 'payload'
 
 import { contentCollectionAccess } from '../access/contentAccess.ts'
+import { withCollectionCSV } from '../utilities/collectionCSV.ts'
 
-export const Media: CollectionConfig = {
+export const Media: CollectionConfig = withCollectionCSV({
   slug: 'media',
   access: contentCollectionAccess,
   labels: {
@@ -90,4 +91,4 @@ export const Media: CollectionConfig = {
       maxLength: 160
     }
   ]
-}
+})

@@ -1,11 +1,14 @@
 'use client'
 
 import type { BeforeListClientProps } from 'payload'
-import type { CSSProperties } from 'react'
-import { useRef, useState } from 'react'
+import { Button } from '@payloadcms/ui'
+import { useMemo, useRef, useState } from 'react'
+
+import './CollectionCSVActions.scss'
 
 type ImportResponse = {
   created?: number
+  failures?: Array<{ error?: string; row?: number }>
   failed?: number
   partiallyImported?: number
   totalRows?: number
@@ -13,39 +16,25 @@ type ImportResponse = {
   warnings?: Array<{ ignoredFields?: string[]; row?: number }>
 }
 
-const buttonStyle: CSSProperties = {
-  alignItems: 'center',
-  background: '#111827',
-  border: '1px solid #111827',
-  borderRadius: 6,
-  color: '#ffffff',
-  cursor: 'pointer',
-  display: 'inline-flex',
-  fontSize: 13,
-  fontWeight: 600,
-  height: 34,
-  justifyContent: 'center',
-  minWidth: 118,
-  padding: '0 12px'
-}
-
-const disabledButtonStyle: CSSProperties = {
-  ...buttonStyle,
-  cursor: 'not-allowed',
-  opacity: 0.6
-}
-
 export function CollectionCSVActions({ collectionSlug }: BeforeListClientProps) {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [isExporting, setIsExporting] = useState(false)
   const [isImporting, setIsImporting] = useState(false)
   const [message, setMessage] = useState<string>('')
+  const [messageType, setMessageType] = useState<'error' | 'info' | 'success'>('info')
 
   const exportUrl = `/api/${collectionSlug}/csv/export`
   const importUrl = `/api/${collectionSlug}/csv/import`
+  const isBusy = isExporting || isImporting
+  const statusClassName = useMemo(() => {
+    if (messageType === 'error') return 'collection-csv-actions__status--error'
+    if (messageType === 'success') return 'collection-csv-actions__status--success'
+    return 'collection-csv-actions__status--info'
+  }, [messageType])
 
   const onClickExport = () => {
     setMessage('')
+    setMessageType('info')
     setIsExporting(true)
     window.location.assign(exportUrl)
 
@@ -57,6 +46,7 @@ export function CollectionCSVActions({ collectionSlug }: BeforeListClientProps) 
 
   const onClickImport = () => {
     setMessage('')
+    setMessageType('info')
     inputRef.current?.click()
   }
 
@@ -68,6 +58,7 @@ export function CollectionCSVActions({ collectionSlug }: BeforeListClientProps) 
     }
 
     setIsImporting(true)
+    setMessageType('info')
     setMessage('Importing CSV...')
 
     const formData = new FormData()
@@ -83,6 +74,7 @@ export function CollectionCSVActions({ collectionSlug }: BeforeListClientProps) 
       const payload = (await response.json().catch(() => ({}))) as ImportResponse & { error?: string }
 
       if (!response.ok && response.status !== 207) {
+        setMessageType('error')
         setMessage(payload.error ?? 'CSV import failed.')
         return
       }
@@ -92,12 +84,21 @@ export function CollectionCSVActions({ collectionSlug }: BeforeListClientProps) 
       const updated = payload.updated ?? 0
       const failed = payload.failed ?? 0
       const partiallyImported = payload.partiallyImported ?? 0
+      const firstFailure = payload.failures?.find((failure) => typeof failure?.error === 'string')
       const partialSuffix =
         partiallyImported > 0 ? ` ${partiallyImported} row(s) were partially imported (invalid fields were ignored).` : ''
+      const failureSuffix =
+        failed > 0 && firstFailure?.error
+          ? ` First failure: row ${firstFailure.row ?? '?'} - ${firstFailure.error}.`
+          : ''
 
-      setMessage(`Import complete: ${created} created, ${updated} updated, ${failed} failed (${total} rows).${partialSuffix}`)
+      setMessageType(failed > 0 ? 'error' : 'success')
+      setMessage(
+        `Import complete: ${created} created, ${updated} updated, ${failed} failed (${total} rows).${partialSuffix}${failureSuffix}`
+      )
       window.location.reload()
     } catch {
+      setMessageType('error')
       setMessage('CSV import failed due to a network error.')
     } finally {
       setIsImporting(false)
@@ -106,25 +107,27 @@ export function CollectionCSVActions({ collectionSlug }: BeforeListClientProps) 
   }
 
   return (
-    <div style={{ marginBottom: 12 }}>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
-        <button
+    <div className="collection-csv-actions">
+      <div className="collection-csv-actions__row">
+        <Button
           onClick={onClickExport}
-          style={isExporting || isImporting ? disabledButtonStyle : buttonStyle}
+          buttonStyle="secondary"
+          size="small"
           type="button"
-          disabled={isExporting || isImporting}
+          disabled={isBusy}
         >
           {isExporting ? 'Exporting...' : 'Export CSV'}
-        </button>
+        </Button>
 
-        <button
+        <Button
           onClick={onClickImport}
-          style={isImporting ? disabledButtonStyle : buttonStyle}
+          buttonStyle="primary"
+          size="small"
           type="button"
           disabled={isImporting}
         >
           {isImporting ? 'Importing...' : 'Import CSV'}
-        </button>
+        </Button>
       </div>
 
       <input
@@ -135,7 +138,7 @@ export function CollectionCSVActions({ collectionSlug }: BeforeListClientProps) 
         type="file"
       />
 
-      <p style={{ color: '#4b5563', fontSize: 12, margin: 0 }}>
+      <p className={`collection-csv-actions__status ${statusClassName}`}>
         {message || 'Use exported CSVs as templates for bulk updates and uploads.'}
       </p>
     </div>

@@ -1,17 +1,40 @@
 import type { IconProps } from '@phosphor-icons/react'
 import {
+  Anchor,
+  BeerStein,
+  Bicycle,
+  Boat,
   Bed,
   Binoculars,
+  Bread,
   BuildingApartment,
+  BuildingOffice,
+  Coffee,
+  Car,
   Circle,
+  Fish,
   ForkKnife,
   House,
+  HouseLine,
+  Lighthouse,
+  MapPinArea,
   Mountains,
+  MusicNotes,
+  Palette,
+  PawPrint,
+  Sailboat,
+  ShoppingBag,
+  SunHorizon,
   Tent,
+  Ticket,
+  Tree,
+  TreeEvergreen,
   UsersThree,
   Van,
+  WaveSawtooth,
   WaveSine,
-  Waves
+  Waves,
+  Wine
 } from '@phosphor-icons/react/dist/ssr'
 import type { ComponentType } from 'react'
 
@@ -20,7 +43,44 @@ type PhosphorIconProps = {
   size?: number
 }
 
-type IconKey = 'bed' | 'hotel' | 'campground' | 'rv' | 'home' | 'restaurant' | 'beach' | 'whale' | 'hiking' | 'tidepool' | 'family' | 'circle'
+type IconKey =
+  | 'bed'
+  | 'hotel'
+  | 'campground'
+  | 'rv'
+  | 'home'
+  | 'restaurant'
+  | 'beach'
+  | 'whale'
+  | 'hiking'
+  | 'tidepool'
+  | 'family'
+  | 'aquarium'
+  | 'art'
+  | 'bakery'
+  | 'boat'
+  | 'coffee'
+  | 'shopping'
+  | 'brewery'
+  | 'museum'
+  | 'bike'
+  | 'music'
+  | 'lighthouse'
+  | 'kayak'
+  | 'attractions'
+  | 'pets'
+  | 'crabbing'
+  | 'dunes'
+  | 'fishing'
+  | 'freeparking'
+  | 'park'
+  | 'rentalhome'
+  | 'stateparks'
+  | 'surfing'
+  | 'vacationrental'
+  | 'viewpoint'
+  | 'winery'
+  | 'circle'
 
 const iconComponentByKey: Record<IconKey, ComponentType<IconProps>> = {
   bed: Bed,
@@ -34,6 +94,31 @@ const iconComponentByKey: Record<IconKey, ComponentType<IconProps>> = {
   hiking: Mountains,
   tidepool: Waves,
   family: UsersThree,
+  aquarium: Fish,
+  art: Palette,
+  bakery: Bread,
+  boat: Boat,
+  coffee: Coffee,
+  shopping: ShoppingBag,
+  brewery: BeerStein,
+  museum: BuildingOffice,
+  bike: Bicycle,
+  music: MusicNotes,
+  lighthouse: Lighthouse,
+  kayak: Sailboat,
+  attractions: Ticket,
+  pets: PawPrint,
+  crabbing: Anchor,
+  dunes: SunHorizon,
+  fishing: Fish,
+  freeparking: Car,
+  park: Tree,
+  rentalhome: HouseLine,
+  stateparks: TreeEvergreen,
+  surfing: WaveSawtooth,
+  vacationrental: House,
+  viewpoint: MapPinArea,
+  winery: Wine,
   circle: Circle
 }
 
@@ -81,7 +166,86 @@ const iconKeyByToken: Record<string, IconKey> = {
   families: 'family',
   kids: 'family',
   usersthree: 'family',
-  'users-three': 'family'
+  'users-three': 'family',
+  aquarium: 'aquarium',
+  art: 'art',
+  arts: 'art',
+  gallery: 'art',
+  galleries: 'art',
+  palette: 'art',
+  bakery: 'bakery',
+  bakeries: 'bakery',
+  bread: 'bakery',
+  pastry: 'bakery',
+  'boat-tour': 'boat',
+  boattour: 'boat',
+  boat: 'boat',
+  boats: 'boat',
+  sailing: 'boat',
+  coffee: 'coffee',
+  cafe: 'coffee',
+  'coffee-shop': 'coffee',
+  shopping: 'shopping',
+  shop: 'shopping',
+  shops: 'shopping',
+  boutique: 'shopping',
+  boutiques: 'shopping',
+  brewery: 'brewery',
+  breweries: 'brewery',
+  beer: 'brewery',
+  museum: 'museum',
+  museums: 'museum',
+  history: 'museum',
+  bike: 'bike',
+  bikes: 'bike',
+  biking: 'bike',
+  bicycle: 'bike',
+  music: 'music',
+  concert: 'music',
+  concerts: 'music',
+  lighthouse: 'lighthouse',
+  lighthouses: 'lighthouse',
+  kayak: 'kayak',
+  kayaking: 'kayak',
+  sailboat: 'kayak',
+  attraction: 'attractions',
+  attractions: 'attractions',
+  ticket: 'attractions',
+  tickets: 'attractions',
+  pet: 'pets',
+  pets: 'pets',
+  'pet-friendly': 'pets',
+  paw: 'pets',
+  crabbing: 'crabbing',
+  crab: 'crabbing',
+  crabs: 'crabbing',
+  dunes: 'dunes',
+  dune: 'dunes',
+  fishing: 'fishing',
+  fish: 'fishing',
+  'free-parking': 'freeparking',
+  freeparking: 'freeparking',
+  parking: 'freeparking',
+  'free parking': 'freeparking',
+  park: 'park',
+  parks: 'park',
+  'rental-home': 'rentalhome',
+  rentalhome: 'rentalhome',
+  'vacation-rental': 'vacationrental',
+  vacationrental: 'vacationrental',
+  'vacation-rentals': 'vacationrental',
+  'state-park': 'stateparks',
+  'state-parks': 'stateparks',
+  statepark: 'stateparks',
+  stateparks: 'stateparks',
+  surfing: 'surfing',
+  surf: 'surfing',
+  viewpoint: 'viewpoint',
+  viewpoints: 'viewpoint',
+  overlook: 'viewpoint',
+  winery: 'winery',
+  wineries: 'winery',
+  wine: 'winery'
 }
 
 const keywordIconMap: Array<[keyword: string, key: IconKey]> = [
@@ -106,7 +270,48 @@ const keywordIconMap: Array<[keyword: string, key: IconKey]> = [
   ['tide', 'tidepool'],
   ['pool', 'tidepool'],
   ['family', 'family'],
-  ['kids', 'family']
+  ['kids', 'family'],
+  ['aquarium', 'aquarium'],
+  ['fish', 'aquarium'],
+  ['art', 'art'],
+  ['gallery', 'art'],
+  ['baker', 'bakery'],
+  ['bread', 'bakery'],
+  ['pastry', 'bakery'],
+  ['boat', 'boat'],
+  ['cruise', 'boat'],
+  ['coffee', 'coffee'],
+  ['cafe', 'coffee'],
+  ['shop', 'shopping'],
+  ['boutique', 'shopping'],
+  ['brew', 'brewery'],
+  ['beer', 'brewery'],
+  ['museum', 'museum'],
+  ['history', 'museum'],
+  ['bike', 'bike'],
+  ['bicy', 'bike'],
+  ['music', 'music'],
+  ['concert', 'music'],
+  ['lighthouse', 'lighthouse'],
+  ['kayak', 'kayak'],
+  ['paddle', 'kayak'],
+  ['attraction', 'attractions'],
+  ['ticket', 'attractions'],
+  ['pet', 'pets'],
+  ['paw', 'pets'],
+  ['crab', 'crabbing'],
+  ['dune', 'dunes'],
+  ['fishing', 'fishing'],
+  ['parking', 'freeparking'],
+  ['park', 'park'],
+  ['rental-home', 'rentalhome'],
+  ['state-park', 'stateparks'],
+  ['surf', 'surfing'],
+  ['vacation-rental', 'vacationrental'],
+  ['viewpoint', 'viewpoint'],
+  ['overlook', 'viewpoint'],
+  ['winery', 'winery'],
+  ['wine', 'winery']
 ]
 
 const normalizeToken = (value: string): string =>

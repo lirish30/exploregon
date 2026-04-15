@@ -20,12 +20,13 @@ import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
 import { Banner } from '@/blocks/Banner/config'
 import { Code } from '@/blocks/Code/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
+import { withCollectionCSV } from '@/utilities/collectionCSV'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { createSlugField } from '@/utilities/slug'
 import { populateAuthors } from './Posts/hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './Posts/hooks/revalidatePost'
 
-export const Posts: CollectionConfig = {
+export const Posts: CollectionConfig = withCollectionCSV({
   slug: 'posts',
   access: {
     create: authenticated,
@@ -306,4 +307,4 @@ export const Posts: CollectionConfig = {
     },
     maxPerDoc: 50
   }
-}
+})

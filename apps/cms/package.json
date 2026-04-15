@@ -13,6 +13,7 @@
     "importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap --config src/payload.config.ts",
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate --config src/payload.config.ts",
     "seed": "tsx src/seed/index.ts",
+    "seed:minimal": "tsx src/seed/minimal.ts",
     "import": "tsx src/import/runner.ts",
     "migrate:website-template": "tsx src/migrate/websiteTemplateIntegration.ts"
   },

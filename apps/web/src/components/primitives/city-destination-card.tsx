@@ -9,6 +9,7 @@ type CityDestinationCardProps = {
   name: string
   summary: string
   image: NormalizedMedia | null
+  imageUrl?: string | null
   href: string
   badges?: string[]
   meta?: Array<{
@@ -16,25 +17,26 @@ type CityDestinationCardProps = {
     value: string
   }>
   linkLabel?: string
-  resolveMediaUrl: ResolveMediaUrl
+  resolveMediaUrl?: ResolveMediaUrl
 }
 
 export const CityDestinationCard = ({
   name,
   summary,
   image,
+  imageUrl,
   href,
   badges = [],
-  meta = [],
-  linkLabel,
   resolveMediaUrl
 }: CityDestinationCardProps) => {
+  const resolvedSrc = imageUrl ?? resolveMediaUrl?.(image?.url) ?? image?.url ?? null
+
   return (
-    <article className="coast-home-destination-card">
+    <Link href={href} className="coast-home-destination-card" aria-label={`Open ${name}`}>
       <div className="coast-home-destination-media">
         <HomeMedia
           media={image}
-          src={resolveMediaUrl(image?.url)}
+          src={resolvedSrc}
           altFallback={name}
           className="coast-home-card-image"
           sizes="(max-width: 900px) 100vw, 25vw"
@@ -52,20 +54,7 @@ export const CityDestinationCard = ({
           </div>
         ) : null}
         <p>{summary}</p>
-        {meta.length ? (
-          <dl className="coast-home-meta-list">
-            {meta.map((item) => (
-              <div key={`${name}-${item.label}`}>
-                <dt>{item.label}</dt>
-                <dd>{item.value}</dd>
-              </div>
-            ))}
-          </dl>
-        ) : null}
-        <Link href={href} className="coast-home-inline-link">
-          {linkLabel ?? `Explore ${name}`}
-        </Link>
       </div>
-    </article>
+    </Link>
   )
 }

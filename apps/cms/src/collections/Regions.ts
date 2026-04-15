@@ -1,9 +1,10 @@
 import type { CollectionConfig } from 'payload'
 
 import { contentCollectionAccess } from '../access/contentAccess.ts'
+import { withCollectionCSV } from '../utilities/collectionCSV.ts'
 import { createSlugField } from '../utilities/slug.ts'
 
-export const Regions: CollectionConfig = {
+export const Regions: CollectionConfig = withCollectionCSV({
   slug: 'regions',
   access: contentCollectionAccess,
   labels: {
@@ -206,4 +207,4 @@ export const Regions: CollectionConfig = {
       maxLength: 160
     }
   ]
-}
+})

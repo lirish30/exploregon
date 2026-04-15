@@ -26,7 +26,11 @@ export type HomepageDestinationCard = {
 
 export type HomepageFilterGroup = {
   label: string
-  options: string[]
+  name: string
+  options: Array<{
+    label: string
+    value: string
+  }>
 }
 
 export type HomepageMetricCard = {
@@ -79,6 +83,10 @@ export type HomepageViewModel = {
   tripFinder: {
     title: string
     intro: string
+    primaryCta: HomepageHeroLink
+    secondaryCta: HomepageHeroLink
+    resultsButtonLabel: string
+    resultsBaseUrl: string
     filters: HomepageFilterGroup[]
   }
   utilitySnapshot: {
@@ -101,6 +109,8 @@ export type HomepageViewModel = {
 type BuildHomepageViewModelArgs = {
   settings: SiteSettingsGlobal
   homepage: NormalizedHomepage
+  allCities: NormalizedCity[]
+  allCategories: NormalizedCategory[]
   featuredCities: NormalizedCity[]
   featuredCategories: NormalizedCategory[]
   compareCities: NormalizedCity[]
@@ -119,7 +129,7 @@ const toTitleCase = (value: string): string =>
 const compact = <T>(items: Array<T | null | undefined>): T[] => items.filter((item): item is T => Boolean(item))
 
 const categoryLinks = (categories: NormalizedCategory[]): HomepageHeroLink[] =>
-  categories.slice(0, 6).map((category) => ({
+  categories.map((category) => ({
     label: category.name,
     href: `/categories/${category.slug}`
   }))
@@ -128,7 +138,7 @@ const buildDestinationCard = (city: NormalizedCity): HomepageDestinationCard => 
   name: city.name,
   href: `/cities/${city.slug}`,
   summary: city.summary,
-  badges: city.featuredHighlights.slice(0, 2),
+  badges: city.featuredHighlights,
   meta: [
     {
       label: 'Base',
@@ -182,6 +192,8 @@ const buildTripFinderIntro = (homepage: NormalizedHomepage): string =>
 export const buildHomepageViewModel = ({
   settings,
   homepage,
+  allCities,
+  allCategories,
   featuredCities,
   featuredCategories,
   compareCities,
@@ -190,7 +202,7 @@ export const buildHomepageViewModel = ({
   coastalPulseEvents,
   planningItinerary
 }: BuildHomepageViewModelArgs): HomepageViewModel => {
-  const quickLinks = categoryLinks(featuredCategories)
+  const quickLinks = categoryLinks(allCategories.length > 0 ? allCategories : featuredCategories)
   const heroImage = homepage.heroImage ?? featuredCities[0]?.heroImage ?? editorsChoiceListings[0]?.heroImage ?? planningItinerary?.heroImage ?? null
   const utilityMetrics = compact([
     featuredCities[0]
@@ -244,19 +256,37 @@ export const buildHomepageViewModel = ({
         : [],
     destinationStrip:
       featuredCities.length > 0
-        ? featuredCities.slice(0, 4).map(buildDestinationCard)
-        : compareCities.slice(0, 4).map(buildDestinationCard),
+        ? featuredCities.map(buildDestinationCard)
+        : compareCities.map(buildDestinationCard),
     tripFinder: {
       title: homepage.utilityTeaserBlock?.headline ?? 'Find your ideal match',
       intro: buildTripFinderIntro(homepage),
+      primaryCta: {
+        label: homepage.utilityTeaserBlock?.primaryButtonLabel ?? 'Browse by city',
+        href: homepage.utilityTeaserBlock?.primaryButtonUrl ?? '/cities'
+      },
+      secondaryCta: {
+        label: homepage.utilityTeaserBlock?.secondaryButtonLabel ?? 'Compare categories',
+        href: homepage.utilityTeaserBlock?.secondaryButtonUrl ?? '/categories'
+      },
+      resultsButtonLabel: homepage.utilityTeaserBlock?.resultsButtonLabel ?? 'Explore results',
+      resultsBaseUrl: homepage.utilityTeaserBlock?.resultsBaseUrl ?? '/listings',
       filters: [
         {
           label: 'City',
-          options: featuredCities.map((city) => city.name)
+          name: 'city',
+          options: allCities.map((city) => ({
+            label: city.name,
+            value: city.slug
+          }))
         },
         {
           label: 'Category',
-          options: featuredCategories.map((category) => category.name)
+          name: 'category',
+          options: allCategories.map((category) => ({
+            label: category.name,
+            value: category.slug
+          }))
         }
       ].filter((group) => group.options.length > 0)
     },

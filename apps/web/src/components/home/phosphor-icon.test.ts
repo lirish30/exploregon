@@ -22,6 +22,33 @@ const cases: Array<{ input: string; expected: string }> = [
   { input: 'tidepool', expected: 'tidepool' },
   { input: 'tidepools', expected: 'tidepool' },
   { input: 'family', expected: 'family' },
+  { input: 'aquarium', expected: 'aquarium' },
+  { input: 'art', expected: 'art' },
+  { input: 'bakery', expected: 'bakery' },
+  { input: 'boat-tour', expected: 'boat' },
+  { input: 'coffee', expected: 'coffee' },
+  { input: 'shopping', expected: 'shopping' },
+  { input: 'brewery', expected: 'brewery' },
+  { input: 'museum', expected: 'museum' },
+  { input: 'bike', expected: 'bike' },
+  { input: 'music', expected: 'music' },
+  { input: 'lighthouse', expected: 'lighthouse' },
+  { input: 'kayaking', expected: 'kayak' },
+  { input: 'attractions', expected: 'attractions' },
+  { input: 'pet-friendly', expected: 'pets' },
+  { input: 'crabbing', expected: 'crabbing' },
+  { input: 'dunes', expected: 'dunes' },
+  { input: 'fishing', expected: 'fishing' },
+  { input: 'free-parking', expected: 'freeparking' },
+  { input: 'park', expected: 'park' },
+  { input: 'rental-home', expected: 'rentalhome' },
+  { input: 'state-parks', expected: 'stateparks' },
+  { input: 'surfing', expected: 'surfing' },
+  { input: 'vacation-rental', expected: 'vacationrental' },
+  { input: 'viewpoint', expected: 'viewpoint' },
+  { input: 'winery', expected: 'winery' },
+  { input: 'Boat Tour', expected: 'boat' },
+  { input: 'galleries', expected: 'art' },
   { input: 'HotelIcon', expected: 'hotel' },
   { input: 'restaurant_outline', expected: 'restaurant' },
   { input: 'WHALE WATCHING', expected: 'whale' }
@@ -36,4 +63,3 @@ test('resolvePhosphorIconKey maps category icon tokens and variants', () => {
 test('resolvePhosphorIconKey returns circle for unknown token', () => {
   assert.equal(resolvePhosphorIconKey('some-unknown-token'), 'circle')
 })
-

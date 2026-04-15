@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
+import { withCollectionCSV } from '../utilities/collectionCSV.ts'
 
-export const Users: CollectionConfig = {
+export const Users: CollectionConfig = withCollectionCSV({
   slug: 'users',
   auth: true,
   admin: {
@@ -29,4 +30,4 @@ export const Users: CollectionConfig = {
       ]
     }
   ]
-}
+})

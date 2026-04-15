@@ -42,6 +42,8 @@ const extractSlugFromPath = (path: string | undefined): string | null => {
 type HomepageRouteModel = {
   settings: SiteSettingsGlobal
   homepage: NormalizedHomepage
+  allCities: NormalizedCity[]
+  allCategories: NormalizedCategory[]
   featuredCities: NormalizedCity[]
   featuredCategories: NormalizedCategory[]
   compareCities: NormalizedCity[]
@@ -66,7 +68,9 @@ const loadHomepageRouteModelImpl = async (): Promise<HomepageRouteModel> => {
   const [
     featuredCityResults,
     featuredCategoryResults,
+    allCities,
     fallbackCities,
+    allCategories,
     fallbackCategories,
     editorsChoiceListings,
     coastalPulseGuides,
@@ -76,7 +80,9 @@ const loadHomepageRouteModelImpl = async (): Promise<HomepageRouteModel> => {
   ] = await Promise.all([
     Promise.all(featuredCitySlugs.map((slug) => getCityBySlug(slug, { revalidate: 60 }))),
     Promise.all(featuredCategorySlugs.map((slug) => getCategoryBySlug(slug, { revalidate: 60 }))),
-    getCities({ limit: 4, revalidate: 60 }),
+    getCities({ limit: 250, sort: 'name', revalidate: 60 }),
+    getCities({ limit: 24, revalidate: 60 }),
+    getCategories({ limit: 250, sort: 'name', revalidate: 60 }),
     getCategories({ limit: 6, revalidate: 60 }),
     getListings({ limit: 4, sort: '-updatedAt' }),
     getGuides({ limit: 2, sort: '-updatedAt' }),
@@ -91,6 +97,8 @@ const loadHomepageRouteModelImpl = async (): Promise<HomepageRouteModel> => {
   return {
     settings,
     homepage,
+    allCities,
+    allCategories,
     featuredCities: resolvedFeaturedCities.length > 0 ? resolvedFeaturedCities : fallbackCities,
     featuredCategories: resolvedFeaturedCategories.length > 0 ? resolvedFeaturedCategories : fallbackCategories,
     compareCities: resolvedFeaturedCities.length > 0 ? resolvedFeaturedCities : fallbackCities,

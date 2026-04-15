@@ -16,11 +16,12 @@ import { FormBlock } from '@/blocks/Form/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
 import { hero } from '@/heros/config'
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
+import { withCollectionCSV } from '@/utilities/collectionCSV'
 import { createSlugField } from '@/utilities/slug'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './Pages/hooks/revalidatePage'
 
-export const Pages: CollectionConfig = {
+export const Pages: CollectionConfig = withCollectionCSV({
   slug: 'pages',
   access: {
     create: authenticated,
@@ -285,4 +286,4 @@ export const Pages: CollectionConfig = {
     },
     maxPerDoc: 50
   }
-}
+})

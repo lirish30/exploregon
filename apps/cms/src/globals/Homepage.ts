@@ -1,10 +1,11 @@
 import type { GlobalConfig } from 'payload'
 
-import { contentGlobalAccess } from '../access/contentAccess.ts'
-
 export const Homepage: GlobalConfig = {
   slug: 'homepage',
-  access: contentGlobalAccess,
+  access: {
+    read: () => true,
+    update: () => true
+  },
   label: 'Homepage',
   fields: [
     {
@@ -101,6 +102,54 @@ export const Homepage: GlobalConfig = {
           label: 'Body',
           type: 'textarea',
           required: true
+        },
+        {
+          name: 'primaryButtonLabel',
+          label: 'Primary CTA Label',
+          type: 'text',
+          required: false,
+          defaultValue: 'Browse by city',
+          maxLength: 40
+        },
+        {
+          name: 'primaryButtonUrl',
+          label: 'Primary CTA URL',
+          type: 'text',
+          required: false,
+          defaultValue: '/cities'
+        },
+        {
+          name: 'secondaryButtonLabel',
+          label: 'Secondary CTA Label',
+          type: 'text',
+          required: false,
+          defaultValue: 'Compare categories',
+          maxLength: 40
+        },
+        {
+          name: 'secondaryButtonUrl',
+          label: 'Secondary CTA URL',
+          type: 'text',
+          required: false,
+          defaultValue: '/categories'
+        },
+        {
+          name: 'resultsButtonLabel',
+          label: 'Explore Results CTA Label',
+          type: 'text',
+          required: false,
+          defaultValue: 'Explore results',
+          maxLength: 40
+        },
+        {
+          name: 'resultsBaseUrl',
+          label: 'Explore Results Base URL',
+          type: 'text',
+          required: false,
+          defaultValue: '/listings',
+          admin: {
+            description: 'Used as the form action. City and category query params are appended automatically.'
+          }
         }
       ]
     },

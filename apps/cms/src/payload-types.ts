@@ -937,7 +937,32 @@ export interface ListingCategory {
     | 'whale'
     | 'hiking'
     | 'tidepool'
-    | 'family';
+    | 'family'
+    | 'aquarium'
+    | 'art'
+    | 'bakery'
+    | 'boat-tour'
+    | 'coffee'
+    | 'shopping'
+    | 'brewery'
+    | 'museum'
+    | 'bike'
+    | 'music'
+    | 'lighthouse'
+    | 'kayak'
+    | 'attractions'
+    | 'pets'
+    | 'crabbing'
+    | 'dunes'
+    | 'fishing'
+    | 'free-parking'
+    | 'park'
+    | 'rental-home'
+    | 'state-parks'
+    | 'surfing'
+    | 'vacation-rental'
+    | 'viewpoint'
+    | 'winery';
   seoTitle: string;
   seoDescription: string;
   updatedAt: string;
@@ -2318,6 +2343,15 @@ export interface Homepage {
   utilityTeaserBlock: {
     headline: string;
     body: string;
+    primaryButtonLabel?: string | null;
+    primaryButtonUrl?: string | null;
+    secondaryButtonLabel?: string | null;
+    secondaryButtonUrl?: string | null;
+    resultsButtonLabel?: string | null;
+    /**
+     * Used as the form action. City and category query params are appended automatically.
+     */
+    resultsBaseUrl?: string | null;
   };
   planningCtaBlock: {
     headline: string;
@@ -2481,6 +2515,12 @@ export interface HomepageSelect<T extends boolean = true> {
     | {
         headline?: T;
         body?: T;
+        primaryButtonLabel?: T;
+        primaryButtonUrl?: T;
+        secondaryButtonLabel?: T;
+        secondaryButtonUrl?: T;
+        resultsButtonLabel?: T;
+        resultsBaseUrl?: T;
       };
   planningCtaBlock?:
     | T

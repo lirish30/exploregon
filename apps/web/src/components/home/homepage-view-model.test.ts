@@ -43,7 +43,13 @@ const baseHomepage: NormalizedHomepage = {
   },
   utilityTeaserBlock: {
     headline: 'Find your ideal match',
-    body: 'Filter by budget, vibe, and coast zone.'
+    body: 'Filter by budget, vibe, and coast zone.',
+    primaryButtonLabel: 'Browse by city',
+    primaryButtonUrl: '/cities',
+    secondaryButtonLabel: 'Compare categories',
+    secondaryButtonUrl: '/categories',
+    resultsButtonLabel: 'Explore results',
+    resultsBaseUrl: '/listings'
   },
   planningCtaBlock: {
     headline: 'Get local tide, event, and travel tips.',
@@ -258,6 +264,8 @@ test('buildHomepageViewModel prefers real media and preserves key homepage modul
   const result = buildHomepageViewModel({
     settings: baseSettings,
     homepage: baseHomepage,
+    allCities: featuredCities,
+    allCategories: [makeCategory({}), makeCategory({ id: 'category-2', name: 'Campgrounds', slug: 'campgrounds' })],
     featuredCities,
     featuredCategories: [makeCategory({}), makeCategory({ id: 'category-2', name: 'Campgrounds', slug: 'campgrounds' })],
     compareCities: featuredCities,
@@ -270,6 +278,8 @@ test('buildHomepageViewModel prefers real media and preserves key homepage modul
   assert.equal(result.hero.image?.url, '/media/cannon.jpg')
   assert.equal(result.hero.quickLinks.length, 2)
   assert.equal(result.destinationStrip.length, 2)
+  assert.equal(result.tripFinder.filters[0]?.options[0]?.value, 'cannon-beach')
+  assert.equal(result.tripFinder.resultsBaseUrl, '/listings')
   assert.equal(result.editorsChoice.length, 1)
   assert.equal(result.coastalPulse.guides.length, 1)
   assert.equal(result.coastalPulse.events.length, 1)
@@ -285,6 +295,8 @@ test('buildHomepageViewModel falls back to placeholders when seeded content is i
       utilityTeaserBlock: null,
       planningCtaBlock: null
     },
+    allCities: [],
+    allCategories: [],
     featuredCities: [],
     featuredCategories: [],
     compareCities: [],

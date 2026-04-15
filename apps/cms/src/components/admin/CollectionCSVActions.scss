@@ -1,0 +1,32 @@
+.collection-csv-actions {
+  margin: 0 0 var(--base) 0;
+  padding: calc(var(--base) * 0.7) var(--base);
+  border: 1px solid var(--theme-elevation-100);
+  border-radius: var(--style-radius-m);
+  background: var(--theme-elevation-0);
+}
+
+.collection-csv-actions__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--base) * 0.4);
+  align-items: center;
+}
+
+.collection-csv-actions__status {
+  margin: calc(var(--base) * 0.5) 0 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.collection-csv-actions__status--info {
+  color: var(--theme-elevation-500);
+}
+
+.collection-csv-actions__status--success {
+  color: var(--theme-success-500);
+}
+
+.collection-csv-actions__status--error {
+  color: var(--theme-error-500);
+}

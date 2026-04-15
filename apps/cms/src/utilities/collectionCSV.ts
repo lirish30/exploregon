@@ -16,6 +16,15 @@ type CSVImportWarning = {
   row: number
 }
 
+type FieldMutationProperty = 'minLength' | 'minRows' | 'required' | 'validate'
+
+type FieldMutation = {
+  field: Record<string, unknown>
+  hadOwnProperty: boolean
+  property: FieldMutationProperty
+  value: unknown
+}
+
 type PayloadValidationError = {
   data?: {
     errors?: Array<{
@@ -130,22 +139,38 @@ const normalizeFieldType = (field: unknown): string => {
 const collectTopLevelFieldDefinitions = (fields: Field[]): Map<string, CSVFieldDefinition> => {
   const definitions = new Map<string, CSVFieldDefinition>()
 
-  for (const rawField of fields) {
-    if (!rawField || typeof rawField !== 'object') {
-      continue
+  const walkFields = (rawFields: unknown): void => {
+    if (!Array.isArray(rawFields)) {
+      return
     }
 
-    const field = rawField as { hasMany?: unknown; name?: unknown; type?: unknown }
-    if (typeof field.name !== 'string') {
-      continue
-    }
+    for (const rawField of rawFields) {
+      if (!rawField || typeof rawField !== 'object') {
+        continue
+      }
 
-    definitions.set(field.name, {
-      name: field.name,
-      type: normalizeFieldType(field),
-      hasMany: Boolean(field.hasMany)
-    })
+      const field = rawField as { hasMany?: unknown; name?: unknown; tabs?: unknown; type?: unknown }
+      if (typeof field.name === 'string') {
+        definitions.set(field.name, {
+          name: field.name,
+          type: normalizeFieldType(field),
+          hasMany: Boolean(field.hasMany)
+        })
+      }
+
+      if (Array.isArray(field.tabs)) {
+        for (const tab of field.tabs) {
+          if (!tab || typeof tab !== 'object') {
+            continue
+          }
+
+          walkFields((tab as { fields?: unknown }).fields)
+        }
+      }
+    }
   }
+
+  walkFields(fields)
 
   return definitions
 }
@@ -235,7 +260,27 @@ const parseCellValue = (value: string, fieldDefinition?: CSVFieldDefinition): un
   const trimmed = value.trim()
 
   if (!trimmed) {
-    return undefined
+    if (!fieldDefinition) {
+      return undefined
+    }
+
+    switch (fieldDefinition.type) {
+      case 'array':
+      case 'blocks':
+      case 'group':
+      case 'json':
+        return null
+      case 'checkbox':
+        return false
+      case 'number':
+      case 'select':
+      case 'upload':
+        return null
+      case 'relationship':
+        return fieldDefinition.hasMany ? [] : null
+      default:
+        return null
+    }
   }
 
   if (!fieldDefinition) {
@@ -309,6 +354,179 @@ const executeWithInvalidFieldFallback = async (
       for (const field of invalidFields) {
         delete workingData[field]
         ignoredFields.add(field)
+      }
+    }
+  }
+}
+
+const isMissingDocumentError = (error: unknown): boolean => {
+  if (error instanceof Error) {
+    const message = error.message.toLowerCase()
+    if (message.includes('not found') || message.includes('no document') || message.includes('cannot find')) {
+      return true
+    }
+  }
+
+  const structuredError = error as {
+    data?: { errors?: Array<{ message?: string }> }
+    status?: number
+    statusCode?: number
+  }
+
+  if (structuredError?.status === 404 || structuredError?.statusCode === 404) {
+    return true
+  }
+
+  return Boolean(
+    structuredError?.data?.errors?.some((entry) => typeof entry?.message === 'string' && entry.message.toLowerCase().includes('not found'))
+  )
+}
+
+const findExistingDocumentForRow = async ({
+  collectionSlug,
+  payload,
+  rawId,
+  rawSlug
+}: {
+  collectionSlug: string
+  payload: any
+  rawId: string
+  rawSlug: string
+}): Promise<number | string | null> => {
+  if (rawId) {
+    try {
+      const byId = await payload.findByID({
+        collection: collectionSlug,
+        depth: 0,
+        disableErrors: true,
+        id: parseNumericCell(rawId)
+      })
+
+      if (byId?.id !== undefined && byId?.id !== null) {
+        return byId.id as number | string
+      }
+    } catch {
+      // If the current ID does not resolve in this environment, fallback to slug/create.
+    }
+  }
+
+  if (rawSlug) {
+    const existing = await payload.find({
+      collection: collectionSlug,
+      depth: 0,
+      limit: 1,
+      where: {
+        slug: {
+          equals: rawSlug
+        }
+      }
+    })
+
+    if (existing.docs.length > 0) {
+      return existing.docs[0]?.id as number | string
+    }
+  }
+
+  return null
+}
+
+const relaxCollectionFieldsForCSVImport = (fields: Field[]): (() => void) => {
+  const mutations: FieldMutation[] = []
+
+  const trackMutation = (field: Record<string, unknown>, property: FieldMutationProperty, nextValue: unknown): void => {
+    mutations.push({
+      field,
+      property,
+      hadOwnProperty: Object.hasOwn(field, property),
+      value: field[property]
+    })
+
+    if (nextValue === undefined) {
+      delete field[property]
+      return
+    }
+
+    field[property] = nextValue
+  }
+
+  const walkField = (rawField: unknown): void => {
+    if (!rawField || typeof rawField !== 'object') {
+      return
+    }
+
+    const field = rawField as Record<string, unknown>
+
+    if (Object.hasOwn(field, 'required')) {
+      trackMutation(field, 'required', false)
+    }
+
+    if (Object.hasOwn(field, 'minLength')) {
+      trackMutation(field, 'minLength', undefined)
+    }
+
+    if (Object.hasOwn(field, 'minRows')) {
+      trackMutation(field, 'minRows', undefined)
+    }
+
+    if (Object.hasOwn(field, 'validate')) {
+      trackMutation(field, 'validate', undefined)
+    }
+
+    const nestedFields = field.fields
+    if (Array.isArray(nestedFields)) {
+      for (const nestedField of nestedFields) {
+        walkField(nestedField)
+      }
+    }
+
+    const tabs = field.tabs
+    if (Array.isArray(tabs)) {
+      for (const tab of tabs) {
+        if (!tab || typeof tab !== 'object') {
+          continue
+        }
+
+        const tabFields = (tab as { fields?: unknown }).fields
+        if (!Array.isArray(tabFields)) {
+          continue
+        }
+
+        for (const tabField of tabFields) {
+          walkField(tabField)
+        }
+      }
+    }
+
+    const blocks = field.blocks
+    if (Array.isArray(blocks)) {
+      for (const block of blocks) {
+        if (!block || typeof block !== 'object') {
+          continue
+        }
+
+        const blockFields = (block as { fields?: unknown }).fields
+        if (!Array.isArray(blockFields)) {
+          continue
+        }
+
+        for (const blockField of blockFields) {
+          walkField(blockField)
+        }
+      }
+    }
+  }
+
+  for (const field of fields) {
+    walkField(field)
+  }
+
+  return () => {
+    for (let index = mutations.length - 1; index >= 0; index -= 1) {
+      const mutation = mutations[index]
+      if (!mutation.hadOwnProperty) {
+        delete mutation.field[mutation.property]
+      } else {
+        mutation.field[mutation.property] = mutation.value
       }
     }
   }
@@ -427,76 +645,52 @@ const collectionCSVImportHandler = async (req: PayloadRequest): Promise<Response
   let partiallyImported = 0
   let updated = 0
 
-  for (let rowIndex = 0; rowIndex < dataRows.length; rowIndex += 1) {
-    const rowValues = dataRows[rowIndex]
+  const restoreCollectionFields = relaxCollectionFieldsForCSVImport(collection.config.fields)
 
-    const rowMap = new Map<string, string>()
-    headers.forEach((header, index) => {
-      rowMap.set(header, rowValues[index] ?? '')
-    })
+  try {
+    for (let rowIndex = 0; rowIndex < dataRows.length; rowIndex += 1) {
+      const rowValues = dataRows[rowIndex]
 
-    const rawId = (rowMap.get('id') ?? '').trim()
-    const rawSlug = (rowMap.get('slug') ?? '').trim()
+      const rowMap = new Map<string, string>()
+      headers.forEach((header, index) => {
+        rowMap.set(header, rowValues[index] ?? '')
+      })
 
-    const data: Record<string, unknown> = {}
+      const rawId = (rowMap.get('id') ?? '').trim()
+      const rawSlug = (rowMap.get('slug') ?? '').trim()
 
-    for (const header of headers) {
-      if (!header || RESERVED_COLUMNS.has(header)) {
-        continue
-      }
+      const data: Record<string, unknown> = {}
 
-      const rawValue = rowMap.get(header)
-      if (rawValue === undefined) {
-        continue
-      }
-
-      const parsedValue = parseCellValue(rawValue, fieldDefinitions.get(header))
-      if (parsedValue !== undefined) {
-        data[header] = parsedValue
-      }
-    }
-
-    try {
-      if (rawId) {
-        const id = parseNumericCell(rawId)
-        const ignoredFields = await executeWithInvalidFieldFallback(data, async (nextData) => {
-          await payload.update({
-            collection: collectionSlug,
-            data: nextData,
-            id: id as number | string
-          })
-        })
-
-        if (ignoredFields.length > 0) {
-          warnings.push({
-            row: rowIndex + 2,
-            ignoredFields
-          })
-          partiallyImported += 1
+      for (const header of headers) {
+        if (!header || RESERVED_COLUMNS.has(header)) {
+          continue
         }
 
-        updated += 1
-        continue
+        const rawValue = rowMap.get(header)
+        if (rawValue === undefined) {
+          continue
+        }
+
+        const parsedValue = parseCellValue(rawValue, fieldDefinitions.get(header))
+        if (parsedValue !== undefined) {
+          data[header] = parsedValue
+        }
       }
 
-      if (rawSlug) {
-        const existing = await payload.find({
-          collection: collectionSlug,
-          depth: 0,
-          limit: 1,
-          where: {
-            slug: {
-              equals: rawSlug
-            }
-          }
+      try {
+        const existingId = await findExistingDocumentForRow({
+          collectionSlug,
+          payload,
+          rawId,
+          rawSlug
         })
 
-        if (existing.docs.length > 0) {
+        if (existingId !== null) {
           const ignoredFields = await executeWithInvalidFieldFallback(data, async (nextData) => {
             await payload.update({
               collection: collectionSlug,
               data: nextData,
-              id: existing.docs[0]?.id as number | string
+              id: existingId
             })
           })
 
@@ -511,30 +705,60 @@ const collectionCSVImportHandler = async (req: PayloadRequest): Promise<Response
           updated += 1
           continue
         }
-      }
 
-      const ignoredFields = await executeWithInvalidFieldFallback(data, async (nextData) => {
-        await payload.create({
-          collection: collectionSlug,
-          data: nextData
+        const ignoredFields = await executeWithInvalidFieldFallback(data, async (nextData) => {
+          await payload.create({
+            collection: collectionSlug,
+            data: nextData
+          })
         })
-      })
 
-      if (ignoredFields.length > 0) {
-        warnings.push({
+        if (ignoredFields.length > 0) {
+          warnings.push({
+            row: rowIndex + 2,
+            ignoredFields
+          })
+          partiallyImported += 1
+        }
+
+        created += 1
+      } catch (error) {
+        if (rawId && isMissingDocumentError(error)) {
+          try {
+            const ignoredFields = await executeWithInvalidFieldFallback(data, async (nextData) => {
+              await payload.create({
+                collection: collectionSlug,
+                data: nextData
+              })
+            })
+
+            if (ignoredFields.length > 0) {
+              warnings.push({
+                row: rowIndex + 2,
+                ignoredFields
+              })
+              partiallyImported += 1
+            }
+
+            created += 1
+            continue
+          } catch (createFallbackError) {
+            failures.push({
+              row: rowIndex + 2,
+              error: createFallbackError instanceof Error ? createFallbackError.message : 'Unknown error'
+            })
+            continue
+          }
+        }
+
+        failures.push({
           row: rowIndex + 2,
-          ignoredFields
+          error: error instanceof Error ? error.message : 'Unknown error'
         })
-        partiallyImported += 1
       }
-
-      created += 1
-    } catch (error) {
-      failures.push({
-        row: rowIndex + 2,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      })
     }
+  } finally {
+    restoreCollectionFields()
   }
 
   return Response.json(
