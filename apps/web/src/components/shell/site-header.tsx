@@ -17,7 +17,7 @@ type SiteHeaderProps = {
 export const SiteHeader = ({ siteName, logo, navItems, actionButtons }: SiteHeaderProps) => {
   const logoUrl = toPayloadMediaUrl(logo?.url)
   const logoAlt = logo?.alt?.trim() || `${siteName} logo`
-  const rightButtons = actionButtons.slice(0, 2)
+  const ctaButton = actionButtons.length > 0 ? actionButtons[actionButtons.length - 1] : null
   const headerRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -106,19 +106,17 @@ export const SiteHeader = ({ siteName, logo, navItems, actionButtons }: SiteHead
                 ))}
               </nav>
             </details>
-            {rightButtons.length > 0 ? (
+            {ctaButton ? (
               <div className="header-utility-links">
-                {rightButtons.map((button, index) => (
-                  <Link
-                    key={`${button.label}-${button.url}-${index}`}
-                    href={button.url}
-                    className={index === 0 ? 'header-utility-link' : 'button-primary header-cta'}
-                    target={button.openInNewTab ? '_blank' : undefined}
-                    rel={button.openInNewTab ? 'noreferrer' : undefined}
-                  >
-                    {button.label}
-                  </Link>
-                ))}
+                <Link
+                  key={`${ctaButton.label}-${ctaButton.url}`}
+                  href={ctaButton.url}
+                  className="button-primary header-cta"
+                  target={ctaButton.openInNewTab ? '_blank' : undefined}
+                  rel={ctaButton.openInNewTab ? 'noreferrer' : undefined}
+                >
+                  {ctaButton.label}
+                </Link>
               </div>
             ) : null}
           </div>

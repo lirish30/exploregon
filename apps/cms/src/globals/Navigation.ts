@@ -41,10 +41,10 @@ export const Navigation: GlobalConfig = {
     },
     {
       name: 'headerActionButtons',
-      label: 'Header Action Buttons',
+      label: 'Header CTA Button',
       type: 'array',
-      minRows: 2,
-      maxRows: 2,
+      minRows: 1,
+      maxRows: 1,
       fields: [
         {
           name: 'label',

@@ -928,6 +928,7 @@ const normalizeNavigation = (navigation: Partial<NavigationGlobal> | null | unde
           }
         })
         .filter((button): button is HeaderActionButton => button !== null)
+        .slice(-1)
     : [],
   footerNavGroups: Array.isArray(navigation?.footerNavGroups) ? navigation.footerNavGroups : []
 })
