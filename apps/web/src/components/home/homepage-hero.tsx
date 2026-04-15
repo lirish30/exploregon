@@ -110,21 +110,21 @@ export const HomepageHero = ({ hero, heroImageUrl }: HomepageHeroProps) => {
               Search Directory
             </button>
           </form>
-          <div className="coast-home-chip-row-carousel" aria-label="Listing categories">
-            <div className="coast-home-chip-track" aria-live="off">
-              {marqueeQuickLinks.map((link, index) => (
-                <Link
-                  key={`${link.label}-${link.href}-${index}`}
-                  href={link.href}
-                  className="coast-home-chip"
-                  aria-hidden={quickLinkCount > 1 && index >= quickLinkCount ? true : undefined}
-                  tabIndex={quickLinkCount > 1 && index >= quickLinkCount ? -1 : undefined}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
+        </div>
+      </div>
+      <div className="coast-home-chip-row-carousel" aria-label="Listing categories">
+        <div className="coast-home-chip-track" aria-live="off">
+          {marqueeQuickLinks.map((link, index) => (
+            <Link
+              key={`${link.label}-${link.href}-${index}`}
+              href={link.href}
+              className="coast-home-chip"
+              aria-hidden={quickLinkCount > 1 && index >= quickLinkCount ? true : undefined}
+              tabIndex={quickLinkCount > 1 && index >= quickLinkCount ? -1 : undefined}
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
       </div>
     </section>

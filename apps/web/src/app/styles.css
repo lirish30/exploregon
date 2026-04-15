@@ -149,7 +149,7 @@ a:focus-visible {
   left: 0;
   right: 0;
   z-index: 20;
-  background: rgba(244, 250, 254, 0.20);
+  background: rgba(244, 250, 254, 0.4);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(28, 49, 56, 0.1);
@@ -272,22 +272,6 @@ a:focus-visible {
   display: flex;
   align-items: center;
   gap: 0.8rem;
-}
-
-.header-utility-link {
-  color: var(--ink);
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 700;
-  transition: color 120ms ease, text-decoration-color 120ms ease;
-}
-
-.header-utility-link:hover {
-  text-decoration: underline;
-  text-decoration-thickness: 0.06em;
-  text-underline-offset: 0.1em;
-  text-decoration-skip-ink: auto;
-  text-decoration-color: currentColor;
 }
 
 .header-cta {
@@ -2055,7 +2039,7 @@ a:focus-visible {
   align-items: center;
   justify-content: center;
   min-height: min(88vh, 58rem);
-  padding: clamp(5rem, 10vw, 7.5rem) 0 clamp(3rem, 8vw, 5rem);
+  padding: clamp(5rem, 10vw, 7.5rem) 0;
 }
 
 .coast-home-hero-copy {
@@ -2156,9 +2140,12 @@ a:focus-visible {
 }
 
 .coast-home-chip-row-carousel {
-  position: relative;
+  position: absolute;
+  inset: auto 0;
+  bottom: 0;
+  z-index: 4;
   width: 100%;
-  padding: 0.25rem 0.8rem 0.45rem;
+  padding: 0.25rem 0.8rem 0;
   overflow: hidden;
   mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
@@ -2190,8 +2177,8 @@ a:focus-visible {
   text-decoration: none;
   padding: 0.45rem 0.85rem;
   border-radius: 999px;
-  background: rgba(241, 245, 247, 0.16);
-  border: 1px solid rgba(241, 245, 247, 0.16);
+  background: rgba(241, 245, 247, 0.28);
+  border: 1px solid rgba(241, 245, 247, 0.28);
   color: #fff;
   font-size: 0.76rem;
   font-weight: 700;
@@ -2200,7 +2187,7 @@ a:focus-visible {
   transition:
     background 0.2s ease,
     color 0.2s ease;
-  box-shadow: 0 4px 20px rgba(6, 20, 24, 0.18);
+  box-shadow: none;
 }
 
 .coast-home-chip:hover {
@@ -2243,7 +2230,7 @@ a:focus-visible {
 }
 
 .coast-home-shortcuts {
-  margin-top: -2rem;
+  margin-top: 0;
   position: relative;
   z-index: 2;
   background: #e6eff3;
@@ -2832,6 +2819,10 @@ a:focus-visible {
   .coast-home-hero-inner {
     min-height: auto;
     padding-top: 4.75rem;
+  }
+
+  .coast-home-chip-row-carousel {
+    bottom: 0;
   }
 
   .coast-home-search {
