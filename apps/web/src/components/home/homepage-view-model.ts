@@ -120,12 +120,6 @@ type BuildHomepageViewModelArgs = {
   planningItinerary: NormalizedItinerary | null
 }
 
-const toTitleCase = (value: string): string =>
-  value
-    .split('-')
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ')
-
 const compact = <T>(items: Array<T | null | undefined>): T[] => items.filter((item): item is T => Boolean(item))
 
 const categoryLinks = (categories: NormalizedCategory[]): HomepageHeroLink[] =>
@@ -204,29 +198,23 @@ export const buildHomepageViewModel = ({
 }: BuildHomepageViewModelArgs): HomepageViewModel => {
   const quickLinks = categoryLinks(allCategories.length > 0 ? allCategories : featuredCategories)
   const heroImage = homepage.heroImage ?? featuredCities[0]?.heroImage ?? editorsChoiceListings[0]?.heroImage ?? planningItinerary?.heroImage ?? null
-  const utilityMetrics = compact([
-    featuredCities[0]
-      ? {
-          label: 'Top basecamp',
-          value: featuredCities[0].name,
-          detail: featuredCities[0].summary
-        }
-      : null,
-    coastalPulseEvents[0]
-      ? {
-          label: 'Next event',
-          value: coastalPulseEvents[0].title,
-          detail: formatEventDate(coastalPulseEvents[0].startDate)
-        }
-      : null,
-    coastalPulseGuides[0]
-      ? {
-          label: 'Editor watch',
-          value: toTitleCase(coastalPulseGuides[0].travelSeason),
-          detail: coastalPulseGuides[0].title
-        }
-      : null
-  ])
+  const utilityMetrics: HomepageMetricCard[] = [
+    {
+      label: 'Tide table',
+      value: 'High at 2:14 PM',
+      detail: 'Next low: 8:45 PM'
+    },
+    {
+      label: 'Weather',
+      value: '54°F & Misty',
+      detail: 'Wind: 12 mph NW'
+    },
+    {
+      label: 'Highway 101',
+      value: 'All Clear',
+      detail: 'No active alerts'
+    }
+  ]
 
   return {
     settings,

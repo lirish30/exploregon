@@ -1,9 +1,10 @@
 import Link from 'next/link'
+import type { CSSProperties } from 'react'
 
 import type { HomepageViewModel } from './homepage-view-model'
-import { HomeMedia } from './home-media'
 import { PhosphorIcon } from './phosphor-icon'
 import { HomeDestinationCarousel } from './home-destination-carousel'
+import { HomeTabbedFeatureGrid, type HomeTabbedFeatureStory, type HomeTabbedFeatureTab } from './home-tabbed-feature-grid'
 
 type ResolveMediaUrl = (pathOrUrl: string | null | undefined) => string | null
 
@@ -12,21 +13,38 @@ type HomepageCategoryShortcutsProps = {
 }
 
 export const HomepageCategoryShortcuts = ({ categoryHighlights }: HomepageCategoryShortcutsProps) => {
+  const categoryNotes = categoryHighlights.slice(0, 3)
+
   return (
     <section className="section coast-home-shortcuts">
       <div className="container">
-        <div className="coast-home-shortcut-grid">
-          {categoryHighlights.map((category) => (
-            <Link key={category.href} href={category.href} className="coast-home-shortcut-card">
-              {category.icon && (
-                <span className="coast-home-shortcut-icon">
-                  <PhosphorIcon name={category.icon} size={32} />
-                </span>
-              )}
-              <span className="coast-home-shortcut-name">{category.name}</span>
-              <span className="coast-home-shortcut-copy">{category.description}</span>
-            </Link>
-          ))}
+        <div className="coast-home-shortcut-layout">
+          <div className="coast-home-shortcut-intro">
+            <h2 className="coast-home-section-title">Build your coast plan with the right starting point.</h2>
+            <p className="coast-home-section-copy">
+              Start with a category and quickly narrow toward places, stays, and activities that fit your trip style.
+            </p>
+            <ul className="coast-home-shortcut-points">
+              {categoryNotes.map((category) => (
+                <li key={`category-note-${category.href}`}>{category.name}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="coast-home-shortcut-grid">
+            {categoryHighlights.map((category) => (
+              <Link key={category.href} href={category.href} className="coast-home-shortcut-card coast-home-shortcut-card-large">
+                {category.icon && (
+                  <span className="coast-home-shortcut-icon">
+                    <PhosphorIcon name={category.icon} size={30} />
+                  </span>
+                )}
+                <div className="coast-home-shortcut-content">
+                  <h3 className="coast-home-shortcut-name">{category.name}</h3>
+                  <span className="coast-home-shortcut-copy">{category.description}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -66,43 +84,41 @@ export const HomepageDestinations = ({ destinationStrip, resolveMediaUrl }: Home
 
 type HomepageTripFinderProps = {
   tripFinder: HomepageViewModel['tripFinder']
+  backgroundImageUrl: string | null
 }
 
-export const HomepageTripFinder = ({ tripFinder }: HomepageTripFinderProps) => {
+export const HomepageTripFinder = ({ tripFinder, backgroundImageUrl }: HomepageTripFinderProps) => {
+  const sectionStyle = (
+    backgroundImageUrl
+      ? ({ '--coast-trip-finder-bg-image': `url("${backgroundImageUrl}")` } as CSSProperties)
+      : undefined
+  )
+
   return (
-    <section className="section">
+    <section className="section coast-home-trip-finder-wrap" style={sectionStyle}>
       <div className="container">
         <div className="coast-home-trip-finder">
           <div className="coast-home-trip-copy">
             <h2 className="coast-home-section-title">{tripFinder.title}</h2>
             <p className="coast-home-section-copy">{tripFinder.intro}</p>
-            <div className="coast-home-trip-actions">
-              <Link href={tripFinder.primaryCta.href} className="button-primary">
-                {tripFinder.primaryCta.label}
-              </Link>
-              <Link href={tripFinder.secondaryCta.href} className="coast-home-outline-link coast-home-outline-link-dark">
-                {tripFinder.secondaryCta.label}
-              </Link>
-            </div>
+            <form action={tripFinder.resultsBaseUrl} method="get" className="coast-home-filter-panel">
+              {tripFinder.filters.map((group) => (
+                <div key={group.label} className="coast-home-filter-group">
+                  <select name={group.name} defaultValue="" aria-label={group.label}>
+                    <option value="">{group.label}</option>
+                    {group.options.map((option) => (
+                      <option key={`${group.label}-${option.value}`} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+              <button type="submit" className="button-primary coast-home-filter-submit">
+                {tripFinder.resultsButtonLabel}
+              </button>
+            </form>
           </div>
-          <form action={tripFinder.resultsBaseUrl} method="get" className="coast-home-filter-panel">
-            {tripFinder.filters.map((group) => (
-              <div key={group.label} className="coast-home-filter-group">
-                <label>{group.label}</label>
-                <select name={group.name} defaultValue="">
-                  <option value="">{group.label}</option>
-                  {group.options.map((option) => (
-                    <option key={`${group.label}-${option.value}`} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ))}
-            <button type="submit" className="button-primary coast-home-filter-submit">
-              {tripFinder.resultsButtonLabel}
-            </button>
-          </form>
         </div>
       </div>
     </section>
@@ -145,107 +161,55 @@ export const HomepageUtilitySnapshot = ({ utilitySnapshot }: HomepageUtilitySnap
 
 type HomepageEditorialProps = {
   coastalPulse: HomepageViewModel['coastalPulse']
-  resolveMediaUrl: ResolveMediaUrl
-}
-
-export const HomepageEditorial = ({ coastalPulse, resolveMediaUrl }: HomepageEditorialProps) => {
-  return (
-    <section className="section coast-home-editorial">
-      <div className="container">
-        <div className="coast-home-section-head coast-home-section-head-stack">
-          <div>
-            <h2 className="coast-home-section-title">{coastalPulse.title}</h2>
-            <p className="coast-home-section-copy">{coastalPulse.intro}</p>
-          </div>
-        </div>
-        <div className="coast-home-editorial-grid">
-          <div className="coast-home-editorial-column">
-            {coastalPulse.guides.map((guide) => (
-              <article key={guide.href} className="coast-home-story-card coast-home-story-card-large">
-                <div className="coast-home-story-media">
-                  <HomeMedia
-                    media={guide.image}
-                    src={resolveMediaUrl(guide.image?.url)}
-                    altFallback={guide.title}
-                    className="coast-home-card-image"
-                    sizes="(max-width: 900px) 100vw, 50vw"
-                  />
-                </div>
-                <div className="coast-home-story-body">
-                  <p className="coast-home-story-tag">{guide.eyebrow}</p>
-                  <h3>{guide.title}</h3>
-                  <p>{guide.summary}</p>
-                  <Link href={guide.href} className="coast-home-inline-link">
-                    Read guide
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-          <div className="coast-home-editorial-column">
-            {coastalPulse.events.map((event) => (
-              <article key={event.href} className="coast-home-story-card coast-home-story-card-compact">
-                <div className="coast-home-story-body">
-                  <p className="coast-home-story-tag">{event.eyebrow}</p>
-                  <h3>{event.title}</h3>
-                  <p>{event.summary}</p>
-                  <Link href={event.href} className="coast-home-inline-link">
-                    View event
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-type HomepageListingsProps = {
   editorsChoice: HomepageViewModel['editorsChoice']
   resolveMediaUrl: ResolveMediaUrl
 }
 
-export const HomepageListings = ({ editorsChoice, resolveMediaUrl }: HomepageListingsProps) => {
+export const HomepageEditorial = ({ coastalPulse, editorsChoice, resolveMediaUrl }: HomepageEditorialProps) => {
+  const listingStories: HomeTabbedFeatureStory[] = editorsChoice.map((listing) => ({
+    id: listing.href,
+    title: listing.name,
+    summary: listing.summary,
+    href: listing.href,
+    eyebrow: `${listing.city} · ${listing.category}`,
+    ctaLabel: 'Open listing',
+    image: listing.image,
+    imageUrl: resolveMediaUrl(listing.image?.url)
+  }))
+
+  const editorialTabs: HomeTabbedFeatureTab[] = [
+    {
+      id: 'guides',
+      label: 'Guides',
+      stories: coastalPulse.guides.map((guide): HomeTabbedFeatureStory => ({
+        id: guide.href,
+        title: guide.title,
+        summary: guide.summary,
+        href: guide.href,
+        eyebrow: guide.eyebrow,
+        ctaLabel: 'Read guide',
+        image: guide.image,
+        imageUrl: resolveMediaUrl(guide.image?.url)
+      }))
+    },
+    {
+      id: 'listings',
+      label: 'Listings',
+      stories: listingStories
+    }
+  ].filter((tab) => tab.stories.length > 0)
+
+  if (editorialTabs.length === 0) {
+    return null
+  }
+
   return (
-    <section className="section">
-      <div className="container">
-        <div className="coast-home-section-head coast-home-section-head-stack">
-          <div>
-            <h2 className="coast-home-section-title">Practical directory picks for launch.</h2>
-          </div>
-        </div>
-        <div className="coast-home-listing-grid">
-          {editorsChoice.map((listing, index) => (
-            <article
-              key={listing.href}
-              className={index === 0 ? 'coast-home-listing-card coast-home-listing-card-featured' : 'coast-home-listing-card'}
-            >
-              <div className="coast-home-listing-media">
-                <HomeMedia
-                  media={listing.image}
-                  src={resolveMediaUrl(listing.image?.url)}
-                  altFallback={listing.name}
-                  className="coast-home-card-image"
-                  sizes={index === 0 ? '(max-width: 900px) 100vw, 50vw' : '(max-width: 900px) 100vw, 25vw'}
-                />
-              </div>
-              <div className="coast-home-listing-body">
-                <p className="coast-home-story-tag">
-                  {listing.city} · {listing.category}
-                </p>
-                <h3>{listing.name}</h3>
-                <p>{listing.summary}</p>
-                <Link href={listing.href} className="coast-home-inline-link">
-                  Open listing
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
+    <HomeTabbedFeatureGrid
+      title="Coastal Pulse"
+      intro={coastalPulse.intro}
+      tabs={editorialTabs}
+      sectionClassName="coast-home-editorial"
+    />
   )
 }
 

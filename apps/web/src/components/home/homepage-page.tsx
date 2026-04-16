@@ -4,7 +4,6 @@ import {
   HomepageCategoryShortcuts,
   HomepageDestinations,
   HomepageEditorial,
-  HomepageListings,
   HomepagePlanningBanner,
   HomepageTripFinder,
   HomepageUtilitySnapshot
@@ -16,15 +15,20 @@ type HomepagePageProps = {
 }
 
 export const HomepagePage = ({ model, resolveMediaUrl }: HomepagePageProps) => {
+  const heroImageUrl = resolveMediaUrl(model.hero.image?.url)
+
   return (
     <>
-      <HomepageHero hero={model.hero} heroImageUrl={resolveMediaUrl(model.hero.image?.url)} />
-      <HomepageCategoryShortcuts categoryHighlights={model.categoryHighlights} />
+      <HomepageHero hero={model.hero} heroImageUrl={heroImageUrl} />
       <HomepageDestinations destinationStrip={model.destinationStrip} resolveMediaUrl={resolveMediaUrl} />
-      <HomepageTripFinder tripFinder={model.tripFinder} />
+      <HomepageCategoryShortcuts categoryHighlights={model.categoryHighlights} />
+      <HomepageTripFinder tripFinder={model.tripFinder} backgroundImageUrl={heroImageUrl} />
       <HomepageUtilitySnapshot utilitySnapshot={model.utilitySnapshot} />
-      <HomepageEditorial coastalPulse={model.coastalPulse} resolveMediaUrl={resolveMediaUrl} />
-      <HomepageListings editorsChoice={model.editorsChoice} resolveMediaUrl={resolveMediaUrl} />
+      <HomepageEditorial
+        coastalPulse={model.coastalPulse}
+        editorsChoice={model.editorsChoice}
+        resolveMediaUrl={resolveMediaUrl}
+      />
       <HomepagePlanningBanner planningBanner={model.planningBanner} />
     </>
   )
